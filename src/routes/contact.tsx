@@ -63,7 +63,7 @@ function ContactPage() {
             </div>
           </aside>
 
-          <form onSubmit={submit} className="rounded-2xl glass p-6">
+          <form onSubmit={submit} className="rounded-2xl glass p-6 transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Name</label>
