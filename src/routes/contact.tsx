@@ -51,7 +51,7 @@ function ContactPage() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-[1fr_1.4fr]">
           <aside className="space-y-4">
-            <a href="mailto:hello@nandish-tech.com" className="block rounded-2xl glass p-5 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]">
+            <a href="mailto:hello@nandish-tech.com" className="block rounded-2xl glass p-5 card-hover">
               <Mail className="h-5 w-5 text-primary" />
               <div className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">Email</div>
               <div className="mt-1 text-sm font-medium">hello@nandish-tech.com</div>
