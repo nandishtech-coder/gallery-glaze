@@ -33,10 +33,10 @@ export function SiteFooter() {
               <Mail className="h-4 w-4" />
             </a>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
-              <Github className="h-4 w-4" />
+              <GithubIcon className="h-4 w-4" />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
-              <Linkedin className="h-4 w-4" />
+              <Briefcase className="h-4 w-4" />
             </a>
           </div>
         </div>
