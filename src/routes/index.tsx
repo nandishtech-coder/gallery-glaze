@@ -70,7 +70,7 @@ function Index() {
               {projects.map((p) => (
                 <article
                   key={p.id}
-                  className="group flex flex-col overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]"
+                  className="group flex flex-col overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] active:-translate-y-0.5 active:shadow-[var(--shadow-glow)]"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                     {p.thumbnail_url ? (
