@@ -52,7 +52,7 @@ function AboutPage() {
           ))}
         </section>
 
-        <section className="mt-14 rounded-2xl glass p-8">
+        <section className="mt-14 rounded-2xl glass p-8 transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
           <h2 className="text-xl font-semibold">What I do</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             I work end-to-end on web products — design systems, frontend architecture, and the backend
