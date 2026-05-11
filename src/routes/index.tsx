@@ -55,9 +55,9 @@ function Index() {
           </h2>
 
           {loading ? (
-            <div className="grid gap-8 sm:grid-cols-1 lg:grid-cols-2">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-96 rounded-2xl glass animate-pulse" />
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="h-80 rounded-2xl glass animate-pulse" />
               ))}
             </div>
           ) : projects.length === 0 ? (
@@ -65,7 +65,7 @@ function Index() {
               No projects yet. Sign in to add your first.
             </div>
           ) : (
-            <div className="grid gap-8 sm:grid-cols-1 lg:grid-cols-2">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
               {projects.map((p) => (
                 <article
                   key={p.id}
