@@ -109,9 +109,7 @@ function Index() {
         </section>
       </main>
 
-      <footer className="border-t border-border/50 py-8 text-center text-sm text-muted-foreground">
-        Built with care · {new Date().getFullYear()}
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
