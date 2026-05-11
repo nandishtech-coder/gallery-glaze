@@ -20,20 +20,13 @@ export function NavBar() {
               <LayoutDashboard className="h-4 w-4" /> Admin
             </Link>
           )}
-          {user ? (
+          {user && (
             <button
               onClick={() => signOut()}
               className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-foreground/80 hover:bg-secondary hover:text-foreground transition"
             >
               <LogOut className="h-4 w-4" /> Sign out
             </button>
-          ) : (
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 font-medium text-primary-foreground btn-glow hover:opacity-90 transition"
-            >
-              <LogIn className="h-4 w-4" /> Sign in
-            </Link>
           )}
         </nav>
       </div>
