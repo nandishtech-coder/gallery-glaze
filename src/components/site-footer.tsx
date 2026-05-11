@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, Github, Linkedin } from "lucide-react";
+import { Mail, Linkedin as LinkedinIcon } from "lucide-react";
+import { GithubIcon } from "@/components/icons/github";
 
 export function SiteFooter() {
   return (
