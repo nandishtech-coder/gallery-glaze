@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ExternalLink, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
+import { SiteFooter } from "@/components/site-footer";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -108,9 +109,7 @@ function Index() {
         </section>
       </main>
 
-      <footer className="border-t border-border/50 py-8 text-center text-sm text-muted-foreground">
-        Built with care · {new Date().getFullYear()}
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
