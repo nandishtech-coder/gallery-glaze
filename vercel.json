@@ -1,9 +1,7 @@
 {
+  "version": 2,
   "framework": "tanstack-start",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "buildCommand": "bun run build",
+  "outputDirectory": ".output/public",
+  "cleanUrls": true
 }
