@@ -56,14 +56,14 @@ function ContactPage() {
               <div className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">Email</div>
               <div className="mt-1 text-sm font-medium">hello@nandish-tech.com</div>
             </a>
-            <div className="rounded-2xl glass p-5 transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] active:-translate-y-0.5 active:shadow-[var(--shadow-glow)]">
+            <div className="rounded-2xl glass p-5 card-hover">
               <MapPin className="h-5 w-5 text-primary" />
               <div className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">Based in</div>
               <div className="mt-1 text-sm font-medium">Bangalore, India · Remote worldwide</div>
             </div>
           </aside>
 
-          <form onSubmit={submit} className="rounded-2xl glass p-6 transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] active:-translate-y-0.5 active:shadow-[var(--shadow-glow)]">
+          <form onSubmit={submit} className="rounded-2xl glass p-6 card-hover">
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Name</label>
