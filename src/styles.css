@@ -101,3 +101,27 @@
 @utility btn-glow {
   box-shadow: var(--shadow-glow);
 }
+
+@utility card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+/* Touch devices: trigger on tap and keep highlight on focus */
+.card-hover:active,
+.card-hover:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+@media (hover: none) {
+  .card-hover {
+    box-shadow: 0 0 24px -10px oklch(0.74 0.18 295 / 0.35), var(--shadow-card);
+  }
+  .card-hover:active {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+  }
+}
+
