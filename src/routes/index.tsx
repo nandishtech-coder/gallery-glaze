@@ -65,13 +65,13 @@ function Index() {
               No projects yet. Sign in to add your first.
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-1 lg:grid-cols-2">
               {projects.map((p) => (
                 <article
                   key={p.id}
                   className="group flex flex-col overflow-hidden rounded-2xl glass transition hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]"
                 >
-                  <div className="relative aspect-video overflow-hidden bg-secondary">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
                     {p.thumbnail_url ? (
                       <img
                         src={p.thumbnail_url}
