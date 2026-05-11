@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
-import { LogIn, LogOut, Sparkles, LayoutDashboard } from "lucide-react";
+import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
 
 export function NavBar() {
   const { user, isAdmin, signOut } = useAuth();
