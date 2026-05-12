@@ -1,7 +1,0 @@
-{
-  "version": 2,
-  "framework": "tanstack-start",
-  "buildCommand": "bun run build",
-  "outputDirectory": ".output/public",
-  "cleanUrls": true
-}
