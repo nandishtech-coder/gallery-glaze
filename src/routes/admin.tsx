@@ -36,6 +36,7 @@ function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
 
@@ -45,16 +46,36 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const { data, error } = await supabase
-      .from("projects")
-      .select("id, name, description, live_url, github_url, thumbnail_url")
-      .order("created_at", { ascending: false });
-    if (error) toast.error(error.message);
-    setProjects((data ?? []) as Project[]);
+    const [proj, prof] = await Promise.all([
+      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url").order("created_at", { ascending: false }),
+      supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
+    ]);
+    if (proj.error) toast.error(proj.error.message);
+    if (prof.error) toast.error(prof.error.message);
+    setProjects((proj.data ?? []) as Project[]);
+    setProfiles((prof.data ?? []) as Profile[]);
     setFetching(false);
   };
 
   useEffect(() => { if (user && isAdmin) load(); }, [user, isAdmin]);
+
+  const setApproval = async (p: Profile, approved: boolean) => {
+    const { error } = await supabase
+      .from("profiles")
+      .update({ approved, approved_at: approved ? new Date().toISOString() : null, approved_by: approved ? user!.id : null })
+      .eq("id", p.id);
+    if (error) return toast.error(error.message);
+    toast.success(approved ? `Approved ${p.email}` : `Revoked ${p.email}`);
+    load();
+  };
+
+  const removeUser = async (p: Profile) => {
+    if (!confirm(`Delete profile for ${p.email}? (auth account will remain)`)) return;
+    const { error } = await supabase.from("profiles").delete().eq("id", p.id);
+    if (error) return toast.error(error.message);
+    toast.success("Profile removed");
+    load();
+  };
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
