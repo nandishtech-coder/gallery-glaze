@@ -39,6 +39,7 @@ function AdminPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
+  const [tab, setTab] = useState<"projects" | "clients">("projects");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
