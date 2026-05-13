@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -39,6 +39,7 @@ function AdminPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
+  const [tab, setTab] = useState<"projects" | "clients">("projects");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -130,137 +131,196 @@ function AdminPage() {
     <div className="min-h-screen">
       <NavBar />
       <main className="mx-auto max-w-6xl px-4 py-12">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">Admin Dashboard</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Manage your portfolio projects.</p>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-semibold tracking-tight">Admin Dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Manage projects and approve client signups.</p>
+        </div>
+
+        {/* Tab menu */}
+        <div className="mb-6 flex items-center gap-1 rounded-xl border border-border/60 bg-secondary/30 p-1 w-fit">
           <button
-            onClick={() => setEditing({ ...empty })}
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90"
+            onClick={() => setTab("projects")}
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              tab === "projects" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
           >
-            <Plus className="h-4 w-4" /> New project
+            <FolderKanban className="h-4 w-4" /> Projects
+          </button>
+          <button
+            onClick={() => setTab("clients")}
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              tab === "clients" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <UsersIcon className="h-4 w-4" /> Clients
+            {profiles.filter((p) => !p.approved).length > 0 && (
+              <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
+                {profiles.filter((p) => !p.approved).length}
+              </span>
+            )}
           </button>
         </div>
 
-        <div className="overflow-hidden rounded-2xl glass">
-          {fetching ? (
-            <div className="p-12 text-center text-muted-foreground">
-              <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+        {tab === "projects" && (
+          <>
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <p className="text-sm text-muted-foreground">All portfolio projects.</p>
+              <button
+                onClick={() => setEditing({ ...empty })}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90"
+              >
+                <Plus className="h-4 w-4" /> New project
+              </button>
             </div>
-          ) : projects.length === 0 ? (
-            <div className="p-12 text-center text-muted-foreground">No projects yet.</div>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-5 py-3">Project</th>
-                  <th className="px-5 py-3">Links</th>
-                  <th className="px-5 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.map((p) => (
-                  <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
-                    <td className="px-5 py-4">
-                      <div className="font-medium">{p.name}</div>
-                      <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.description}</div>
-                    </td>
-                    <td className="px-5 py-4">
-                      <div className="flex flex-wrap gap-2">
-                        {p.live_url && (
-                          <a href={p.live_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs hover:bg-secondary/70">
-                            <ExternalLink className="h-3 w-3" /> Live
-                          </a>
-                        )}
-                        {p.github_url && (
-                          <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs hover:bg-secondary/70">
-                            <GithubIcon className="h-3 w-3" /> GitHub
-                          </a>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-5 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        <button onClick={() => setEditing({ ...p })} className="rounded-md p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground">
-                          <Pencil className="h-4 w-4" />
-                        </button>
-                        <button onClick={() => remove(p.id)} className="rounded-md p-2 text-muted-foreground transition hover:bg-destructive/20 hover:text-destructive">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
 
-        <div className="mt-12 mb-4 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">Users</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Approve or revoke access for people who signed up.</p>
-          </div>
-        </div>
-
-        <div className="overflow-hidden rounded-2xl glass">
-          {fetching ? (
-            <div className="p-12 text-center text-muted-foreground">
-              <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground">
+                  <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+                </div>
+              ) : projects.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No projects yet.</div>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="px-5 py-3">Project</th>
+                      <th className="px-5 py-3">Links</th>
+                      <th className="px-5 py-3 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {projects.map((p) => (
+                      <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
+                        <td className="px-5 py-4">
+                          <div className="font-medium">{p.name}</div>
+                          <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.description}</div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex flex-wrap gap-2">
+                            {p.live_url && (
+                              <a href={p.live_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs hover:bg-secondary/70">
+                                <ExternalLink className="h-3 w-3" /> Live
+                              </a>
+                            )}
+                            {p.github_url && (
+                              <a href={p.github_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs hover:bg-secondary/70">
+                                <GithubIcon className="h-3 w-3" /> GitHub
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-5 py-4 text-right">
+                          <div className="flex justify-end gap-2">
+                            <button onClick={() => setEditing({ ...p })} className="rounded-md p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground">
+                              <Pencil className="h-4 w-4" />
+                            </button>
+                            <button onClick={() => remove(p.id)} className="rounded-md p-2 text-muted-foreground transition hover:bg-destructive/20 hover:text-destructive">
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
-          ) : profiles.length === 0 ? (
-            <div className="p-12 text-center text-muted-foreground">No users yet.</div>
-          ) : (
-            <table className="w-full text-sm">
-              <thead className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <tr>
-                  <th className="px-5 py-3">Email</th>
-                  <th className="px-5 py-3">Status</th>
-                  <th className="px-5 py-3">Signed up</th>
-                  <th className="px-5 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {profiles.map((p) => (
-                  <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
-                    <td className="px-5 py-4 font-medium">{p.email}</td>
-                    <td className="px-5 py-4">
-                      {p.approved ? (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-1 text-xs text-primary">
-                          <Check className="h-3 w-3" /> Approved
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs text-muted-foreground">
-                          Pending
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-5 py-4 text-xs text-muted-foreground">
-                      {new Date(p.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="px-5 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        {p.approved ? (
-                          <button onClick={() => setApproval(p, false)} title="Revoke" className="rounded-md p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground">
-                            <UserX className="h-4 w-4" />
-                          </button>
-                        ) : (
-                          <button onClick={() => setApproval(p, true)} title="Approve" className="rounded-md p-2 text-muted-foreground transition hover:bg-primary/20 hover:text-primary">
-                            <Check className="h-4 w-4" />
-                          </button>
-                        )}
-                        <button onClick={() => removeUser(p)} title="Delete profile" className="rounded-md p-2 text-muted-foreground transition hover:bg-destructive/20 hover:text-destructive">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+          </>
+        )}
+
+        {tab === "clients" && (
+          <>
+            <div className="mb-4">
+              <p className="text-sm text-muted-foreground">
+                Approve or reject people who signed up. Only approved clients can sign in.
+              </p>
+            </div>
+
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground">
+                  <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+                </div>
+              ) : profiles.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No client signups yet.</div>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="px-5 py-3">Email</th>
+                      <th className="px-5 py-3">Status</th>
+                      <th className="px-5 py-3">Signed up</th>
+                      <th className="px-5 py-3 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {profiles.map((p) => {
+                      const isOwner = p.email.toLowerCase() === "contactnandishtech@gmail.com";
+                      return (
+                        <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
+                          <td className="px-5 py-4">
+                            <div className="font-medium">{p.email}</div>
+                            {isOwner && (
+                              <div className="mt-0.5 text-[10px] uppercase tracking-wider text-primary">Owner</div>
+                            )}
+                          </td>
+                          <td className="px-5 py-4">
+                            {p.approved ? (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-1 text-xs text-primary">
+                                <Check className="h-3 w-3" /> Approved
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-2 py-1 text-xs text-amber-500">
+                                Pending
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-5 py-4 text-xs text-muted-foreground">
+                            {new Date(p.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-5 py-4 text-right">
+                            {isOwner ? (
+                              <span className="text-xs text-muted-foreground">—</span>
+                            ) : (
+                              <div className="flex justify-end gap-2">
+                                {!p.approved && (
+                                  <button
+                                    onClick={() => setApproval(p, true)}
+                                    title="Approve"
+                                    className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/25"
+                                  >
+                                    <Check className="h-3.5 w-3.5" /> Approve
+                                  </button>
+                                )}
+                                {p.approved && (
+                                  <button
+                                    onClick={() => setApproval(p, false)}
+                                    title="Revoke approval"
+                                    className="inline-flex items-center gap-1 rounded-md bg-secondary px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:bg-secondary/70 hover:text-foreground"
+                                  >
+                                    <UserX className="h-3.5 w-3.5" /> Revoke
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => removeUser(p)}
+                                  title="Reject & delete"
+                                  className="inline-flex items-center gap-1 rounded-md bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/20"
+                                >
+                                  <X className="h-3.5 w-3.5" /> Reject
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </>
+        )}
       </main>
 
       {editing && (
