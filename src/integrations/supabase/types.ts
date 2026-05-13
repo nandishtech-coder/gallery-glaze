@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          approved: boolean
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          email: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          approved?: boolean
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           created_at: string
