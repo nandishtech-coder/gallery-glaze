@@ -20,6 +20,14 @@ interface Project {
   thumbnail_url: string | null;
 }
 
+interface Profile {
+  id: string;
+  user_id: string;
+  email: string;
+  approved: boolean;
+  created_at: string;
+}
+
 type Draft = Omit<Project, "id"> & { id?: string };
 
 const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "" };
