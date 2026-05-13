@@ -31,10 +31,23 @@ function LoginPage() {
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        toast.success("Account created. Check your email to confirm.");
+        toast.success("Account created. Awaiting admin approval before you can sign in.");
+        await supabase.auth.signOut();
+        setMode("signin");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        // Check approval status
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("approved")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+        if (!profile?.approved) {
+          await supabase.auth.signOut();
+          toast.error("Your account is pending admin approval.");
+          return;
+        }
         toast.success("Welcome back.");
         navigate({ to: "/admin" });
       }
