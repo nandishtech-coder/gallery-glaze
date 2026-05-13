@@ -196,6 +196,71 @@ function AdminPage() {
             </table>
           )}
         </div>
+
+        <div className="mt-12 mb-4 flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">Users</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Approve or revoke access for people who signed up.</p>
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-2xl glass">
+          {fetching ? (
+            <div className="p-12 text-center text-muted-foreground">
+              <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+            </div>
+          ) : profiles.length === 0 ? (
+            <div className="p-12 text-center text-muted-foreground">No users yet.</div>
+          ) : (
+            <table className="w-full text-sm">
+              <thead className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                <tr>
+                  <th className="px-5 py-3">Email</th>
+                  <th className="px-5 py-3">Status</th>
+                  <th className="px-5 py-3">Signed up</th>
+                  <th className="px-5 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {profiles.map((p) => (
+                  <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
+                    <td className="px-5 py-4 font-medium">{p.email}</td>
+                    <td className="px-5 py-4">
+                      {p.approved ? (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-1 text-xs text-primary">
+                          <Check className="h-3 w-3" /> Approved
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs text-muted-foreground">
+                          Pending
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-5 py-4 text-xs text-muted-foreground">
+                      {new Date(p.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-5 py-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        {p.approved ? (
+                          <button onClick={() => setApproval(p, false)} title="Revoke" className="rounded-md p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground">
+                            <UserX className="h-4 w-4" />
+                          </button>
+                        ) : (
+                          <button onClick={() => setApproval(p, true)} title="Approve" className="rounded-md p-2 text-muted-foreground transition hover:bg-primary/20 hover:text-primary">
+                            <Check className="h-4 w-4" />
+                          </button>
+                        )}
+                        <button onClick={() => removeUser(p)} title="Delete profile" className="rounded-md p-2 text-muted-foreground transition hover:bg-destructive/20 hover:text-destructive">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </main>
 
       {editing && (
