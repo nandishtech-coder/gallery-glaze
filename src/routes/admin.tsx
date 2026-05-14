@@ -245,78 +245,60 @@ function AdminPage() {
               ) : profiles.length === 0 ? (
                 <div className="p-12 text-center text-muted-foreground">No client signups yet.</div>
               ) : (
-                <table className="w-full text-sm">
-                  <thead className="border-b border-border/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
-                    <tr>
-                      <th className="px-5 py-3">Email</th>
-                      <th className="px-5 py-3">Status</th>
-                      <th className="px-5 py-3">Signed up</th>
-                      <th className="px-5 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {profiles.map((p) => {
-                      const isOwner = p.email.toLowerCase() === "contactnandishtech@gmail.com";
-                      return (
-                        <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
-                          <td className="px-5 py-4">
-                            <div className="font-medium">{p.email}</div>
-                            {isOwner && (
-                              <div className="mt-0.5 text-[10px] uppercase tracking-wider text-primary">Owner</div>
-                            )}
-                          </td>
-                          <td className="px-5 py-4">
+                <ul className="divide-y divide-border/40">
+                  {profiles.map((p) => {
+                    const isOwner = p.email.toLowerCase() === "contactnandishtech@gmail.com";
+                    return (
+                      <li key={p.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-sm font-medium">{p.email}</div>
+                          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                             {p.approved ? (
-                              <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-1 text-xs text-primary">
+                              <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-0.5 text-primary">
                                 <Check className="h-3 w-3" /> Approved
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-2 py-1 text-xs text-amber-500">
+                              <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-2 py-0.5 text-amber-500">
                                 Pending
                               </span>
                             )}
-                          </td>
-                          <td className="px-5 py-4 text-xs text-muted-foreground">
-                            {new Date(p.created_at).toLocaleDateString()}
-                          </td>
-                          <td className="px-5 py-4 text-right">
-                            {isOwner ? (
-                              <span className="text-xs text-muted-foreground">—</span>
-                            ) : (
-                              <div className="flex justify-end gap-2">
-                                {!p.approved && (
-                                  <button
-                                    onClick={() => setApproval(p, true)}
-                                    title="Approve"
-                                    className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/25"
-                                  >
-                                    <Check className="h-3.5 w-3.5" /> Approve
-                                  </button>
-                                )}
-                                {p.approved && (
-                                  <button
-                                    onClick={() => setApproval(p, false)}
-                                    title="Revoke approval"
-                                    className="inline-flex items-center gap-1 rounded-md bg-secondary px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:bg-secondary/70 hover:text-foreground"
-                                  >
-                                    <UserX className="h-3.5 w-3.5" /> Revoke
-                                  </button>
-                                )}
-                                <button
-                                  onClick={() => removeUser(p)}
-                                  title="Reject & delete"
-                                  className="inline-flex items-center gap-1 rounded-md bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/20"
-                                >
-                                  <X className="h-3.5 w-3.5" /> Reject
-                                </button>
-                              </div>
+                            {isOwner && (
+                              <span className="text-[10px] uppercase tracking-wider text-primary">Owner</span>
                             )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                            <span>· {new Date(p.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        {isOwner ? (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        ) : (
+                          <div className="flex flex-wrap gap-2 sm:justify-end">
+                            {!p.approved ? (
+                              <button
+                                onClick={() => setApproval(p, true)}
+                                className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/25"
+                              >
+                                <Check className="h-3.5 w-3.5" /> Approve
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => setApproval(p, false)}
+                                className="inline-flex items-center gap-1 rounded-md bg-secondary px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:bg-secondary/70 hover:text-foreground"
+                              >
+                                <UserX className="h-3.5 w-3.5" /> Revoke
+                              </button>
+                            )}
+                            <button
+                              onClick={() => removeUser(p)}
+                              className="inline-flex items-center gap-1 rounded-md bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/20"
+                            >
+                              <X className="h-3.5 w-3.5" /> Reject
+                            </button>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
               )}
             </div>
           </>
