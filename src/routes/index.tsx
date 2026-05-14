@@ -20,6 +20,13 @@ interface PublicProject {
 function Index() {
   const [projects, setProjects] = useState<PublicProject[]>([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
+
+  const filtered = projects.filter((p) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return p.name.toLowerCase().includes(q) || (p.description ?? "").toLowerCase().includes(q);
+  });
 
   useEffect(() => {
     supabase
