@@ -21,11 +21,15 @@ function Index() {
   const [projects, setProjects] = useState<PublicProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [activeTag, setActiveTag] = useState<string>("All");
+
+  const tags = ["All", ...Array.from(new Set(projects.map((p) => p.name).filter(Boolean)))];
 
   const filtered = projects.filter((p) => {
     const q = query.trim().toLowerCase();
-    if (!q) return true;
-    return p.name.toLowerCase().includes(q) || (p.description ?? "").toLowerCase().includes(q);
+    const matchesQuery = !q || p.name.toLowerCase().includes(q) || (p.description ?? "").toLowerCase().includes(q);
+    const matchesTag = activeTag === "All" || p.name === activeTag;
+    return matchesQuery && matchesTag;
   });
 
   useEffect(() => {
