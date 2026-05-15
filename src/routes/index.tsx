@@ -78,6 +78,29 @@ function Index() {
             </div>
           </div>
 
+          {tags.length > 1 && (
+            <div className="mb-8 flex flex-wrap gap-2">
+              {tags.map((t) => {
+                const active = activeTag === t;
+                return (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setActiveTag(t)}
+                    className={
+                      "rounded-full px-4 py-1.5 text-sm transition border " +
+                      (active
+                        ? "bg-primary text-primary-foreground border-primary btn-glow"
+                        : "glass border-border text-muted-foreground hover:text-foreground")
+                    }
+                  >
+                    {t}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           {loading ? (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
