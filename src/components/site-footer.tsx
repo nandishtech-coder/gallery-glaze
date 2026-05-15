@@ -29,7 +29,7 @@ export function SiteFooter() {
             Connect
           </h4>
           <div className="flex items-center gap-3">
-            <a href="mailto:hello@nandish-tech.com" aria-label="Email" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
+            <a href="mailto:contactnandishtech@gmail.com" aria-label="Email" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
               <Mail className="h-4 w-4" />
             </a>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">

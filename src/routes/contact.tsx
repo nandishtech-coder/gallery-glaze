@@ -26,7 +26,7 @@ function ContactPage() {
     setSending(true);
     const subject = encodeURIComponent(`New inquiry from ${form.name}`);
     const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
-    window.location.href = `mailto:hello@nandish-tech.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:contactnandishtech@gmail.com?subject=${subject}&body=${body}`;
     setTimeout(() => {
       toast.success("Opening your email client…");
       setSending(false);
@@ -51,10 +51,10 @@ function ContactPage() {
 
         <div className="mt-12 grid gap-6 md:grid-cols-[1fr_1.4fr]">
           <aside className="space-y-4">
-            <a href="mailto:hello@nandish-tech.com" className="block rounded-2xl glass p-5 card-hover">
+            <a href="mailto:contactnandishtech@gmail.com" className="block rounded-2xl glass p-5 card-hover">
               <Mail className="h-5 w-5 text-primary" />
               <div className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">Email</div>
-              <div className="mt-1 text-sm font-medium">hello@nandish-tech.com</div>
+              <div className="mt-1 text-sm font-medium">contactnandishtech@gmail.com</div>
             </a>
             <div className="rounded-2xl glass p-5 card-hover">
               <MapPin className="h-5 w-5 text-primary" />
