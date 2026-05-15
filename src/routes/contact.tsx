@@ -108,14 +108,24 @@ function ContactPage() {
                 className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
               />
             </div>
-            <button
-              type="submit"
-              disabled={sending}
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90 disabled:opacity-60"
-            >
-              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              Send message
-            </button>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <button
+                type="submit"
+                disabled={sending}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90 disabled:opacity-60"
+              >
+                {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                Send message
+              </button>
+              <button
+                type="button"
+                onClick={openGmail}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary/40 px-4 py-2.5 text-sm font-medium text-foreground/90 transition hover:bg-secondary"
+              >
+                <Mail className="h-4 w-4" />
+                Open in Gmail
+              </button>
+            </div>
           </form>
         </div>
       </main>
