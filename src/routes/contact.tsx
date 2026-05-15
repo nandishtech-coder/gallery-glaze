@@ -21,32 +21,30 @@ function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
 
+  const to = "contactnandishtech@gmail.com";
+  const subject = encodeURIComponent(`New inquiry from ${form.name || "website visitor"}`);
+  const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
+  const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}`;
+  const gmailUrl = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${to}&su=${subject}&body=${body}`;
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
-    const to = "contactnandishtech@gmail.com";
-    const subject = encodeURIComponent(`New inquiry from ${form.name}`);
-    const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
-    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-
-    if (isMobile) {
-      // Mobile: open the device's default mail app
-      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-    } else {
-      // Desktop: try Gmail compose; fall back to default mail client if blocked
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
-      const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}`;
-      const win = window.open(gmailUrl, "_blank", "noopener,noreferrer");
-      if (!win || win.closed || typeof win.closed === "undefined") {
-        // Popup blocked or open failed — fall back to system default mail client
-        window.location.href = mailtoUrl;
-      }
-    }
-
+    // Universal: opens the OS default mail client (Gmail app on mobile, default mail app on desktop)
+    window.location.href = mailtoUrl;
     setTimeout(() => {
       toast.success("Opening your email…");
       setSending(false);
     }, 400);
+  };
+
+  const openGmail = () => {
+    // Try to copy message as a safety net in case Gmail web fails to load
+    try {
+      navigator.clipboard?.writeText(decodeURIComponent(body));
+    } catch {}
+    window.open(gmailUrl, "_blank", "noopener,noreferrer");
+    toast.success("Opening Gmail in a new tab…");
   };
 
   return (
