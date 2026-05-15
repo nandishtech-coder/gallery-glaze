@@ -24,11 +24,25 @@ function ContactPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
+    const to = "contactnandishtech@gmail.com";
     const subject = encodeURIComponent(`New inquiry from ${form.name}`);
     const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
-    window.location.href = `mailto:contactnandishtech@gmail.com?subject=${subject}&body=${body}`;
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Mobile: open the device's default mail app
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    } else {
+      // Desktop: open Gmail compose directly in a new tab (skips Outlook/default handler)
+      window.open(
+        `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    }
+
     setTimeout(() => {
-      toast.success("Opening your email client…");
+      toast.success("Opening your email…");
       setSending(false);
     }, 400);
   };
