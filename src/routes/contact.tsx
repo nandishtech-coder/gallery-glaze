@@ -33,12 +33,14 @@ function ContactPage() {
       // Mobile: open the device's default mail app
       window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
     } else {
-      // Desktop: open Gmail compose directly in a new tab (skips Outlook/default handler)
-      window.open(
-        `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
+      // Desktop: try Gmail compose; fall back to default mail client if blocked
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+      const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}`;
+      const win = window.open(gmailUrl, "_blank", "noopener,noreferrer");
+      if (!win || win.closed || typeof win.closed === "undefined") {
+        // Popup blocked or open failed — fall back to system default mail client
+        window.location.href = mailtoUrl;
+      }
     }
 
     setTimeout(() => {
