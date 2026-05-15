@@ -21,11 +21,15 @@ function Index() {
   const [projects, setProjects] = useState<PublicProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [activeTag, setActiveTag] = useState<string>("All");
+
+  const tags = ["All", ...Array.from(new Set(projects.map((p) => p.name).filter(Boolean)))];
 
   const filtered = projects.filter((p) => {
     const q = query.trim().toLowerCase();
-    if (!q) return true;
-    return p.name.toLowerCase().includes(q) || (p.description ?? "").toLowerCase().includes(q);
+    const matchesQuery = !q || p.name.toLowerCase().includes(q) || (p.description ?? "").toLowerCase().includes(q);
+    const matchesTag = activeTag === "All" || p.name === activeTag;
+    return matchesQuery && matchesTag;
   });
 
   useEffect(() => {
@@ -73,6 +77,29 @@ function Index() {
               />
             </div>
           </div>
+
+          {tags.length > 1 && (
+            <div className="mb-8 flex flex-wrap gap-2">
+              {tags.map((t) => {
+                const active = activeTag === t;
+                return (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setActiveTag(t)}
+                    className={
+                      "rounded-full px-4 py-1.5 text-sm transition border " +
+                      (active
+                        ? "bg-primary text-primary-foreground border-primary btn-glow"
+                        : "glass border-border text-muted-foreground hover:text-foreground")
+                    }
+                  >
+                    {t}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {loading ? (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
