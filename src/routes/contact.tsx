@@ -107,14 +107,6 @@ function ContactPage() {
                 {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 Send message
               </button>
-              <button
-                type="button"
-                onClick={openGmail}
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary/40 px-4 py-2.5 text-sm font-medium text-foreground/90 transition hover:bg-secondary"
-              >
-                <Mail className="h-4 w-4" />
-                Open in Gmail
-              </button>
             </div>
           </form>
         </div>
