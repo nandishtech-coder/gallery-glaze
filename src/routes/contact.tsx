@@ -25,7 +25,6 @@ function ContactPage() {
   const subject = encodeURIComponent(`New inquiry from ${form.name || "website visitor"}`);
   const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
   const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}`;
-  const gmailUrl = `https://mail.google.com/mail/u/0/?fs=1&tf=cm&to=${to}&su=${subject}&body=${body}`;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,15 +35,6 @@ function ContactPage() {
       toast.success("Opening your email…");
       setSending(false);
     }, 400);
-  };
-
-  const openGmail = () => {
-    // Try to copy message as a safety net in case Gmail web fails to load
-    try {
-      navigator.clipboard?.writeText(decodeURIComponent(body));
-    } catch {}
-    window.open(gmailUrl, "_blank", "noopener,noreferrer");
-    toast.success("Opening Gmail in a new tab…");
   };
 
   return (
@@ -116,14 +106,6 @@ function ContactPage() {
               >
                 {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 Send message
-              </button>
-              <button
-                type="button"
-                onClick={openGmail}
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary/40 px-4 py-2.5 text-sm font-medium text-foreground/90 transition hover:bg-secondary"
-              >
-                <Mail className="h-4 w-4" />
-                Open in Gmail
               </button>
             </div>
           </form>
