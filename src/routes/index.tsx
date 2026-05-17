@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ExternalLink, Sparkles, Search } from "lucide-react";
+import { ExternalLink, Sparkles, Search, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
