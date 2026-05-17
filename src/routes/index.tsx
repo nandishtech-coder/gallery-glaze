@@ -133,8 +133,10 @@ function Index() {
                     )}
                   </div>
                   <div className="flex flex-1 flex-col p-5">
-                    <h3 className="text-lg font-semibold">{p.name}</h3>
-                    <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">
+                    <h3 className="text-lg font-semibold transition-transform duration-300 hover:scale-105 hover:text-primary inline-block origin-left cursor-default">
+                      {p.name}
+                    </h3>
+                    <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground transition-transform duration-300 hover:scale-[1.02] hover:text-foreground origin-left cursor-default">
                       {p.description}
                     </p>
                     {(p.live_url || p.name) && (
@@ -144,17 +146,17 @@ function Index() {
                             href={p.live_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+                            className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-transform duration-300 hover:scale-105 hover:opacity-90"
                           >
                             View Live <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         )}
                         <a
-                          href={`https://wa.me/917899560461?text=${encodeURIComponent(`Hi, I'm interested in the "${p.name}" demo project. Could you share more details?`)}`}
+                          href={`https://wa.me/917899560461?text=${encodeURIComponent(`Hello Nandish-Tech 👋,\n\nI came across your portfolio and I'm interested in the "${p.name}" demo project.\n\nCould you please share more details regarding:\n• Features & customization options\n• Pricing & delivery timeline\n• Next steps to get started\n\nLooking forward to your response.\n\nThank you!`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Enquire about ${p.name} on WhatsApp`}
-                          className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border glass px-3 py-2 text-sm font-medium transition hover:text-primary"
+                          className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border glass px-3 py-2 text-sm font-medium transition-transform duration-300 hover:scale-105 hover:text-primary"
                         >
                           WhatsApp <MessageCircle className="h-3.5 w-3.5" />
                         </a>
