@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ExternalLink, Sparkles, Search } from "lucide-react";
+import { ExternalLink, Sparkles, Search, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
@@ -137,15 +137,28 @@ function Index() {
                     <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">
                       {p.description}
                     </p>
-                    {p.live_url && (
-                      <a
-                        href={p.live_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-                      >
-                        View Live <ExternalLink className="h-3.5 w-3.5" />
-                      </a>
+                    {(p.live_url || p.name) && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {p.live_url && (
+                          <a
+                            href={p.live_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+                          >
+                            View Live <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                        <a
+                          href={`https://wa.me/917899560461?text=${encodeURIComponent(`Hi, I'm interested in the "${p.name}" demo project. Could you share more details?`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Enquire about ${p.name} on WhatsApp`}
+                          className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border glass px-3 py-2 text-sm font-medium transition hover:text-primary"
+                        >
+                          WhatsApp <MessageCircle className="h-3.5 w-3.5" />
+                        </a>
+                      </div>
                     )}
                   </div>
                 </article>
