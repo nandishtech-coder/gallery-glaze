@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
-import { MotionToggle } from "@/components/motion-toggle";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -12,7 +11,7 @@ const navLinks = [
 export function NavBar() {
   const { user, isAdmin, signOut } = useAuth();
   return (
-    <header className="sticky top-0 z-40 w-full px-4">
+    <header className="sticky top-0 z-40 w-full px-4 rise-in">
       <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between gap-2 rounded-2xl glass px-3 py-2.5 sm:px-5 sm:py-3">
         <Link to="/" className="flex shrink-0 items-center gap-1.5 text-sm font-semibold tracking-tight sm:gap-2 sm:text-base">
           <Sparkles className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
@@ -33,7 +32,6 @@ export function NavBar() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1 text-sm">
-          <MotionToggle />
           {user && isAdmin && (
             <Link
               to="/admin"

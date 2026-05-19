@@ -144,14 +144,12 @@
   animation: bounce-soft 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Auto-apply bounce to headings + common interactive content site-wide.
-   Headings get inline-block so the transform-origin works correctly and
-   they snap back to their original layout position after the animation. */
+/* Auto-apply bounce on hover to headings + common interactive content.
+   No display change — transform alone is enough and preserves layout. */
 h1, h2, h3, h4, h5, h6,
 nav a, nav button,
 article p, article a, article button,
 .glass a, .glass button {
-  display: inline-block;
   transform-origin: center;
 }
 h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover,
@@ -160,6 +158,18 @@ article p:hover, article a:hover, article button:hover,
 .glass a:hover, .glass button:hover {
   animation: bounce-soft 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* Staggered entrance animation on page load */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.rise-delay-1 { animation-delay: 0.15s; }
+.rise-delay-2 { animation-delay: 0.35s; }
+.rise-delay-3 { animation-delay: 0.55s; }
 
 /* User toggle + OS preference disables all bounce animations site-wide. */
 html.no-anim *,
