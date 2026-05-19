@@ -32,7 +32,7 @@ export function NavBar() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-1 text-sm">
-          <MotionToggle />
+          <header className="contents" />
           {user && isAdmin && (
             <Link
               to="/admin"
