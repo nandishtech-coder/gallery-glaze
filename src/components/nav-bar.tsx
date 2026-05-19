@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
-import { MotionToggle } from "@/components/motion-toggle";
 
 const navLinks = [
   { to: "/", label: "Home" },
