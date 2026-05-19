@@ -49,14 +49,14 @@ function Index() {
 
       <main className="mx-auto max-w-6xl px-4 pt-16 pb-24">
         <section className="mb-16 text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Available for new work
           </div>
-          <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl">
+          <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
             Crafting <span className="text-gradient">digital products</span><br />
             with care and precision.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
             A selection of recent projects — interfaces, tools, and experiments shipped to real users.
           </p>
         </section>
