@@ -66,15 +66,50 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const [proj, prof] = await Promise.all([
+    const [proj, prof, svc] = await Promise.all([
       supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
+      supabase.from("services").select("*").order("sort_order", { ascending: true }),
     ]);
     if (proj.error) toast.error(proj.error.message);
     if (prof.error) toast.error(prof.error.message);
+    if (svc.error) toast.error(svc.error.message);
     setProjects((proj.data ?? []) as Project[]);
     setProfiles((prof.data ?? []) as Profile[]);
+    setServices((svc.data ?? []) as Service[]);
     setFetching(false);
+  };
+
+  const saveService = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingService) return;
+    const features = (editingService.featuresText ?? "")
+      .split("\n").map((s) => s.trim()).filter(Boolean);
+    const payload = {
+      title: editingService.title,
+      description: editingService.description,
+      price: editingService.price,
+      price_suffix: editingService.price_suffix || "onwards",
+      features,
+      popular: !!editingService.popular,
+      cta_label: editingService.cta_label || "Get Started",
+      sort_order: Number(editingService.sort_order) || 0,
+    };
+    const res = editingService.id
+      ? await supabase.from("services").update(payload).eq("id", editingService.id)
+      : await supabase.from("services").insert(payload);
+    if (res.error) return toast.error(res.error.message);
+    toast.success(editingService.id ? "Service updated" : "Service added");
+    setEditingService(null);
+    load();
+  };
+
+  const removeService = async (id: string) => {
+    if (!confirm("Delete this service?")) return;
+    const { error } = await supabase.from("services").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Deleted");
+    load();
   };
 
   useEffect(() => { if (user && isAdmin) load(); }, [user, isAdmin]);
