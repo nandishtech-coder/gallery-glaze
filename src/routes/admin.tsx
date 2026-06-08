@@ -291,6 +291,53 @@ function AdminPage() {
           </>
         )}
 
+        {tab === "services" && (
+          <>
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <p className="text-sm text-muted-foreground">Manage the "Services I Offer" section shown on the public site.</p>
+              <button
+                onClick={() => setEditingService({ ...emptyService })}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90"
+              >
+                <Plus className="h-4 w-4" /> New service
+              </button>
+            </div>
+
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground"><Loader2 className="mx-auto h-5 w-5 animate-spin" /></div>
+              ) : services.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No services yet.</div>
+              ) : (
+                <ul className="divide-y divide-border/40">
+                  {services.map((s) => (
+                    <li key={s.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{s.title}</span>
+                          {s.popular && <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">Popular</span>}
+                          <span className="text-xs text-muted-foreground">#{s.sort_order}</span>
+                        </div>
+                        <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{s.description}</div>
+                        <div className="mt-1 text-xs"><span className="text-gradient font-semibold">{s.price}</span> <span className="text-muted-foreground">{s.price_suffix}</span> · {s.features.length} features</div>
+                      </div>
+                      <div className="flex gap-2 sm:justify-end">
+                        <button onClick={() => setEditingService({ ...s, featuresText: s.features.join("\n") })} className="rounded-md p-2 text-muted-foreground hover:bg-secondary hover:text-foreground">
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button onClick={() => removeService(s.id)} className="rounded-md p-2 text-muted-foreground hover:bg-destructive/20 hover:text-destructive">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        )}
+
+
         {tab === "clients" && (
           <>
             <div className="mb-4">
