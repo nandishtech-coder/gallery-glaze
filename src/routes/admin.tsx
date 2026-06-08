@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -28,18 +28,37 @@ interface Profile {
   created_at: string;
 }
 
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  price_suffix: string;
+  features: string[];
+  popular: boolean;
+  cta_label: string;
+  sort_order: number;
+}
+
 type Draft = Omit<Project, "id"> & { id?: string };
+type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 
 const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "" };
+const emptyService: ServiceDraft = {
+  title: "", description: "", price: "", price_suffix: "onwards",
+  features: [], popular: true, cta_label: "Get Started", sort_order: 0, featuresText: "",
+};
 
 function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
-  const [tab, setTab] = useState<"projects" | "clients">("projects");
+  const [editingService, setEditingService] = useState<ServiceDraft | null>(null);
+  const [tab, setTab] = useState<"projects" | "services" | "clients">("projects");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -47,15 +66,50 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const [proj, prof] = await Promise.all([
+    const [proj, prof, svc] = await Promise.all([
       supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
+      supabase.from("services").select("*").order("sort_order", { ascending: true }),
     ]);
     if (proj.error) toast.error(proj.error.message);
     if (prof.error) toast.error(prof.error.message);
+    if (svc.error) toast.error(svc.error.message);
     setProjects((proj.data ?? []) as Project[]);
     setProfiles((prof.data ?? []) as Profile[]);
+    setServices((svc.data ?? []) as Service[]);
     setFetching(false);
+  };
+
+  const saveService = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingService) return;
+    const features = (editingService.featuresText ?? "")
+      .split("\n").map((s) => s.trim()).filter(Boolean);
+    const payload = {
+      title: editingService.title,
+      description: editingService.description,
+      price: editingService.price,
+      price_suffix: editingService.price_suffix || "onwards",
+      features,
+      popular: !!editingService.popular,
+      cta_label: editingService.cta_label || "Get Started",
+      sort_order: Number(editingService.sort_order) || 0,
+    };
+    const res = editingService.id
+      ? await supabase.from("services").update(payload).eq("id", editingService.id)
+      : await supabase.from("services").insert(payload);
+    if (res.error) return toast.error(res.error.message);
+    toast.success(editingService.id ? "Service updated" : "Service added");
+    setEditingService(null);
+    load();
+  };
+
+  const removeService = async (id: string) => {
+    if (!confirm("Delete this service?")) return;
+    const { error } = await supabase.from("services").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Deleted");
+    load();
   };
 
   useEffect(() => { if (user && isAdmin) load(); }, [user, isAdmin]);
@@ -147,6 +201,14 @@ function AdminPage() {
             <FolderKanban className="h-4 w-4" /> Projects
           </button>
           <button
+            onClick={() => setTab("services")}
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              tab === "services" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Briefcase className="h-4 w-4" /> Services I Offer
+          </button>
+          <button
             onClick={() => setTab("clients")}
             className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
               tab === "clients" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
@@ -228,6 +290,53 @@ function AdminPage() {
             </div>
           </>
         )}
+
+        {tab === "services" && (
+          <>
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <p className="text-sm text-muted-foreground">Manage the "Services I Offer" section shown on the public site.</p>
+              <button
+                onClick={() => setEditingService({ ...emptyService })}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90"
+              >
+                <Plus className="h-4 w-4" /> New service
+              </button>
+            </div>
+
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground"><Loader2 className="mx-auto h-5 w-5 animate-spin" /></div>
+              ) : services.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No services yet.</div>
+              ) : (
+                <ul className="divide-y divide-border/40">
+                  {services.map((s) => (
+                    <li key={s.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{s.title}</span>
+                          {s.popular && <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">Popular</span>}
+                          <span className="text-xs text-muted-foreground">#{s.sort_order}</span>
+                        </div>
+                        <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{s.description}</div>
+                        <div className="mt-1 text-xs"><span className="text-gradient font-semibold">{s.price}</span> <span className="text-muted-foreground">{s.price_suffix}</span> · {s.features.length} features</div>
+                      </div>
+                      <div className="flex gap-2 sm:justify-end">
+                        <button onClick={() => setEditingService({ ...s, featuresText: s.features.join("\n") })} className="rounded-md p-2 text-muted-foreground hover:bg-secondary hover:text-foreground">
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button onClick={() => removeService(s.id)} className="rounded-md p-2 text-muted-foreground hover:bg-destructive/20 hover:text-destructive">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        )}
+
 
         {tab === "clients" && (
           <>
@@ -344,6 +453,69 @@ function AdminPage() {
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <button type="button" onClick={() => setEditing(null)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>
+              <button type="submit" className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow hover:opacity-90">Save</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {editingService && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
+          <form onSubmit={saveService} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{editingService.id ? "Edit service" : "New service"}</h2>
+              <button type="button" onClick={() => setEditingService(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Title</label>
+                <input required value={editingService.title} onChange={(e) => setEditingService({ ...editingService, title: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Description</label>
+                <textarea rows={2} value={editingService.description} onChange={(e) => setEditingService({ ...editingService, description: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Price (e.g. ₹499)</label>
+                  <input value={editingService.price} onChange={(e) => setEditingService({ ...editingService, price: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Price suffix</label>
+                  <input value={editingService.price_suffix} onChange={(e) => setEditingService({ ...editingService, price_suffix: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Features (one per line)</label>
+                <textarea rows={6} value={editingService.featuresText ?? ""} onChange={(e) => setEditingService({ ...editingService, featuresText: e.target.value })}
+                  placeholder={"Deploy website on hosting\nSSL setup (HTTPS)\nLive URL delivery"}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">CTA label</label>
+                  <input value={editingService.cta_label} onChange={(e) => setEditingService({ ...editingService, cta_label: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Sort order</label>
+                  <input type="number" value={editingService.sort_order} onChange={(e) => setEditingService({ ...editingService, sort_order: Number(e.target.value) })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={editingService.popular} onChange={(e) => setEditingService({ ...editingService, popular: e.target.checked })} />
+                Show "Popular" badge
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button type="button" onClick={() => setEditingService(null)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>
               <button type="submit" className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow hover:opacity-90">Save</button>
             </div>
           </form>

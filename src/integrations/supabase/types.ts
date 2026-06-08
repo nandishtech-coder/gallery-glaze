@@ -77,6 +77,48 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          created_at: string
+          cta_label: string
+          description: string
+          features: string[]
+          id: string
+          popular: boolean
+          price: string
+          price_suffix: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_label?: string
+          description?: string
+          features?: string[]
+          id?: string
+          popular?: boolean
+          price?: string
+          price_suffix?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_label?: string
+          description?: string
+          features?: string[]
+          id?: string
+          popular?: boolean
+          price?: string
+          price_suffix?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
