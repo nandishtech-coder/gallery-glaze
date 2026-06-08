@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -28,18 +28,37 @@ interface Profile {
   created_at: string;
 }
 
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  price_suffix: string;
+  features: string[];
+  popular: boolean;
+  cta_label: string;
+  sort_order: number;
+}
+
 type Draft = Omit<Project, "id"> & { id?: string };
+type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 
 const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "" };
+const emptyService: ServiceDraft = {
+  title: "", description: "", price: "", price_suffix: "onwards",
+  features: [], popular: true, cta_label: "Get Started", sort_order: 0, featuresText: "",
+};
 
 function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
-  const [tab, setTab] = useState<"projects" | "clients">("projects");
+  const [editingService, setEditingService] = useState<ServiceDraft | null>(null);
+  const [tab, setTab] = useState<"projects" | "services" | "clients">("projects");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
