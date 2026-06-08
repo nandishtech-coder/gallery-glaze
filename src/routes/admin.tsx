@@ -458,6 +458,69 @@ function AdminPage() {
           </form>
         </div>
       )}
+
+      {editingService && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
+          <form onSubmit={saveService} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{editingService.id ? "Edit service" : "New service"}</h2>
+              <button type="button" onClick={() => setEditingService(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Title</label>
+                <input required value={editingService.title} onChange={(e) => setEditingService({ ...editingService, title: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Description</label>
+                <textarea rows={2} value={editingService.description} onChange={(e) => setEditingService({ ...editingService, description: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Price (e.g. ₹499)</label>
+                  <input value={editingService.price} onChange={(e) => setEditingService({ ...editingService, price: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Price suffix</label>
+                  <input value={editingService.price_suffix} onChange={(e) => setEditingService({ ...editingService, price_suffix: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Features (one per line)</label>
+                <textarea rows={6} value={editingService.featuresText ?? ""} onChange={(e) => setEditingService({ ...editingService, featuresText: e.target.value })}
+                  placeholder={"Deploy website on hosting\nSSL setup (HTTPS)\nLive URL delivery"}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">CTA label</label>
+                  <input value={editingService.cta_label} onChange={(e) => setEditingService({ ...editingService, cta_label: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Sort order</label>
+                  <input type="number" value={editingService.sort_order} onChange={(e) => setEditingService({ ...editingService, sort_order: Number(e.target.value) })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={editingService.popular} onChange={(e) => setEditingService({ ...editingService, popular: e.target.checked })} />
+                Show "Popular" badge
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button type="button" onClick={() => setEditingService(null)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>
+              <button type="submit" className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow hover:opacity-90">Save</button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
