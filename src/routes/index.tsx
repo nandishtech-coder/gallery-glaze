@@ -195,6 +195,67 @@ function Index() {
             </div>
           )}
         </section>
+
+        {services.length > 0 && (
+          <section className="mt-24">
+            <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+                  Services I Offer
+                </h2>
+                <p className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+                  Build something <span className="text-gradient">great together</span>
+                </p>
+              </div>
+              <Link
+                to="/services"
+                className="inline-flex w-fit items-center gap-1.5 rounded-lg glass border border-border px-4 py-2 text-sm font-medium transition hover:text-primary"
+              >
+                View all services <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {services.slice(0, 3).map((s) => (
+                <article
+                  key={s.id}
+                  className="group relative flex flex-col rounded-2xl glass p-6 card-hover"
+                >
+                  {s.popular && (
+                    <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow-lg">
+                      Popular
+                    </span>
+                  )}
+                  <h3 className="text-lg font-semibold tracking-tight">{s.title}</h3>
+                  <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{s.description}</p>
+
+                  <div className="mt-4 flex items-baseline gap-1.5">
+                    <span className="text-2xl font-bold text-gradient">{s.price}</span>
+                    <span className="text-xs text-muted-foreground">{s.price_suffix}</span>
+                  </div>
+
+                  <ul className="mt-4 flex-1 space-y-2">
+                    {s.features.slice(0, 3).map((f, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-foreground/85">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <span className="line-clamp-1">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href={waForService(s)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90"
+                  >
+                    <MessageCircle className="h-4 w-4" /> {s.cta_label || "Get Started"}
+                  </a>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <SiteFooter />
