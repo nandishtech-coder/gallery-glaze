@@ -12,20 +12,20 @@ const navLinks = [
 export function NavBar() {
   const { user, isAdmin, signOut } = useAuth();
   return (
-    <header className="sticky top-0 z-40 w-full px-4 rise-in">
-      <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between gap-2 rounded-2xl glass px-3 py-2.5 sm:px-5 sm:py-3">
-        <Link to="/" className="flex shrink-0 items-center gap-1.5 text-sm font-semibold tracking-tight sm:gap-2 sm:text-base">
-          <Sparkles className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
-          <span className="text-gradient">Nandish-Tech</span>
+    <header className="sticky top-0 z-40 w-full px-2 sm:px-4 rise-in">
+      <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between gap-1 rounded-2xl glass px-2 py-2 sm:gap-2 sm:px-5 sm:py-3">
+        <Link to="/" className="flex min-w-0 shrink items-center gap-1 text-sm font-semibold tracking-tight sm:gap-2 sm:text-base">
+          <Sparkles className="h-4 w-4 shrink-0 text-primary sm:h-5 sm:w-5" />
+          <span className="text-gradient truncate">Nandish-Tech</span>
         </Link>
 
-        <nav className="flex items-center gap-0.5 text-xs sm:gap-1 sm:text-sm">
+        <nav className="flex shrink-0 items-center gap-0 text-[11px] sm:gap-1 sm:text-sm">
           {navLinks.map((l) => (
             <Link
               key={l.to}
               to={l.to}
               activeOptions={{ exact: true }}
-              className="rounded-lg px-2 py-1.5 text-foreground/70 transition hover:bg-secondary hover:text-foreground active:bg-secondary active:text-foreground sm:px-3 data-[status=active]:bg-secondary/60 data-[status=active]:text-foreground"
+              className="rounded-lg px-1.5 py-1.5 text-foreground/70 transition hover:bg-secondary hover:text-foreground active:bg-secondary active:text-foreground sm:px-3 data-[status=active]:bg-secondary/60 data-[status=active]:text-foreground"
             >
               {l.label}
             </Link>
