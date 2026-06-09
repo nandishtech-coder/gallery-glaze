@@ -33,6 +33,7 @@ interface PublicProject {
 
 function Index() {
   const [projects, setProjects] = useState<PublicProject[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string>("All");
@@ -55,7 +56,19 @@ function Index() {
         setProjects((data ?? []) as PublicProject[]);
         setLoading(false);
       });
+    supabase
+      .from("services")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => {
+        setServices((data ?? []) as Service[]);
+      });
   }, []);
+
+  const waForService = (s: Service) => {
+    const msg = `Hello! I'm interested in your *${s.title}* service (${s.price} ${s.price_suffix}).\n\nCould you please share more details and the next steps?\n\nThank you!`;
+    return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  };
 
   return (
     <div className="min-h-screen">
