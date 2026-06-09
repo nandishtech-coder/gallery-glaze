@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ExternalLink, Sparkles, Search, MessageCircle } from "lucide-react";
+import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
@@ -8,6 +8,20 @@ import { SiteFooter } from "@/components/site-footer";
 export const Route = createFileRoute("/")({
   component: Index,
 });
+
+interface Service {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  price_suffix: string;
+  features: string[];
+  popular: boolean;
+  cta_label: string;
+  sort_order: number;
+}
+
+const ADMIN_WHATSAPP = "917899560461";
 
 interface PublicProject {
   id: string;
