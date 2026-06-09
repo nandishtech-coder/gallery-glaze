@@ -216,7 +216,7 @@ function Index() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {services.slice(0, 3).map((s) => (
+              {services.map((s) => (
                 <article
                   key={s.id}
                   className="group relative flex flex-col rounded-2xl glass p-6 card-hover"
@@ -227,7 +227,7 @@ function Index() {
                     </span>
                   )}
                   <h3 className="text-lg font-semibold tracking-tight">{s.title}</h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{s.description}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
 
                   <div className="mt-4 flex items-baseline gap-1.5">
                     <span className="text-2xl font-bold text-gradient">{s.price}</span>
@@ -235,10 +235,10 @@ function Index() {
                   </div>
 
                   <ul className="mt-4 flex-1 space-y-2">
-                    {s.features.slice(0, 3).map((f, i) => (
+                    {s.features.map((f, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-foreground/85">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        <span className="line-clamp-1">{f}</span>
+                        <span>{f}</span>
                       </li>
                     ))}
                   </ul>
