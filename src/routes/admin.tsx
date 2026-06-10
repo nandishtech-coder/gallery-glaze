@@ -340,6 +340,7 @@ function AdminPage() {
                             );
                           })()}
                         </div>
+                      </div>
                       <div className="flex gap-2 sm:justify-end">
                         <button onClick={() => setEditingService({ ...s, featuresText: s.features.join("\n") })} className="rounded-md p-2 text-muted-foreground hover:bg-secondary hover:text-foreground">
                           <Pencil className="h-4 w-4" />
