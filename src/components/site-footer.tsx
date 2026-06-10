@@ -5,7 +5,7 @@ import { GithubIcon } from "@/components/icons/github";
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-border/50 bg-background/40">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div>
           <h3 className="text-lg font-semibold text-gradient">Nandish-Tech</h3>
           <p className="mt-2 max-w-xs text-sm text-muted-foreground">
@@ -20,7 +20,20 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm">
             <li><Link to="/" className="text-foreground/80 hover:text-foreground">Home</Link></li>
             <li><Link to="/about" className="text-foreground/80 hover:text-foreground">About</Link></li>
+            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Services</Link></li>
             <li><Link to="/contact" className="text-foreground/80 hover:text-foreground">Contact</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Services I Offer
+          </h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Website Setup / Deployment</Link></li>
+            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Bug Fixing / Small Tasks</Link></li>
+            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Custom Web Development</Link></li>
+            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">View all services →</Link></li>
           </ul>
         </div>
 
