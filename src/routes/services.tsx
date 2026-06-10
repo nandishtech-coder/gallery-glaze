@@ -4,6 +4,7 @@ import { Check, Sparkles, MessageCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
+import { computeDiscounted } from "@/lib/price";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -27,6 +28,7 @@ interface Service {
   popular: boolean;
   cta_label: string;
   sort_order: number;
+  discount_percent: number;
 }
 
 const ADMIN_WHATSAPP = "917899560461";
@@ -47,7 +49,11 @@ function ServicesPage() {
   }, []);
 
   const wa = (s: Service) => {
-    const msg = `Hello! I'm interested in your *${s.title}* service (${s.price} ${s.price_suffix}).\n\nCould you please share more details and the next steps?\n\nThank you!`;
+    const discounted = computeDiscounted(s.price, s.discount_percent);
+    const priceLine = discounted
+      ? `${discounted} ${s.price_suffix} (after ${s.discount_percent}% off, original ${s.price})`
+      : `${s.price} ${s.price_suffix}`;
+    const msg = `Hello! I'm interested in your *${s.title}* service (${priceLine}).\n\nCould you please share more details and the next steps?\n\nThank you!`;
     return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
   };
 
@@ -91,13 +97,26 @@ function ServicesPage() {
                     Popular
                   </span>
                 )}
+                {s.discount_percent > 0 && (
+                  <span className="absolute -top-3 right-6 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-lg">
+                    {s.discount_percent}% OFF
+                  </span>
+                )}
                 <h3 className="text-lg font-semibold tracking-tight">{s.title}</h3>
                 <p className="mt-2 min-h-[3rem] text-sm text-muted-foreground">{s.description}</p>
 
-                <div className="mt-4 flex items-baseline gap-1.5">
-                  <span className="text-3xl font-bold text-gradient">{s.price}</span>
-                  <span className="text-xs text-muted-foreground">{s.price_suffix}</span>
-                </div>
+                {(() => {
+                  const discounted = computeDiscounted(s.price, s.discount_percent);
+                  return (
+                    <div className="mt-4 flex items-baseline gap-2 flex-wrap">
+                      <span className="text-3xl font-bold text-gradient">{discounted ?? s.price}</span>
+                      {discounted && (
+                        <span className="text-sm text-muted-foreground line-through">{s.price}</span>
+                      )}
+                      <span className="text-xs text-muted-foreground">{s.price_suffix}</span>
+                    </div>
+                  );
+                })()}
 
                 <ul className="mt-5 flex-1 space-y-2.5">
                   {s.features.map((f, i) => (
