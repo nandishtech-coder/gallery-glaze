@@ -82,6 +82,7 @@ export type Database = {
           created_at: string
           cta_label: string
           description: string
+          discount_percent: number
           features: string[]
           id: string
           popular: boolean
@@ -95,6 +96,7 @@ export type Database = {
           created_at?: string
           cta_label?: string
           description?: string
+          discount_percent?: number
           features?: string[]
           id?: string
           popular?: boolean
@@ -108,6 +110,7 @@ export type Database = {
           created_at?: string
           cta_label?: string
           description?: string
+          discount_percent?: number
           features?: string[]
           id?: string
           popular?: boolean
