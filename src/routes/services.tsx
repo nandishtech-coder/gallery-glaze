@@ -49,7 +49,11 @@ function ServicesPage() {
   }, []);
 
   const wa = (s: Service) => {
-    const msg = `Hello! I'm interested in your *${s.title}* service (${s.price} ${s.price_suffix}).\n\nCould you please share more details and the next steps?\n\nThank you!`;
+    const discounted = computeDiscounted(s.price, s.discount_percent);
+    const priceLine = discounted
+      ? `${discounted} ${s.price_suffix} (after ${s.discount_percent}% off, original ${s.price})`
+      : `${s.price} ${s.price_suffix}`;
+    const msg = `Hello! I'm interested in your *${s.title}* service (${priceLine}).\n\nCould you please share more details and the next steps?\n\nThank you!`;
     return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
   };
 
