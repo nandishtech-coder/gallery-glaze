@@ -6,6 +6,7 @@ import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
 import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase } from "lucide-react";
 import { toast } from "sonner";
+import { computeDiscounted } from "@/lib/price";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -38,6 +39,7 @@ interface Service {
   popular: boolean;
   cta_label: string;
   sort_order: number;
+  discount_percent: number;
 }
 
 type Draft = Omit<Project, "id"> & { id?: string };
@@ -46,7 +48,7 @@ type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string }
 const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "" };
 const emptyService: ServiceDraft = {
   title: "", description: "", price: "", price_suffix: "onwards",
-  features: [], popular: true, cta_label: "Get Started", sort_order: 0, featuresText: "",
+  features: [], popular: true, cta_label: "Get Started", sort_order: 0, discount_percent: 0, featuresText: "",
 };
 
 function AdminPage() {
@@ -94,6 +96,7 @@ function AdminPage() {
       popular: !!editingService.popular,
       cta_label: editingService.cta_label || "Get Started",
       sort_order: Number(editingService.sort_order) || 0,
+      discount_percent: Math.max(0, Math.min(100, Number(editingService.discount_percent) || 0)),
     };
     const res = editingService.id
       ? await supabase.from("services").update(payload).eq("id", editingService.id)
@@ -319,8 +322,24 @@ function AdminPage() {
                           <span className="text-xs text-muted-foreground">#{s.sort_order}</span>
                         </div>
                         <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{s.description}</div>
-                        <div className="mt-1 text-xs"><span className="text-gradient font-semibold">{s.price}</span> <span className="text-muted-foreground">{s.price_suffix}</span> · {s.features.length} features</div>
-                      </div>
+                        <div className="mt-1 text-xs">
+                          {(() => {
+                            const d = computeDiscounted(s.price, s.discount_percent);
+                            return (
+                              <>
+                                <span className="text-gradient font-semibold">{d ?? s.price}</span>{" "}
+                                {d && <span className="line-through text-muted-foreground">{s.price}</span>}{" "}
+                                <span className="text-muted-foreground">{s.price_suffix}</span>
+                                {s.discount_percent > 0 && (
+                                  <span className="ml-2 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-500">
+                                    {s.discount_percent}% OFF
+                                  </span>
+                                )}
+                                <span className="text-muted-foreground"> · {s.features.length} features</span>
+                              </>
+                            );
+                          })()}
+                        </div>
                       <div className="flex gap-2 sm:justify-end">
                         <button onClick={() => setEditingService({ ...s, featuresText: s.features.join("\n") })} className="rounded-md p-2 text-muted-foreground hover:bg-secondary hover:text-foreground">
                           <Pencil className="h-4 w-4" />
@@ -508,6 +527,18 @@ function AdminPage() {
                   <input type="number" value={editingService.sort_order} onChange={(e) => setEditingService({ ...editingService, sort_order: Number(e.target.value) })}
                     className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
                 </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Discount % (0–100, applied automatically to the price)</label>
+                <input type="number" min={0} max={100} value={editingService.discount_percent}
+                  onChange={(e) => setEditingService({ ...editingService, discount_percent: Number(e.target.value) })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                {editingService.price && editingService.discount_percent > 0 && (
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    Preview: <span className="text-gradient font-semibold">{computeDiscounted(editingService.price, editingService.discount_percent) ?? editingService.price}</span>{" "}
+                    <span className="line-through">{editingService.price}</span> ({editingService.discount_percent}% off)
+                  </p>
+                )}
               </div>
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={editingService.popular} onChange={(e) => setEditingService({ ...editingService, popular: e.target.checked })} />
