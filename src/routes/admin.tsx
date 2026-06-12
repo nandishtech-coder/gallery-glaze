@@ -19,6 +19,10 @@ interface Project {
   live_url: string | null;
   github_url: string | null;
   thumbnail_url: string | null;
+  offer_enabled: boolean;
+  offer_label: string;
+  offer_discount_percent: number;
+  offer_ends_at: string | null;
 }
 
 interface Profile {
@@ -45,7 +49,7 @@ interface Service {
 type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 
-const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "" };
+const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null };
 const emptyService: ServiceDraft = {
   title: "", description: "", price: "", price_suffix: "onwards",
   features: [], popular: true, cta_label: "Get Started", sort_order: 0, discount_percent: 0, featuresText: "",
@@ -69,7 +73,7 @@ function AdminPage() {
   const load = async () => {
     setFetching(true);
     const [proj, prof, svc] = await Promise.all([
-      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url").order("created_at", { ascending: false }),
+      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
     ]);
@@ -144,6 +148,10 @@ function AdminPage() {
       live_url: editing.live_url || null,
       github_url: editing.github_url || null,
       thumbnail_url: editing.thumbnail_url || null,
+      offer_enabled: !!editing.offer_enabled,
+      offer_label: editing.offer_label || "Offer ends soon",
+      offer_discount_percent: Math.max(0, Math.min(100, Number(editing.offer_discount_percent) || 0)),
+      offer_ends_at: editing.offer_ends_at ? new Date(editing.offer_ends_at).toISOString() : null,
     };
     const res = editing.id
       ? await supabase.from("projects").update(payload).eq("id", editing.id)
@@ -435,8 +443,8 @@ function AdminPage() {
       </main>
 
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm">
-          <form onSubmit={save} className="w-full max-w-lg rounded-2xl glass-strong p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
+          <form onSubmit={save} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-semibold">{editing.id ? "Edit project" : "New project"}</h2>
               <button type="button" onClick={() => setEditing(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary">
@@ -470,6 +478,52 @@ function AdminPage() {
                   )}
                 </div>
               ))}
+            </div>
+
+            <div className="mt-6 rounded-xl border border-border/60 bg-secondary/20 p-4">
+              <label className="flex items-center justify-between gap-3">
+                <span className="text-sm font-medium">Enable limited-time offer</span>
+                <input
+                  type="checkbox"
+                  className="h-5 w-9 cursor-pointer appearance-none rounded-full bg-secondary outline-none transition checked:bg-primary relative after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-background after:transition checked:after:translate-x-4"
+                  checked={!!editing.offer_enabled}
+                  onChange={(e) => setEditing({ ...editing, offer_enabled: e.target.checked })}
+                />
+              </label>
+              {editing.offer_enabled && (
+                <div className="mt-4 space-y-3">
+                  <div>
+                    <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Offer label</label>
+                    <input
+                      type="text"
+                      value={editing.offer_label ?? ""}
+                      placeholder="Offer ends soon"
+                      onChange={(e) => setEditing({ ...editing, offer_label: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Discount %</label>
+                      <input
+                        type="number" min={0} max={100}
+                        value={editing.offer_discount_percent ?? 0}
+                        onChange={(e) => setEditing({ ...editing, offer_discount_percent: Number(e.target.value) })}
+                        className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Ends at</label>
+                      <input
+                        type="datetime-local"
+                        value={editing.offer_ends_at ? new Date(editing.offer_ends_at).toISOString().slice(0, 16) : ""}
+                        onChange={(e) => setEditing({ ...editing, offer_ends_at: e.target.value ? new Date(e.target.value).toISOString() : null })}
+                        className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <button type="button" onClick={() => setEditing(null)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight } from "lucide-react";
+import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
@@ -31,6 +31,30 @@ interface PublicProject {
   description: string;
   live_url: string | null;
   thumbnail_url: string | null;
+  offer_enabled: boolean | null;
+  offer_label: string | null;
+  offer_discount_percent: number | null;
+  offer_ends_at: string | null;
+}
+
+function useNow(intervalMs = 1000) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), intervalMs);
+    return () => clearInterval(t);
+  }, [intervalMs]);
+  return now;
+}
+
+function formatRemaining(ms: number) {
+  if (ms <= 0) return null;
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return d > 0 ? `${d}d ${pad(h)}h ${pad(m)}m ${pad(sec)}s` : `${pad(h)}h ${pad(m)}m ${pad(sec)}s`;
 }
 
 function Index() {
@@ -52,7 +76,7 @@ function Index() {
   useEffect(() => {
     supabase
       .from("public_projects")
-      .select("id, name, description, live_url, thumbnail_url")
+      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         setProjects((data ?? []) as PublicProject[]);
@@ -76,6 +100,15 @@ function Index() {
     return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
   };
 
+  const now = useNow(1000);
+  const activeOffers = projects.filter(
+    (p) => p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now,
+  );
+  const soonest = activeOffers
+    .slice()
+    .sort((a, b) => new Date(a.offer_ends_at!).getTime() - new Date(b.offer_ends_at!).getTime())[0];
+  const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at!).getTime() - now) : null;
+
   return (
     <div className="min-h-screen">
       <NavBar />
@@ -92,7 +125,22 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
             A selection of recent projects — interfaces, tools, and experiments shipped to real users.
           </p>
+          {soonest && soonestRemaining && (
+            <div className="mx-auto mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-500 sm:text-sm">
+              <Clock className="h-4 w-4 animate-pulse" />
+              <span className="text-foreground/90">
+                {soonest.offer_label || "Offer ends soon"} on <span className="font-semibold">{soonest.name}</span>
+              </span>
+              {(soonest.offer_discount_percent ?? 0) > 0 && (
+                <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-semibold text-white">
+                  {soonest.offer_discount_percent}% OFF
+                </span>
+              )}
+              <span className="font-mono tabular-nums text-emerald-400">{soonestRemaining}</span>
+            </div>
+          )}
         </section>
+
 
         <section>
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -162,6 +210,19 @@ function Index() {
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                         <Sparkles className="h-8 w-8 opacity-40" />
+                      </div>
+                    )}
+                    {p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now && (
+                      <div className="absolute left-3 top-3 flex flex-col items-start gap-1">
+                        {(p.offer_discount_percent ?? 0) > 0 && (
+                          <span className="rounded-full bg-emerald-500 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-lg">
+                            {p.offer_discount_percent}% OFF
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
+                          <Clock className="h-3 w-3 text-emerald-500" />
+                          <span className="font-mono tabular-nums">{formatRemaining(new Date(p.offer_ends_at).getTime() - now)}</span>
+                        </span>
                       </div>
                     )}
                   </div>

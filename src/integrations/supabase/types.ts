@@ -52,6 +52,10 @@ export type Database = {
           id: string
           live_url: string | null
           name: string
+          offer_discount_percent: number
+          offer_enabled: boolean
+          offer_ends_at: string | null
+          offer_label: string
           thumbnail_url: string | null
           updated_at: string
         }
@@ -62,6 +66,10 @@ export type Database = {
           id?: string
           live_url?: string | null
           name: string
+          offer_discount_percent?: number
+          offer_enabled?: boolean
+          offer_ends_at?: string | null
+          offer_label?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
@@ -72,6 +80,10 @@ export type Database = {
           id?: string
           live_url?: string | null
           name?: string
+          offer_discount_percent?: number
+          offer_enabled?: boolean
+          offer_ends_at?: string | null
+          offer_label?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
@@ -149,6 +161,10 @@ export type Database = {
           id: string | null
           live_url: string | null
           name: string | null
+          offer_discount_percent: number | null
+          offer_enabled: boolean | null
+          offer_ends_at: string | null
+          offer_label: string | null
           thumbnail_url: string | null
         }
         Insert: {
@@ -157,6 +173,10 @@ export type Database = {
           id?: string | null
           live_url?: string | null
           name?: string | null
+          offer_discount_percent?: number | null
+          offer_enabled?: boolean | null
+          offer_ends_at?: string | null
+          offer_label?: string | null
           thumbnail_url?: string | null
         }
         Update: {
@@ -165,6 +185,10 @@ export type Database = {
           id?: string | null
           live_url?: string | null
           name?: string | null
+          offer_discount_percent?: number | null
+          offer_enabled?: boolean | null
+          offer_ends_at?: string | null
+          offer_label?: string | null
           thumbnail_url?: string | null
         }
         Relationships: []
