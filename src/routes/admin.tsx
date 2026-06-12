@@ -148,6 +148,10 @@ function AdminPage() {
       live_url: editing.live_url || null,
       github_url: editing.github_url || null,
       thumbnail_url: editing.thumbnail_url || null,
+      offer_enabled: !!editing.offer_enabled,
+      offer_label: editing.offer_label || "Offer ends soon",
+      offer_discount_percent: Math.max(0, Math.min(100, Number(editing.offer_discount_percent) || 0)),
+      offer_ends_at: editing.offer_ends_at ? new Date(editing.offer_ends_at).toISOString() : null,
     };
     const res = editing.id
       ? await supabase.from("projects").update(payload).eq("id", editing.id)
