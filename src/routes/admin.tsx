@@ -73,7 +73,7 @@ function AdminPage() {
   const load = async () => {
     setFetching(true);
     const [proj, prof, svc] = await Promise.all([
-      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url").order("created_at", { ascending: false }),
+      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
     ]);
