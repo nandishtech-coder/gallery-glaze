@@ -49,7 +49,7 @@ interface Service {
 type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 
-const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "" };
+const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null };
 const emptyService: ServiceDraft = {
   title: "", description: "", price: "", price_suffix: "onwards",
   features: [], popular: true, cta_label: "Get Started", sort_order: 0, discount_percent: 0, featuresText: "",
