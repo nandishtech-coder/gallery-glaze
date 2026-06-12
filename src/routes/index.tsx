@@ -100,6 +100,15 @@ function Index() {
     return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
   };
 
+  const now = useNow(1000);
+  const activeOffers = projects.filter(
+    (p) => p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now,
+  );
+  const soonest = activeOffers
+    .slice()
+    .sort((a, b) => new Date(a.offer_ends_at!).getTime() - new Date(b.offer_ends_at!).getTime())[0];
+  const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at!).getTime() - now) : null;
+
   return (
     <div className="min-h-screen">
       <NavBar />
@@ -116,7 +125,22 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
             A selection of recent projects — interfaces, tools, and experiments shipped to real users.
           </p>
+          {soonest && soonestRemaining && (
+            <div className="mx-auto mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-500 sm:text-sm">
+              <Clock className="h-4 w-4 animate-pulse" />
+              <span className="text-foreground/90">
+                {soonest.offer_label || "Offer ends soon"} on <span className="font-semibold">{soonest.name}</span>
+              </span>
+              {(soonest.offer_discount_percent ?? 0) > 0 && (
+                <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-semibold text-white">
+                  {soonest.offer_discount_percent}% OFF
+                </span>
+              )}
+              <span className="font-mono tabular-nums text-emerald-400">{soonestRemaining}</span>
+            </div>
+          )}
         </section>
+
 
         <section>
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
