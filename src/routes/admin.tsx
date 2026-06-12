@@ -19,6 +19,10 @@ interface Project {
   live_url: string | null;
   github_url: string | null;
   thumbnail_url: string | null;
+  offer_enabled: boolean;
+  offer_label: string;
+  offer_discount_percent: number;
+  offer_ends_at: string | null;
 }
 
 interface Profile {
