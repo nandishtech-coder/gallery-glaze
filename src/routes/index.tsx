@@ -212,6 +212,19 @@ function Index() {
                         <Sparkles className="h-8 w-8 opacity-40" />
                       </div>
                     )}
+                    {p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now && (
+                      <div className="absolute left-3 top-3 flex flex-col items-start gap-1">
+                        {(p.offer_discount_percent ?? 0) > 0 && (
+                          <span className="rounded-full bg-emerald-500 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-lg">
+                            {p.offer_discount_percent}% OFF
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
+                          <Clock className="h-3 w-3 text-emerald-500" />
+                          <span className="font-mono tabular-nums">{formatRemaining(new Date(p.offer_ends_at).getTime() - now)}</span>
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col p-5">
                     <h3 className="text-lg font-semibold transition-transform duration-300 hover:scale-105 hover:text-primary inline-block origin-left cursor-default">
