@@ -110,7 +110,7 @@ function Index() {
   const soonest = sortedOffers[0];
   const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at!).getTime() - now) : null;
 
-  const renderOfferPill = (p: Project, key: string) => {
+  const renderOfferPill = (p: PublicProject, key: string) => {
     const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
     return (
       <span
