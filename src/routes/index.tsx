@@ -141,7 +141,7 @@ function Index() {
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Available for new work
           </div>
           <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
-            I Build High-Performance<span className="text-gradient">digital products</span><br />
+            Crafting <span className="text-gradient">digital products</span><br />
             with care and precision.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
