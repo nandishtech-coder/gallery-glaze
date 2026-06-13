@@ -104,10 +104,32 @@ function Index() {
   const activeOffers = projects.filter(
     (p) => p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now,
   );
-  const soonest = activeOffers
+  const sortedOffers = activeOffers
     .slice()
-    .sort((a, b) => new Date(a.offer_ends_at!).getTime() - new Date(b.offer_ends_at!).getTime())[0];
+    .sort((a, b) => new Date(a.offer_ends_at!).getTime() - new Date(b.offer_ends_at!).getTime());
+  const soonest = sortedOffers[0];
   const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at!).getTime() - now) : null;
+
+  const renderOfferPill = (p: PublicProject, key: string) => {
+    const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
+    return (
+      <span
+        key={key}
+        className="inline-flex shrink-0 items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-500 sm:text-sm"
+      >
+        <Clock className="h-4 w-4 animate-pulse" />
+        <span className="text-foreground/90">
+          {p.offer_label || "Offer ends soon"} on <span className="font-semibold">{p.name}</span>
+        </span>
+        {(p.offer_discount_percent ?? 0) > 0 && (
+          <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-semibold text-white">
+            {p.offer_discount_percent}% OFF
+          </span>
+        )}
+        <span className="font-mono tabular-nums text-emerald-400">{remaining}</span>
+      </span>
+    );
+  };
 
   return (
     <div className="min-h-screen">
@@ -125,21 +147,22 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
             A selection of recent projects — interfaces, tools, and experiments shipped to real users.
           </p>
-          {soonest && soonestRemaining && (
-            <div className="mx-auto mt-6 inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-500 sm:text-sm">
-              <Clock className="h-4 w-4 animate-pulse" />
-              <span className="text-foreground/90">
-                {soonest.offer_label || "Offer ends soon"} on <span className="font-semibold">{soonest.name}</span>
-              </span>
-              {(soonest.offer_discount_percent ?? 0) > 0 && (
-                <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[10px] font-semibold text-white">
-                  {soonest.offer_discount_percent}% OFF
-                </span>
-              )}
-              <span className="font-mono tabular-nums text-emerald-400">{soonestRemaining}</span>
+          {sortedOffers.length === 1 && soonest && soonestRemaining && (
+            <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
+          )}
+          {sortedOffers.length > 1 && (
+            <div className="marquee-wrap marquee-mask mt-6 overflow-hidden">
+              <div
+                className="marquee-track py-1"
+                style={{ animationDuration: `${Math.max(20, sortedOffers.length * 8)}s` }}
+              >
+                {sortedOffers.map((p) => renderOfferPill(p, `a-${p.id}`))}
+                {sortedOffers.map((p) => renderOfferPill(p, `b-${p.id}`))}
+              </div>
             </div>
           )}
         </section>
+
 
 
         <section>
