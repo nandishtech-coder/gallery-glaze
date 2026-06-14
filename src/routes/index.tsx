@@ -232,7 +232,7 @@ function Index() {
 
 
 
-      <main className="mx-auto max-w-6xl px-4 pt-16 pb-24">
+      <main className="mx-auto max-w-6xl px-4 pt-24 pb-24 sm:pt-28">
         <section className="mb-16 text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Available for new work
@@ -247,8 +247,11 @@ function Index() {
           {sortedOffers.length === 1 && soonest && soonestRemaining && (
             <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
           )}
-          {sortedOffers.length > 1 && (
-            <div className="marquee-wrap marquee-mask mt-6 overflow-hidden">
+        </section>
+
+        {sortedOffers.length > 1 && (
+          <div className="relative left-1/2 right-1/2 -mx-[50vw] mb-16 w-screen">
+            <div className="marquee-wrap marquee-mask overflow-hidden">
               <div
                 className="marquee-track py-1"
                 style={{ animationDuration: `${Math.max(20, sortedOffers.length * 8)}s` }}
@@ -257,8 +260,9 @@ function Index() {
                 {sortedOffers.map((p) => renderOfferPill(p, `b-${p.id}`))}
               </div>
             </div>
-          )}
-        </section>
+          </div>
+        )}
+
 
 
 
