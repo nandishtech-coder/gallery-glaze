@@ -111,6 +111,39 @@ function Index() {
   const soonest = sortedOffers[0];
   const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at!).getTime() - now) : null;
 
+  const missedShownRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!projects.length) return;
+    const nowMs = Date.now();
+    const WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+    const seenRaw = typeof window !== "undefined" ? sessionStorage.getItem("missedOffersShown") : null;
+    const seen: Set<string> = new Set(seenRaw ? (JSON.parse(seenRaw) as string[]) : []);
+    const newlyMissed = projects.filter((p) => {
+      if (!p.offer_enabled || !p.offer_ends_at) return false;
+      const end = new Date(p.offer_ends_at).getTime();
+      const expired = end <= nowMs && nowMs - end <= WINDOW_MS;
+      const key = `${p.id}:${p.offer_ends_at}`;
+      if (!expired || seen.has(key) || missedShownRef.current.has(key)) return false;
+      missedShownRef.current.add(key);
+      seen.add(key);
+      return true;
+    });
+    if (newlyMissed.length) {
+      sessionStorage.setItem("missedOffersShown", JSON.stringify(Array.from(seen)));
+      newlyMissed.forEach((p, i) => {
+        setTimeout(() => {
+          toast.error(`You missed the offer on ${p.name}`, {
+            description:
+              (p.offer_discount_percent ?? 0) > 0
+                ? `${p.offer_discount_percent}% OFF just ended. Ping us on WhatsApp — we may still help!`
+                : `${p.offer_label || "Limited-time offer"} just ended.`,
+            duration: 6000,
+          });
+        }, i * 600);
+      });
+    }
+  }, [projects]);
+
   const renderOfferPill = (p: PublicProject, key: string) => {
     const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
     return (
