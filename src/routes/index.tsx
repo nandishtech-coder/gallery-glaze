@@ -195,12 +195,14 @@ function Index() {
   };
 
   const [offersOpen, setOffersOpen] = useState(true);
+  const serviceOffers = services.filter((s) => (s.discount_percent ?? 0) > 0);
+  const totalOffers = sortedOffers.length + serviceOffers.length;
 
   return (
     <div className="min-h-screen">
       <NavBar />
 
-      {sortedOffers.length > 0 && (
+      {totalOffers > 0 && (
         <div className="fixed right-4 top-20 z-40 max-w-xs sm:max-w-sm">
           {offersOpen ? (
             <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-3 shadow-lg shadow-emerald-500/10 backdrop-blur">
@@ -210,7 +212,7 @@ function Index() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                   </span>
-                  Live offers ({sortedOffers.length})
+                  Live offers ({totalOffers})
                 </span>
                 <button
                   type="button"
@@ -221,27 +223,62 @@ function Index() {
                   ✕
                 </button>
               </div>
-              <ul className="max-h-64 space-y-1.5 overflow-y-auto pr-1">
-                {sortedOffers.map((p) => {
-                  const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
-                  return (
-                    <li
-                      key={p.id}
-                      className="flex items-center justify-between gap-2 rounded-lg bg-background/40 px-2.5 py-1.5 text-xs"
-                    >
-                      <span className="truncate font-medium text-foreground">{p.name}</span>
-                      <span className="flex shrink-0 items-center gap-1.5">
-                        {(p.offer_discount_percent ?? 0) > 0 && (
-                          <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
-                            {p.offer_discount_percent}%
-                          </span>
-                        )}
-                        <span className="font-mono tabular-nums text-emerald-400">{remaining}</span>
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+                {sortedOffers.length > 0 && (
+                  <div>
+                    <div className="mb-1 px-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-500/70">
+                      Projects
+                    </div>
+                    <ul className="space-y-1.5">
+                      {sortedOffers.map((p) => {
+                        const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
+                        return (
+                          <li
+                            key={p.id}
+                            className="flex items-center justify-between gap-2 rounded-lg bg-background/40 px-2.5 py-1.5 text-xs"
+                          >
+                            <span className="truncate font-medium text-foreground">{p.name}</span>
+                            <span className="flex shrink-0 items-center gap-1.5">
+                              {(p.offer_discount_percent ?? 0) > 0 && (
+                                <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                                  {p.offer_discount_percent}%
+                                </span>
+                              )}
+                              <span className="font-mono tabular-nums text-emerald-400">{remaining}</span>
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+                {serviceOffers.length > 0 && (
+                  <div>
+                    <div className="mb-1 px-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-500/70">
+                      Services
+                    </div>
+                    <ul className="space-y-1.5">
+                      {serviceOffers.map((s) => (
+                        <li key={s.id}>
+                          <a
+                            href={waForService(s)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between gap-2 rounded-lg bg-background/40 px-2.5 py-1.5 text-xs transition hover:bg-background/60"
+                          >
+                            <span className="truncate font-medium text-foreground">{s.title}</span>
+                            <span className="flex shrink-0 items-center gap-1.5">
+                              <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                                {s.discount_percent}% OFF
+                              </span>
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <button
@@ -253,7 +290,7 @@ function Index() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              {sortedOffers.length} live offer{sortedOffers.length > 1 ? "s" : ""}
+              {totalOffers} live offer{totalOffers > 1 ? "s" : ""}
             </button>
           )}
         </div>
