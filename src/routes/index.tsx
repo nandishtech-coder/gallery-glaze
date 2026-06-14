@@ -144,6 +144,35 @@ function Index() {
     }
   }, [projects]);
 
+  useEffect(() => {
+    const offerServices = services.filter((s) => (s.discount_percent ?? 0) > 0);
+    if (!offerServices.length) return;
+    let i = 0;
+    const showNext = () => {
+      const s = offerServices[i % offerServices.length];
+      const discounted = computeDiscounted(s.price, s.discount_percent);
+      toast.success(`${s.discount_percent}% OFF on ${s.title}`, {
+        description: discounted
+          ? `Now ${discounted} ${s.price_suffix} (was ${s.price}) — tap to enquire.`
+          : `${s.price} ${s.price_suffix} — tap to enquire.`,
+        duration: 5000,
+        position: "bottom-right",
+        action: {
+          label: "WhatsApp",
+          onClick: () => window.open(waForService(s), "_blank", "noopener,noreferrer"),
+        },
+      });
+      i++;
+    };
+    const startId = setTimeout(showNext, 1500);
+    const intervalId = setInterval(showNext, 5500);
+    return () => {
+      clearTimeout(startId);
+      clearInterval(intervalId);
+    };
+  }, [services]);
+
+
   const renderOfferPill = (p: PublicProject, key: string) => {
     const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
     return (
