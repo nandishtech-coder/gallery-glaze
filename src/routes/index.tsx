@@ -165,9 +165,72 @@ function Index() {
     );
   };
 
+  const [offersOpen, setOffersOpen] = useState(true);
+
   return (
     <div className="min-h-screen">
       <NavBar />
+
+      {sortedOffers.length > 0 && (
+        <div className="fixed right-4 top-20 z-40 max-w-xs sm:max-w-sm">
+          {offersOpen ? (
+            <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-3 shadow-lg shadow-emerald-500/10 backdrop-blur">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-500">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                  </span>
+                  Live offers ({sortedOffers.length})
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setOffersOpen(false)}
+                  aria-label="Hide offers"
+                  className="text-emerald-500/70 hover:text-emerald-400 text-sm leading-none"
+                >
+                  ✕
+                </button>
+              </div>
+              <ul className="max-h-64 space-y-1.5 overflow-y-auto pr-1">
+                {sortedOffers.map((p) => {
+                  const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
+                  return (
+                    <li
+                      key={p.id}
+                      className="flex items-center justify-between gap-2 rounded-lg bg-background/40 px-2.5 py-1.5 text-xs"
+                    >
+                      <span className="truncate font-medium text-foreground">{p.name}</span>
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        {(p.offer_discount_percent ?? 0) > 0 && (
+                          <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                            {p.offer_discount_percent}%
+                          </span>
+                        )}
+                        <span className="font-mono tabular-nums text-emerald-400">{remaining}</span>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setOffersOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-500 shadow-lg backdrop-blur hover:bg-emerald-500/20"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              {sortedOffers.length} live offer{sortedOffers.length > 1 ? "s" : ""}
+            </button>
+          )}
+        </div>
+      )}
+
+
 
       <main className="mx-auto max-w-6xl px-4 pt-16 pb-24">
         <section className="mb-16 text-center">
