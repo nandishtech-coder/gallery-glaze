@@ -188,6 +188,12 @@ article p:hover, article a:hover, article button:hover,
 }
 .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
 
+@keyframes offer-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.offer-rise { animation: offer-rise 400ms ease-out; }
+
 /* User toggle + OS preference disables all bounce animations site-wide. */
 html.no-anim *,
 html.no-anim *::before,
