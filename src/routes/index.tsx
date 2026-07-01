@@ -165,7 +165,7 @@ function Index() {
       i++;
     };
     const startId = setTimeout(showNext, 1500);
-    const intervalId = setInterval(showNext, 5500);
+    const intervalId = setInterval(showNext, 7000);
     return () => {
       clearTimeout(startId);
       clearInterval(intervalId);
