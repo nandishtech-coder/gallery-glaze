@@ -220,12 +220,26 @@ function Index() {
   ];
   const totalOffers = liveOffers.length;
 
+  const OFFER_DURATION = 5000;
   const [offerIndex, setOfferIndex] = useState(0);
+  const [offerProgress, setOfferProgress] = useState(0);
   useEffect(() => {
-    if (totalOffers <= 1) return;
-    const id = setInterval(() => setOfferIndex((i) => (i + 1) % totalOffers), 4000);
-    return () => clearInterval(id);
-  }, [totalOffers]);
+    if (totalOffers === 0) return;
+    const start = Date.now();
+    setOfferProgress(0);
+    const tickId = setInterval(() => {
+      const elapsed = Date.now() - start;
+      setOfferProgress(Math.min(100, (elapsed / OFFER_DURATION) * 100));
+    }, 80);
+    const advId = setTimeout(() => {
+      if (totalOffers > 1) setOfferIndex((i) => (i + 1) % totalOffers);
+      else setOfferProgress(0);
+    }, OFFER_DURATION);
+    return () => {
+      clearInterval(tickId);
+      clearTimeout(advId);
+    };
+  }, [totalOffers, offerIndex]);
   useEffect(() => {
     if (offerIndex >= totalOffers) setOfferIndex(0);
   }, [totalOffers, offerIndex]);
