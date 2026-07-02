@@ -178,7 +178,7 @@ function Index() {
     return (
       <span
         key={key}
-        className="inline-flex shrink-0 items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-500 sm:text-sm"
+        className="inline-flex max-w-full shrink-0 flex-wrap items-center justify-center gap-2 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs font-medium text-emerald-500 sm:rounded-full sm:px-4 sm:text-sm"
       >
         <Clock className="h-4 w-4 animate-pulse" />
         <span className="text-foreground/90">
@@ -220,12 +220,26 @@ function Index() {
   ];
   const totalOffers = liveOffers.length;
 
+  const OFFER_DURATION = 5000;
   const [offerIndex, setOfferIndex] = useState(0);
+  const [offerProgress, setOfferProgress] = useState(0);
   useEffect(() => {
-    if (totalOffers <= 1) return;
-    const id = setInterval(() => setOfferIndex((i) => (i + 1) % totalOffers), 4000);
-    return () => clearInterval(id);
-  }, [totalOffers]);
+    if (totalOffers === 0) return;
+    const start = Date.now();
+    setOfferProgress(0);
+    const tickId = setInterval(() => {
+      const elapsed = Date.now() - start;
+      setOfferProgress(Math.min(100, (elapsed / OFFER_DURATION) * 100));
+    }, 80);
+    const advId = setTimeout(() => {
+      if (totalOffers > 1) setOfferIndex((i) => (i + 1) % totalOffers);
+      else setOfferProgress(0);
+    }, OFFER_DURATION);
+    return () => {
+      clearInterval(tickId);
+      clearTimeout(advId);
+    };
+  }, [totalOffers, offerIndex]);
   useEffect(() => {
     if (offerIndex >= totalOffers) setOfferIndex(0);
   }, [totalOffers, offerIndex]);
@@ -285,6 +299,12 @@ function Index() {
                   </span>
                 </a>
               )}
+              <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-emerald-500/15">
+                <div
+                  className="h-full bg-emerald-400 transition-[width] duration-100 ease-linear"
+                  style={{ width: `${offerProgress}%` }}
+                />
+              </div>
               {totalOffers > 1 && (
                 <div className="mt-2 flex justify-center gap-1">
                   {liveOffers.map((_, i) => (
@@ -335,14 +355,16 @@ function Index() {
         </section>
 
         {sortedOffers.length > 1 && (
-          <div className="relative left-1/2 right-1/2 -mx-[50vw] mb-16 w-screen">
-            <div className="marquee-wrap marquee-mask overflow-hidden">
-              <div
-                className="marquee-track py-1"
-                style={{ animationDuration: `${Math.max(20, sortedOffers.length * 8)}s` }}
-              >
-                {sortedOffers.map((p) => renderOfferPill(p, `a-${p.id}`))}
-                {sortedOffers.map((p) => renderOfferPill(p, `b-${p.id}`))}
+          <div className="mb-16 flex justify-center px-2">
+            <div key={sortedOffers[offerIndex % sortedOffers.length].id} className="offer-rise w-full max-w-md">
+              <div className="flex justify-center">
+                {renderOfferPill(sortedOffers[offerIndex % sortedOffers.length], `rot-${sortedOffers[offerIndex % sortedOffers.length].id}`)}
+              </div>
+              <div className="mx-auto mt-3 h-1 w-40 overflow-hidden rounded-full bg-emerald-500/15">
+                <div
+                  className="h-full bg-emerald-400 transition-[width] duration-100 ease-linear"
+                  style={{ width: `${offerProgress}%` }}
+                />
               </div>
             </div>
           </div>
