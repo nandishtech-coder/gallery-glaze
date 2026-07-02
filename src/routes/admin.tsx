@@ -87,19 +87,58 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const [proj, prof, svc] = await Promise.all([
+    const [proj, prof, svc, tst] = await Promise.all([
       supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
+      supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
     ]);
     if (proj.error) toast.error(proj.error.message);
     if (prof.error) toast.error(prof.error.message);
     if (svc.error) toast.error(svc.error.message);
+    if (tst.error) toast.error(tst.error.message);
     setProjects((proj.data ?? []) as Project[]);
     setProfiles((prof.data ?? []) as Profile[]);
     setServices((svc.data ?? []) as Service[]);
+    setTestimonials((tst.data ?? []) as Testimonial[]);
     setFetching(false);
   };
+
+  const saveTestimonial = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTestimonial) return;
+    const payload = {
+      name: editingTestimonial.name,
+      email: editingTestimonial.email || null,
+      company: editingTestimonial.company || null,
+      role: editingTestimonial.role || null,
+      rating: Math.max(1, Math.min(5, Number(editingTestimonial.rating) || 5)),
+      message: editingTestimonial.message,
+      approved: !!editingTestimonial.approved,
+    };
+    if (!editingTestimonial.id) return;
+    const { error } = await supabase.from("testimonials").update(payload).eq("id", editingTestimonial.id);
+    if (error) return toast.error(error.message);
+    toast.success("Testimonial updated");
+    setEditingTestimonial(null);
+    load();
+  };
+
+  const toggleTestimonialApproval = async (t: Testimonial) => {
+    const { error } = await supabase.from("testimonials").update({ approved: !t.approved }).eq("id", t.id);
+    if (error) return toast.error(error.message);
+    toast.success(!t.approved ? "Approved & published" : "Unpublished");
+    load();
+  };
+
+  const removeTestimonial = async (id: string) => {
+    if (!confirm("Delete this testimonial?")) return;
+    const { error } = await supabase.from("testimonials").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Deleted");
+    load();
+  };
+
 
   const saveService = async (e: React.FormEvent) => {
     e.preventDefault();
