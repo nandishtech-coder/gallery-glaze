@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star } from "lucide-react";
 import { toast } from "sonner";
 import { computeDiscounted } from "@/lib/price";
 
@@ -46,8 +46,21 @@ interface Service {
   discount_percent: number;
 }
 
+interface Testimonial {
+  id: string;
+  name: string;
+  email: string | null;
+  company: string | null;
+  role: string | null;
+  rating: number;
+  message: string;
+  approved: boolean;
+  created_at: string;
+}
+
 type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
+type TestimonialDraft = Omit<Testimonial, "id" | "created_at"> & { id?: string };
 
 const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null };
 const emptyService: ServiceDraft = {
@@ -61,10 +74,12 @@ function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
   const [editingService, setEditingService] = useState<ServiceDraft | null>(null);
-  const [tab, setTab] = useState<"projects" | "services" | "clients">("projects");
+  const [editingTestimonial, setEditingTestimonial] = useState<TestimonialDraft | null>(null);
+  const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials">("projects");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
@@ -72,19 +87,58 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const [proj, prof, svc] = await Promise.all([
+    const [proj, prof, svc, tst] = await Promise.all([
       supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
+      supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
     ]);
     if (proj.error) toast.error(proj.error.message);
     if (prof.error) toast.error(prof.error.message);
     if (svc.error) toast.error(svc.error.message);
+    if (tst.error) toast.error(tst.error.message);
     setProjects((proj.data ?? []) as Project[]);
     setProfiles((prof.data ?? []) as Profile[]);
     setServices((svc.data ?? []) as Service[]);
+    setTestimonials((tst.data ?? []) as Testimonial[]);
     setFetching(false);
   };
+
+  const saveTestimonial = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTestimonial) return;
+    const payload = {
+      name: editingTestimonial.name,
+      email: editingTestimonial.email || null,
+      company: editingTestimonial.company || null,
+      role: editingTestimonial.role || null,
+      rating: Math.max(1, Math.min(5, Number(editingTestimonial.rating) || 5)),
+      message: editingTestimonial.message,
+      approved: !!editingTestimonial.approved,
+    };
+    if (!editingTestimonial.id) return;
+    const { error } = await supabase.from("testimonials").update(payload).eq("id", editingTestimonial.id);
+    if (error) return toast.error(error.message);
+    toast.success("Testimonial updated");
+    setEditingTestimonial(null);
+    load();
+  };
+
+  const toggleTestimonialApproval = async (t: Testimonial) => {
+    const { error } = await supabase.from("testimonials").update({ approved: !t.approved }).eq("id", t.id);
+    if (error) return toast.error(error.message);
+    toast.success(!t.approved ? "Approved & published" : "Unpublished");
+    load();
+  };
+
+  const removeTestimonial = async (id: string) => {
+    if (!confirm("Delete this testimonial?")) return;
+    const { error } = await supabase.from("testimonials").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Deleted");
+    load();
+  };
+
 
   const saveService = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -232,7 +286,21 @@ function AdminPage() {
               </span>
             )}
           </button>
+          <button
+            onClick={() => setTab("testimonials")}
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              tab === "testimonials" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <MessageSquare className="h-4 w-4" /> Testimonials
+            {testimonials.filter((t) => !t.approved).length > 0 && (
+              <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
+                {testimonials.filter((t) => !t.approved).length}
+              </span>
+            )}
+          </button>
         </div>
+
 
         {tab === "projects" && (
           <>
@@ -440,7 +508,129 @@ function AdminPage() {
             </div>
           </>
         )}
+
+        {tab === "testimonials" && (
+          <>
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <p className="text-sm text-muted-foreground">Client testimonials submitted through the site. Approve to publish.</p>
+            </div>
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground"><Loader2 className="mx-auto h-5 w-5 animate-spin" /></div>
+              ) : testimonials.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No testimonials yet.</div>
+              ) : (
+                <ul className="divide-y divide-border/40">
+                  {testimonials.map((t) => (
+                    <li key={t.id} className="flex flex-col gap-3 p-4 sm:px-5">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-semibold">{t.name}</span>
+                            {t.email && <span className="text-xs text-muted-foreground">· {t.email}</span>}
+                            {(t.role || t.company) && (
+                              <span className="text-xs text-muted-foreground">· {[t.role, t.company].filter(Boolean).join(" @ ")}</span>
+                            )}
+                          </div>
+                          <div className="mt-1 flex items-center gap-2">
+                            <div className="flex items-center gap-0.5 text-amber-400">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
+                              ))}
+                            </div>
+                            {t.approved ? (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-0.5 text-[10px] text-primary"><Check className="h-3 w-3" /> Published</span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-2 py-0.5 text-[10px] text-amber-500">Pending</span>
+                            )}
+                            <span className="text-[10px] text-muted-foreground">· {new Date(t.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <button onClick={() => toggleTestimonialApproval(t)}
+                            className={`inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium transition ${t.approved ? "bg-secondary text-muted-foreground hover:text-foreground" : "bg-primary/15 text-primary hover:bg-primary/25"}`}>
+                            {t.approved ? <><UserX className="h-3.5 w-3.5" /> Unpublish</> : <><Check className="h-3.5 w-3.5" /> Approve</>}
+                          </button>
+                          <button onClick={() => setEditingTestimonial({ id: t.id, name: t.name, email: t.email, company: t.company, role: t.role, rating: t.rating, message: t.message, approved: t.approved })}
+                            className="inline-flex items-center gap-1 rounded-md bg-secondary px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground">
+                            <Pencil className="h-3.5 w-3.5" /> Edit
+                          </button>
+                          <button onClick={() => removeTestimonial(t.id)}
+                            className="inline-flex items-center gap-1 rounded-md bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/20">
+                            <Trash2 className="h-3.5 w-3.5" /> Delete
+                          </button>
+                        </div>
+                      </div>
+                      <p className="rounded-lg bg-secondary/30 p-3 text-sm text-foreground/90">"{t.message}"</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        )}
       </main>
+
+      {editingTestimonial && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
+          <form onSubmit={saveTestimonial} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Edit testimonial</h2>
+              <button type="button" onClick={() => setEditingTestimonial(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Name</label>
+                  <input required value={editingTestimonial.name} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, name: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Email</label>
+                  <input value={editingTestimonial.email ?? ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, email: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Company</label>
+                  <input value={editingTestimonial.company ?? ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, company: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Role</label>
+                  <input value={editingTestimonial.role ?? ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, role: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Rating</label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button key={n} type="button" onClick={() => setEditingTestimonial({ ...editingTestimonial, rating: n })} className="p-1">
+                      <Star className={`h-6 w-6 ${n <= editingTestimonial.rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Message</label>
+                <textarea required rows={4} value={editingTestimonial.message} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, message: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={editingTestimonial.approved} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, approved: e.target.checked })} />
+                Published (visible on site)
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button type="button" onClick={() => setEditingTestimonial(null)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>
+              <button type="submit" className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow hover:opacity-90">Save</button>
+            </div>
+          </form>
+        </div>
+      )}
+
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">

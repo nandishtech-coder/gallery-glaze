@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
+import { TestimonialsSection } from "@/components/testimonials-section";
 import { computeDiscounted } from "@/lib/price";
 
 export const Route = createFileRoute("/")({
@@ -567,6 +568,8 @@ function Index() {
             </div>
           </section>
         )}
+
+        <TestimonialsSection />
       </main>
 
       <SiteFooter />
