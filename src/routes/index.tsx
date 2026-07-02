@@ -299,6 +299,12 @@ function Index() {
                   </span>
                 </a>
               )}
+              <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-emerald-500/15">
+                <div
+                  className="h-full bg-emerald-400 transition-[width] duration-100 ease-linear"
+                  style={{ width: `${offerProgress}%` }}
+                />
+              </div>
               {totalOffers > 1 && (
                 <div className="mt-2 flex justify-center gap-1">
                   {liveOffers.map((_, i) => (
