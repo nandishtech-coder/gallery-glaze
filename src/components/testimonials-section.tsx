@@ -1,0 +1,180 @@
+import { useEffect, useState } from "react";
+import { Star, Quote, Send, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Testimonial {
+  id: string;
+  name: string;
+  company: string | null;
+  role: string | null;
+  rating: number;
+  message: string;
+  created_at: string;
+}
+
+const emptyForm = { name: "", email: "", company: "", role: "", rating: 5, message: "" };
+
+export function TestimonialsSection() {
+  const [items, setItems] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState(emptyForm);
+  const [submitting, setSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("id, name, company, role, rating, message, created_at")
+      .eq("approved", true)
+      .order("created_at", { ascending: false })
+      .limit(12);
+    if (!error) setItems((data ?? []) as Testimonial[]);
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, []);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.message.trim()) return toast.error("Name and message are required");
+    if (form.message.length > 1000) return toast.error("Message too long");
+    setSubmitting(true);
+    const { error } = await supabase.from("testimonials").insert({
+      name: form.name.trim().slice(0, 100),
+      email: form.email.trim().slice(0, 255) || null,
+      company: form.company.trim().slice(0, 100) || null,
+      role: form.role.trim().slice(0, 100) || null,
+      rating: Math.max(1, Math.min(5, Number(form.rating) || 5)),
+      message: form.message.trim(),
+      approved: false,
+    });
+    setSubmitting(false);
+    if (error) return toast.error(error.message);
+    toast.success("Thanks! Your testimonial will appear once approved.");
+    setForm(emptyForm);
+    setOpen(false);
+  };
+
+  return (
+    <section className="mt-24">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+            Testimonials
+          </h2>
+          <p className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Loved by <span className="text-gradient">happy clients</span>
+          </p>
+        </div>
+        <button
+          onClick={() => setOpen(true)}
+          className="inline-flex w-fit items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90"
+        >
+          <Send className="h-3.5 w-3.5" /> Share your experience
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="py-10 text-center text-muted-foreground">
+          <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+        </div>
+      ) : items.length === 0 ? (
+        <div className="rounded-2xl glass p-8 text-center text-sm text-muted-foreground">
+          No testimonials yet. Be the first to share your experience!
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((t) => (
+            <article key={t.id} className="relative flex flex-col rounded-2xl glass p-6 card-hover">
+              <Quote className="absolute right-4 top-4 h-6 w-6 text-primary/30" />
+              <div className="flex items-center gap-1 text-amber-400">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
+                ))}
+              </div>
+              <p className="mt-3 flex-1 text-sm text-foreground/90 leading-relaxed">
+                "{t.message}"
+              </p>
+              <div className="mt-4 border-t border-border/40 pt-3">
+                <div className="text-sm font-semibold">{t.name}</div>
+                {(t.role || t.company) && (
+                  <div className="text-xs text-muted-foreground">
+                    {[t.role, t.company].filter(Boolean).join(" · ")}
+                  </div>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
+          <form onSubmit={submit} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+            <div className="mb-5 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Share your experience</h3>
+              <button type="button" onClick={() => setOpen(false)} className="text-sm text-muted-foreground hover:text-foreground">
+                Close
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Name *</label>
+                  <input required maxLength={100} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Email</label>
+                  <input type="email" maxLength={255} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Company</label>
+                  <input maxLength={100} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Role</label>
+                  <input maxLength={100} value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Rating</label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button key={n} type="button" onClick={() => setForm({ ...form, rating: n })}
+                      className="p-1">
+                      <Star className={`h-6 w-6 ${n <= form.rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Your testimonial *</label>
+                <textarea required rows={4} maxLength={1000} value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="What did you love about working with Nandish-Tech?"
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                <p className="mt-1 text-[11px] text-muted-foreground">{form.message.length}/1000</p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button type="button" onClick={() => setOpen(false)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>
+              <button type="submit" disabled={submitting}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow hover:opacity-90 disabled:opacity-60">
+                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </section>
+  );
+}
