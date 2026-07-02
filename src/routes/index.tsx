@@ -355,14 +355,16 @@ function Index() {
         </section>
 
         {sortedOffers.length > 1 && (
-          <div className="relative left-1/2 right-1/2 -mx-[50vw] mb-16 w-screen">
-            <div className="marquee-wrap marquee-mask overflow-hidden">
-              <div
-                className="marquee-track py-1"
-                style={{ animationDuration: `${Math.max(20, sortedOffers.length * 8)}s` }}
-              >
-                {sortedOffers.map((p) => renderOfferPill(p, `a-${p.id}`))}
-                {sortedOffers.map((p) => renderOfferPill(p, `b-${p.id}`))}
+          <div className="mb-16 flex justify-center px-2">
+            <div key={sortedOffers[offerIndex % sortedOffers.length].id} className="offer-rise w-full max-w-md">
+              <div className="flex justify-center">
+                {renderOfferPill(sortedOffers[offerIndex % sortedOffers.length], `rot-${sortedOffers[offerIndex % sortedOffers.length].id}`)}
+              </div>
+              <div className="mx-auto mt-3 h-1 w-40 overflow-hidden rounded-full bg-emerald-500/15">
+                <div
+                  className="h-full bg-emerald-400 transition-[width] duration-100 ease-linear"
+                  style={{ width: `${offerProgress}%` }}
+                />
               </div>
             </div>
           </div>
