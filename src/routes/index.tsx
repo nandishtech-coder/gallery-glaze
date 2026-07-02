@@ -568,6 +568,8 @@ function Index() {
             </div>
           </section>
         )}
+
+        <TestimonialsSection />
       </main>
 
       <SiteFooter />
