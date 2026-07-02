@@ -46,8 +46,21 @@ interface Service {
   discount_percent: number;
 }
 
+interface Testimonial {
+  id: string;
+  name: string;
+  email: string | null;
+  company: string | null;
+  role: string | null;
+  rating: number;
+  message: string;
+  approved: boolean;
+  created_at: string;
+}
+
 type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
+type TestimonialDraft = Omit<Testimonial, "id" | "created_at"> & { id?: string };
 
 const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null };
 const emptyService: ServiceDraft = {
@@ -61,10 +74,12 @@ function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
   const [editingService, setEditingService] = useState<ServiceDraft | null>(null);
-  const [tab, setTab] = useState<"projects" | "services" | "clients">("projects");
+  const [editingTestimonial, setEditingTestimonial] = useState<TestimonialDraft | null>(null);
+  const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials">("projects");
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
