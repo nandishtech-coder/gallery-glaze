@@ -508,7 +508,129 @@ function AdminPage() {
             </div>
           </>
         )}
+
+        {tab === "testimonials" && (
+          <>
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <p className="text-sm text-muted-foreground">Client testimonials submitted through the site. Approve to publish.</p>
+            </div>
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground"><Loader2 className="mx-auto h-5 w-5 animate-spin" /></div>
+              ) : testimonials.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No testimonials yet.</div>
+              ) : (
+                <ul className="divide-y divide-border/40">
+                  {testimonials.map((t) => (
+                    <li key={t.id} className="flex flex-col gap-3 p-4 sm:px-5">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-semibold">{t.name}</span>
+                            {t.email && <span className="text-xs text-muted-foreground">· {t.email}</span>}
+                            {(t.role || t.company) && (
+                              <span className="text-xs text-muted-foreground">· {[t.role, t.company].filter(Boolean).join(" @ ")}</span>
+                            )}
+                          </div>
+                          <div className="mt-1 flex items-center gap-2">
+                            <div className="flex items-center gap-0.5 text-amber-400">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
+                              ))}
+                            </div>
+                            {t.approved ? (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-0.5 text-[10px] text-primary"><Check className="h-3 w-3" /> Published</span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 px-2 py-0.5 text-[10px] text-amber-500">Pending</span>
+                            )}
+                            <span className="text-[10px] text-muted-foreground">· {new Date(t.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <button onClick={() => toggleTestimonialApproval(t)}
+                            className={`inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium transition ${t.approved ? "bg-secondary text-muted-foreground hover:text-foreground" : "bg-primary/15 text-primary hover:bg-primary/25"}`}>
+                            {t.approved ? <><UserX className="h-3.5 w-3.5" /> Unpublish</> : <><Check className="h-3.5 w-3.5" /> Approve</>}
+                          </button>
+                          <button onClick={() => setEditingTestimonial({ id: t.id, name: t.name, email: t.email, company: t.company, role: t.role, rating: t.rating, message: t.message, approved: t.approved })}
+                            className="inline-flex items-center gap-1 rounded-md bg-secondary px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground">
+                            <Pencil className="h-3.5 w-3.5" /> Edit
+                          </button>
+                          <button onClick={() => removeTestimonial(t.id)}
+                            className="inline-flex items-center gap-1 rounded-md bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/20">
+                            <Trash2 className="h-3.5 w-3.5" /> Delete
+                          </button>
+                        </div>
+                      </div>
+                      <p className="rounded-lg bg-secondary/30 p-3 text-sm text-foreground/90">"{t.message}"</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        )}
       </main>
+
+      {editingTestimonial && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
+          <form onSubmit={saveTestimonial} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Edit testimonial</h2>
+              <button type="button" onClick={() => setEditingTestimonial(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Name</label>
+                  <input required value={editingTestimonial.name} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, name: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Email</label>
+                  <input value={editingTestimonial.email ?? ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, email: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Company</label>
+                  <input value={editingTestimonial.company ?? ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, company: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Role</label>
+                  <input value={editingTestimonial.role ?? ""} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, role: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Rating</label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button key={n} type="button" onClick={() => setEditingTestimonial({ ...editingTestimonial, rating: n })} className="p-1">
+                      <Star className={`h-6 w-6 ${n <= editingTestimonial.rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Message</label>
+                <textarea required rows={4} value={editingTestimonial.message} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, message: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" checked={editingTestimonial.approved} onChange={(e) => setEditingTestimonial({ ...editingTestimonial, approved: e.target.checked })} />
+                Published (visible on site)
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button type="button" onClick={() => setEditingTestimonial(null)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-secondary">Cancel</button>
+              <button type="submit" className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow hover:opacity-90">Save</button>
+            </div>
+          </form>
+        </div>
+      )}
+
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
