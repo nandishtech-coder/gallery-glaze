@@ -178,7 +178,7 @@ function Index() {
     return (
       <span
         key={key}
-        className="inline-flex shrink-0 items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-500 sm:text-sm"
+        className="inline-flex max-w-full shrink-0 flex-wrap items-center justify-center gap-2 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs font-medium text-emerald-500 sm:rounded-full sm:px-4 sm:text-sm"
       >
         <Clock className="h-4 w-4 animate-pulse" />
         <span className="text-foreground/90">
