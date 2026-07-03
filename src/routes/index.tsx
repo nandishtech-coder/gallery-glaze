@@ -148,11 +148,15 @@ function Index() {
   useEffect(() => {
     const offerServices = services.filter((s) => (s.discount_percent ?? 0) > 0);
     if (!offerServices.length) return;
+    const TOAST_ID = "service-offer-rotator";
     let i = 0;
+    let gapId: ReturnType<typeof setTimeout> | null = null;
+    let cycleId: ReturnType<typeof setTimeout> | null = null;
     const showNext = () => {
       const s = offerServices[i % offerServices.length];
       const discounted = computeDiscounted(s.price, s.discount_percent);
       toast.success(`${s.discount_percent}% OFF on ${s.title}`, {
+        id: TOAST_ID,
         description: discounted
           ? `Now ${discounted} ${s.price_suffix} (was ${s.price}) — tap to enquire.`
           : `${s.price} ${s.price_suffix} — tap to enquire.`,
@@ -164,12 +168,17 @@ function Index() {
         },
       });
       i++;
+      cycleId = setTimeout(() => {
+        toast.dismiss(TOAST_ID);
+        gapId = setTimeout(showNext, 2000);
+      }, 5000);
     };
     const startId = setTimeout(showNext, 1500);
-    const intervalId = setInterval(showNext, 7000);
     return () => {
       clearTimeout(startId);
-      clearInterval(intervalId);
+      if (gapId) clearTimeout(gapId);
+      if (cycleId) clearTimeout(cycleId);
+      toast.dismiss(TOAST_ID);
     };
   }, [services]);
 
