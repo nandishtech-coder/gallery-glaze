@@ -523,7 +523,7 @@ function AdminPage() {
                 <ul className="divide-y divide-border/40">
                   {testimonials.map((t) => (
                     <li key={t.id} className="flex flex-col gap-3 p-4 sm:px-5">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:flex-wrap">
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="text-sm font-semibold">{t.name}</span>
