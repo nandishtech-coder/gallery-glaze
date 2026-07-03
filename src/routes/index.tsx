@@ -148,11 +148,15 @@ function Index() {
   useEffect(() => {
     const offerServices = services.filter((s) => (s.discount_percent ?? 0) > 0);
     if (!offerServices.length) return;
+    const TOAST_ID = "service-offer-rotator";
     let i = 0;
+    let gapId: ReturnType<typeof setTimeout> | null = null;
+    let cycleId: ReturnType<typeof setTimeout> | null = null;
     const showNext = () => {
       const s = offerServices[i % offerServices.length];
       const discounted = computeDiscounted(s.price, s.discount_percent);
       toast.success(`${s.discount_percent}% OFF on ${s.title}`, {
+        id: TOAST_ID,
         description: discounted
           ? `Now ${discounted} ${s.price_suffix} (was ${s.price}) — tap to enquire.`
           : `${s.price} ${s.price_suffix} — tap to enquire.`,
@@ -164,12 +168,17 @@ function Index() {
         },
       });
       i++;
+      cycleId = setTimeout(() => {
+        toast.dismiss(TOAST_ID);
+        gapId = setTimeout(showNext, 2000);
+      }, 5000);
     };
     const startId = setTimeout(showNext, 1500);
-    const intervalId = setInterval(showNext, 7000);
     return () => {
       clearTimeout(startId);
-      clearInterval(intervalId);
+      if (gapId) clearTimeout(gapId);
+      if (cycleId) clearTimeout(cycleId);
+      toast.dismiss(TOAST_ID);
     };
   }, [services]);
 
@@ -254,7 +263,7 @@ function Index() {
       <NavBar />
 
       {totalOffers > 0 && (
-        <div className="fixed right-4 top-20 z-40 w-[min(20rem,calc(100vw-2rem))]">
+        <div className="fixed right-3 top-[4.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] sm:right-4 sm:top-[4.75rem]">
           {offersOpen ? (
             <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-3 shadow-lg shadow-emerald-500/10 backdrop-blur">
               <div className="mb-2 flex items-center justify-between gap-3">
