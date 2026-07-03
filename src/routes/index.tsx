@@ -263,7 +263,7 @@ function Index() {
       <NavBar />
 
       {totalOffers > 0 && (
-        <div className="fixed right-4 top-20 z-40 w-[min(20rem,calc(100vw-2rem))]">
+        <div className="fixed right-3 top-[4.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] sm:right-4 sm:top-[4.75rem]">
           {offersOpen ? (
             <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-3 shadow-lg shadow-emerald-500/10 backdrop-blur">
               <div className="mb-2 flex items-center justify-between gap-3">
