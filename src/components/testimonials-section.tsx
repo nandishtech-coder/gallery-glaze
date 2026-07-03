@@ -113,15 +113,7 @@ export function TestimonialsSection() {
                   className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${gradient} opacity-20 blur-2xl transition group-hover:opacity-30`}
                 />
                 <Quote className="absolute right-4 top-4 h-6 w-6 text-primary/40" />
-                <div className="flex items-center gap-1 text-amber-400">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
-                  ))}
-                </div>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-foreground/90">
-                  &ldquo;{t.message}&rdquo;
-                </p>
-                <div className="mt-5 flex items-center gap-3 border-t border-border/40 pt-4">
+                <div className="flex items-center gap-3">
                   <div
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-sm font-semibold text-white shadow-lg ring-2 ring-background`}
                   >
@@ -138,6 +130,14 @@ export function TestimonialsSection() {
                     )}
                   </div>
                 </div>
+                <div className="mt-4 flex items-center gap-1 text-amber-400">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
+                  ))}
+                </div>
+                <p className="mt-3 flex-1 whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/90">
+                  &ldquo;{t.message}&rdquo;
+                </p>
               </article>
             );
           })}
