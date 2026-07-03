@@ -168,8 +168,8 @@ export function TestimonialsSection() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Company</label>
-                  <input maxLength={100} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })}
+                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Business name</label>
+                  <input maxLength={100} placeholder="Your business or brand" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })}
                     className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30" />
                 </div>
                 <div>
