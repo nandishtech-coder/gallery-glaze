@@ -256,7 +256,7 @@ function AdminPage() {
         </div>
 
         {/* Tab menu */}
-        <div className="mb-6 flex items-center gap-1 rounded-xl border border-border/60 bg-secondary/30 p-1 w-fit">
+        <div className="mb-6 -mx-1 flex items-center gap-1 overflow-x-auto rounded-xl border border-border/60 bg-secondary/30 p-1 sm:w-fit sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <button
             onClick={() => setTab("projects")}
             className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
