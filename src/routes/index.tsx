@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight, Clock } from "lucide-react";
+import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight, Clock, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
+import { Button } from "@/components/ui/button";
 import { computeDiscounted } from "@/lib/price";
 
 export const Route = createFileRoute("/")({
@@ -360,6 +361,17 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
            I help startups and businesses bring their products to life with precision and modern tech.
           </p>
+          <div className="mt-5 flex flex-col items-center gap-2 rise-in rise-delay-4">
+            <Button asChild size="lg" className="btn-glow">
+              <Link to="/contact">
+                <GraduationCap className="h-5 w-5" />
+                Student project? Click here
+              </Link>
+            </Button>
+            <p className="max-w-xs text-center text-sm text-foreground/70">
+              To know more — this is only for students, not for business purpose.
+            </p>
+          </div>
           {sortedOffers.length === 1 && soonest && soonestRemaining && (
             <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
           )}
