@@ -362,6 +362,30 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
            I help startups and businesses bring their products to life with precision and modern tech.
           </p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="mt-5 rise-in rise-delay-4 btn-glow" size="lg">
+                <GraduationCap className="h-5 w-5" />
+                Student project? Click here
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Student Projects</DialogTitle>
+                <DialogDescription>
+                  This is only for students — academic projects, final-year submissions, internships, or learning portfolios.
+                  We provide simplified, budget-friendly support and step-by-step guidance.
+                  Business or commercial work? Please use the Services page instead.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-3 pt-2">
+                <Button asChild>
+                  <Link to="/contact">Get in touch</Link>
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">Not for business purpose.</p>
+              </div>
+            </DialogContent>
+          </Dialog>
           {sortedOffers.length === 1 && soonest && soonestRemaining && (
             <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
           )}
