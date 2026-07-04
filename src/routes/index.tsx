@@ -263,6 +263,31 @@ function Index() {
     <div className="min-h-screen">
       <NavBar />
 
+      <div className="marquee-wrap relative z-30 overflow-hidden border-b border-primary/20 bg-primary/10 py-2">
+        <div className="marquee-mask">
+          <div className="marquee-track">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground"
+              >
+                <span>🎓</span>
+                <span className="text-gradient">Student Projects</span>
+                <span>—</span>
+                <span>Build your academic project with us</span>
+                <span>🚀</span>
+                <span>Visit</span>
+                <span className="text-primary underline">nandish-tech.online</span>
+                <span>💻</span>
+                <span>✨</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+
+
       {totalOffers > 0 && (
         <div className="fixed left-1/2 top-[4.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] -translate-x-1/2 sm:left-auto sm:right-4 sm:top-[4.75rem] sm:translate-x-0">
 
@@ -363,10 +388,10 @@ function Index() {
           </p>
           <div className="mt-5 flex flex-col items-center gap-2 rise-in rise-delay-4">
             <Button asChild size="lg" className="btn-glow">
-              <Link to="/contact">
+              <a href="https://nandish-tech.online" target="_blank" rel="noopener noreferrer">
                 <GraduationCap className="h-5 w-5" />
                 Student project? Click here
-              </Link>
+              </a>
             </Button>
             <p className="max-w-xs text-center text-sm text-foreground/70">
               To know more — this is only for students, not for business purpose.
