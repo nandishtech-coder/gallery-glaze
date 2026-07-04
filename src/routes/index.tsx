@@ -368,7 +368,7 @@ function Index() {
                 Student project? Click here
               </Link>
             </Button>
-            <p className="max-w-xs text-center text-xs text-muted-foreground">
+            <p className="max-w-xs text-center text-sm text-foreground/70">
               To know more — this is only for students, not for business purpose.
             </p>
           </div>
