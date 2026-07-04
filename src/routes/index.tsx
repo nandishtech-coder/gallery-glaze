@@ -7,7 +7,6 @@ import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { computeDiscounted } from "@/lib/price";
 
 export const Route = createFileRoute("/")({
