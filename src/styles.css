@@ -179,9 +179,10 @@ article p:hover, article a:hover, article button:hover,
 .marquee-track {
   display: inline-flex;
   gap: 2.5rem;
-  animation: marquee-x linear infinite;
+  animation: marquee-x 25s linear infinite;
   will-change: transform;
 }
+
 .marquee-mask {
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
