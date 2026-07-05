@@ -232,36 +232,6 @@ export type Database = {
         }
         Relationships: []
       }
-      public_testimonials: {
-        Row: {
-          company: string | null
-          created_at: string | null
-          id: string | null
-          message: string | null
-          name: string | null
-          rating: number | null
-          role: string | null
-        }
-        Insert: {
-          company?: string | null
-          created_at?: string | null
-          id?: string | null
-          message?: string | null
-          name?: string | null
-          rating?: number | null
-          role?: string | null
-        }
-        Update: {
-          company?: string | null
-          created_at?: string | null
-          id?: string | null
-          message?: string | null
-          name?: string | null
-          rating?: number | null
-          role?: string | null
-        }
-        Relationships: []
-      }
     }
     Functions: {
       has_role: {
