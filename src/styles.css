@@ -189,11 +189,29 @@ article p:hover, article a:hover, article button:hover,
 }
 .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
 
+/* Testimonials horizontal marquee */
+@keyframes testimonials-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.testimonial-marquee-wrap {
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.testimonial-marquee-track {
+  display: inline-flex;
+  gap: 1.25rem;
+  animation: testimonials-scroll 45s linear infinite;
+  will-change: transform;
+}
+.testimonial-marquee-wrap:hover .testimonial-marquee-track { animation-play-state: paused; }
+
 @keyframes offer-rise {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .offer-rise { animation: offer-rise 400ms ease-out; }
+
 
 /* User toggle + OS preference disables all bounce animations site-wide. */
 html.no-anim *,
