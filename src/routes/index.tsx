@@ -375,7 +375,7 @@ function Index() {
 
 
 
-      <main className="mx-auto max-w-6xl px-4 pt-24 pb-24 sm:pt-28">
+      <main className="mx-auto max-w-6xl px-4 pt-56 pb-24 sm:pt-28">
         <section className="mb-16 text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Available for new work
