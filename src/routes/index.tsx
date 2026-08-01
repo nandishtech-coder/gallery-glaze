@@ -263,28 +263,6 @@ function Index() {
     <div className="min-h-screen">
       <NavBar />
 
-      <div className="marquee-wrap relative z-30 overflow-hidden border-b border-primary/20 bg-primary/10 py-2">
-        <div className="marquee-mask">
-          <div className="marquee-track">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground"
-              >
-                <span>🎓</span>
-                <span className="text-gradient">Student Projects</span>
-                <span>—</span>
-                <span>Build your academic project with us</span>
-                <span>🚀</span>
-                <span>Visit</span>
-                <span className="text-primary underline">nandish-tech.online</span>
-                <span>💻</span>
-                <span>✨</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
 
 
 
