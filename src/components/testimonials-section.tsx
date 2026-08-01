@@ -57,6 +57,12 @@ export function TestimonialsSection() {
     setOpen(false);
   };
 
+  // Repeat items so the marquee track is always wide enough for a seamless loop
+  const marqueeItems: Testimonial[] =
+    items.length === 0
+      ? []
+      : Array.from({ length: Math.max(2, Math.ceil(6 / items.length) * 2) }).flatMap(() => items);
+
   return (
     <section className="mt-24">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -85,12 +91,12 @@ export function TestimonialsSection() {
           No testimonials yet. Be the first to share your experience!
         </div>
       ) : (
-        <div className={items.length > 2 ? "testimonial-marquee-wrap overflow-hidden" : ""}>
+        <div className="testimonial-marquee-wrap overflow-hidden">
           <div
-            className={items.length > 2 ? "testimonial-marquee-track" : "flex flex-wrap gap-5"}
-            style={items.length > 2 ? { animationDuration: `${Math.max(14, items.length * 4)}s` } : undefined}
+            className="testimonial-marquee-track"
+            style={{ animationDuration: `${Math.max(30, marqueeItems.length * 7)}s` }}
           >
-            {(items.length > 2 ? [...items, ...items] : items).map((t, idx) => {
+            {marqueeItems.map((t, idx) => {
               const initials = t.name
                 .split(/\s+/)
                 .filter(Boolean)
