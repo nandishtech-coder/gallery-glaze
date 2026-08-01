@@ -57,6 +57,12 @@ export function TestimonialsSection() {
     setOpen(false);
   };
 
+  // Repeat items so the marquee track is always wide enough for a seamless loop
+  const marqueeItems: Testimonial[] =
+    items.length === 0
+      ? []
+      : Array.from({ length: Math.max(2, Math.ceil(6 / items.length) * 2) }).flatMap(() => items);
+
   return (
     <section className="mt-24">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
