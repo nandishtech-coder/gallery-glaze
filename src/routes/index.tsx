@@ -446,13 +446,13 @@ function Index() {
                   key={p.id}
                   className="group flex flex-col overflow-hidden rounded-2xl glass card-hover"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
+                  <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
                     {p.thumbnail_url ? (
                       <img
                         src={p.thumbnail_url}
                         alt={p.name}
                         loading="lazy"
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        className="h-full w-full object-contain object-center transition duration-500 group-hover:scale-[1.03]"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-muted-foreground">
