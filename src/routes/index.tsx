@@ -387,17 +387,6 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
            I help startups and businesses bring their products to life with precision and modern tech.
           </p>
-          <div className="mt-5 flex flex-col items-center gap-2 rise-in rise-delay-4">
-            <Button asChild size="lg" className="btn-glow">
-              <a href="https://nandish-tech.online" target="_blank" rel="noopener noreferrer">
-                <GraduationCap className="h-5 w-5" />
-                Student project? Click here
-              </a>
-            </Button>
-            <p className="max-w-xs text-center text-sm text-foreground/70">
-              To know more — this is only for students, not for business purpose.
-            </p>
-          </div>
           {sortedOffers.length === 1 && soonest && soonestRemaining && (
             <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
           )}
