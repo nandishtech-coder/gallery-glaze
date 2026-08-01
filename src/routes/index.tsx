@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight, Clock, GraduationCap } from "lucide-react";
+import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
@@ -263,28 +263,6 @@ function Index() {
     <div className="min-h-screen">
       <NavBar />
 
-      <div className="marquee-wrap relative z-30 overflow-hidden border-b border-primary/20 bg-primary/10 py-2">
-        <div className="marquee-mask">
-          <div className="marquee-track">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-foreground"
-              >
-                <span>🎓</span>
-                <span className="text-gradient">Student Projects</span>
-                <span>—</span>
-                <span>Build your academic project with us</span>
-                <span>🚀</span>
-                <span>Visit</span>
-                <span className="text-primary underline">nandish-tech.online</span>
-                <span>💻</span>
-                <span>✨</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
 
 
 
@@ -387,17 +365,6 @@ function Index() {
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
            I help startups and businesses bring their products to life with precision and modern tech.
           </p>
-          <div className="mt-5 flex flex-col items-center gap-2 rise-in rise-delay-4">
-            <Button asChild size="lg" className="btn-glow">
-              <a href="https://nandish-tech.online" target="_blank" rel="noopener noreferrer">
-                <GraduationCap className="h-5 w-5" />
-                Student project? Click here
-              </a>
-            </Button>
-            <p className="max-w-xs text-center text-sm text-foreground/70">
-              To know more — this is only for students, not for business purpose.
-            </p>
-          </div>
           {sortedOffers.length === 1 && soonest && soonestRemaining && (
             <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
           )}
