@@ -4,10 +4,12 @@ import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
+  { to: "/projects", label: "Projects" },
   { to: "/services", label: "Services" },
+  { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ] as const;
+
 
 export function NavBar() {
   const { user, isAdmin, signOut } = useAuth();
