@@ -134,6 +134,42 @@ export type Database = {
         }
         Relationships: []
       }
+      site_stats: {
+        Row: {
+          created_at: string
+          heading: string
+          id: string
+          projects_count: string
+          projects_label: string
+          subheading: string
+          success_label: string
+          success_rate: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          heading?: string
+          id?: string
+          projects_count?: string
+          projects_label?: string
+          subheading?: string
+          success_label?: string
+          success_rate?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          heading?: string
+          id?: string
+          projects_count?: string
+          projects_label?: string
+          subheading?: string
+          success_label?: string
+          success_rate?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           approved: boolean
