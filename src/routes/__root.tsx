@@ -114,6 +114,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "@/components/ui/sonner";
+import { FloatingContact } from "@/components/floating-contact";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -122,6 +123,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Outlet />
+        <FloatingContact />
         <Toaster theme="dark" />
       </AuthProvider>
     </QueryClientProvider>

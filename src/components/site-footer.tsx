@@ -19,7 +19,9 @@ export function SiteFooter() {
           </h4>
           <ul className="space-y-2 text-sm">
             <li><Link to="/" className="text-foreground/80 hover:text-foreground">Home</Link></li>
+            <li><Link to="/projects" className="text-foreground/80 hover:text-foreground">Projects</Link></li>
             <li><Link to="/about" className="text-foreground/80 hover:text-foreground">About</Link></li>
+
             <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Services</Link></li>
             <li><Link to="/contact" className="text-foreground/80 hover:text-foreground">Contact</Link></li>
           </ul>
