@@ -264,10 +264,12 @@ function Home() {
             ))}
           </div>
         </section>
+        <BetterBusiness />
 
         <div className="mx-auto max-w-6xl px-4">
           <TestimonialsSection />
         </div>
+
 
         {/* CTA */}
         <section className="mx-auto mt-20 max-w-6xl px-4">
