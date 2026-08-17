@@ -339,7 +339,16 @@ function AdminPage() {
               </span>
             )}
           </button>
+          <button
+            onClick={() => setTab("stats")}
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              tab === "stats" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <BarChart3 className="h-4 w-4" /> Stats
+          </button>
         </div>
+
 
 
         {tab === "projects" && (
