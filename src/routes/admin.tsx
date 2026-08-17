@@ -79,7 +79,10 @@ function AdminPage() {
   const [editing, setEditing] = useState<Draft | null>(null);
   const [editingService, setEditingService] = useState<ServiceDraft | null>(null);
   const [editingTestimonial, setEditingTestimonial] = useState<TestimonialDraft | null>(null);
-  const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials">("projects");
+  const [stats, setStats] = useState<SiteStats | null>(null);
+  const [savingStats, setSavingStats] = useState(false);
+  const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials" | "stats">("projects");
+
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/login" });
