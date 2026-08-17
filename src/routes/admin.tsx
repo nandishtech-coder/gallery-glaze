@@ -558,6 +558,85 @@ function AdminPage() {
           </>
         )}
 
+        {tab === "stats" && (
+          <>
+            <div className="mb-4">
+              <p className="text-sm text-muted-foreground">
+                Edit the "Better Business" stats section shown above testimonials on the home page.
+              </p>
+            </div>
+            <div className="rounded-2xl glass p-5 sm:p-6">
+              {fetching ? (
+                <div className="p-8 text-center text-muted-foreground"><Loader2 className="mx-auto h-5 w-5 animate-spin" /></div>
+              ) : !stats ? (
+                <div className="p-8 text-center text-muted-foreground">No stats row found.</div>
+              ) : (
+                <form onSubmit={saveStats} className="space-y-4">
+                  <div>
+                    <label className="mb-1 block text-xs text-muted-foreground">Heading</label>
+                    <input
+                      value={stats.heading}
+                      onChange={(e) => setStats({ ...stats, heading: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs text-muted-foreground">Subheading</label>
+                    <textarea
+                      rows={3}
+                      value={stats.subheading}
+                      onChange={(e) => setStats({ ...stats, subheading: e.target.value })}
+                      className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Projects completed (count)</label>
+                      <input
+                        value={stats.projects_count}
+                        onChange={(e) => setStats({ ...stats, projects_count: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Projects label</label>
+                      <input
+                        value={stats.projects_label}
+                        onChange={(e) => setStats({ ...stats, projects_label: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Success rate</label>
+                      <input
+                        value={stats.success_rate}
+                        onChange={(e) => setStats({ ...stats, success_rate: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Success label</label>
+                      <input
+                        value={stats.success_label}
+                        onChange={(e) => setStats({ ...stats, success_label: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={savingStats}
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground btn-glow transition hover:opacity-90 disabled:opacity-60"
+                  >
+                    {savingStats ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />} Save stats
+                  </button>
+                </form>
+              )}
+            </div>
+          </>
+        )}
+
+
         {tab === "testimonials" && (
           <>
             <div className="mb-4 flex items-end justify-between gap-4">
