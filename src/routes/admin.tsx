@@ -121,6 +121,29 @@ function AdminPage() {
 
   };
 
+  const saveStats = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stats) return;
+    setSavingStats(true);
+    const { error } = await supabase
+      .from("site_stats")
+      .update({
+        heading: stats.heading,
+        subheading: stats.subheading,
+        projects_count: stats.projects_count,
+        projects_label: stats.projects_label,
+        success_rate: stats.success_rate,
+        success_label: stats.success_label,
+      })
+      .eq("id", stats.id);
+    setSavingStats(false);
+    if (error) return toast.error(error.message);
+    toast.success("Stats updated");
+    load();
+  };
+
+
+
   const saveTestimonial = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingTestimonial) return;
