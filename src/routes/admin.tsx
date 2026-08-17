@@ -58,7 +58,18 @@ interface Testimonial {
   created_at: string;
 }
 
+interface SiteStats {
+  id: string;
+  heading: string;
+  subheading: string;
+  projects_count: string;
+  projects_label: string;
+  success_rate: string;
+  success_label: string;
+}
+
 type Draft = Omit<Project, "id"> & { id?: string };
+
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 type TestimonialDraft = Omit<Testimonial, "id" | "created_at"> & { id?: string };
 
