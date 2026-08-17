@@ -111,12 +111,25 @@ const industries = [
 
 function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+      {/* Realistic modern-tech backdrop */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <img
+          src={techBg}
+          alt=""
+          width={1920}
+          height={1088}
+          className="h-full w-full object-cover opacity-35"
+        />
+        <div className="absolute inset-0 bg-background/70" />
+      </div>
+
       <NavBar />
 
       <main>
         {/* Hero */}
         <section className="mx-auto max-w-6xl px-4 pb-16 pt-16 text-center sm:pt-24">
+
           <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Solutions for all your needs
           </div>
