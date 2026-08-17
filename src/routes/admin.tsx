@@ -101,11 +101,12 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const [proj, prof, svc, tst] = await Promise.all([
+    const [proj, prof, svc, tst, st] = await Promise.all([
       supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
+      supabase.from("site_stats").select("*").limit(1).maybeSingle(),
     ]);
     if (proj.error) toast.error(proj.error.message);
     if (prof.error) toast.error(prof.error.message);
@@ -115,7 +116,9 @@ function AdminPage() {
     setProfiles((prof.data ?? []) as Profile[]);
     setServices((svc.data ?? []) as Service[]);
     setTestimonials((tst.data ?? []) as Testimonial[]);
+    setStats((st.data as SiteStats) ?? null);
     setFetching(false);
+
   };
 
   const saveTestimonial = async (e: React.FormEvent) => {
