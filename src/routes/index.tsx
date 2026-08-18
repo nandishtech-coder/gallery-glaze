@@ -194,6 +194,7 @@ function Home() {
             </Link>
           </div>
         </section>
+      </div>
 
         {/* Stats */}
         <section className="mx-auto max-w-6xl px-4">
