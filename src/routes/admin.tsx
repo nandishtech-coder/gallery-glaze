@@ -66,6 +66,14 @@ interface SiteStats {
   projects_label: string;
   success_rate: string;
   success_label: string;
+  hero_stat1_value: string;
+  hero_stat1_label: string;
+  hero_stat2_value: string;
+  hero_stat2_label: string;
+  hero_stat3_value: string;
+  hero_stat3_label: string;
+  hero_stat4_value: string;
+  hero_stat4_label: string;
 }
 
 type Draft = Omit<Project, "id"> & { id?: string };
@@ -134,6 +142,14 @@ function AdminPage() {
         projects_label: stats.projects_label,
         success_rate: stats.success_rate,
         success_label: stats.success_label,
+        hero_stat1_value: stats.hero_stat1_value,
+        hero_stat1_label: stats.hero_stat1_label,
+        hero_stat2_value: stats.hero_stat2_value,
+        hero_stat2_label: stats.hero_stat2_label,
+        hero_stat3_value: stats.hero_stat3_value,
+        hero_stat3_label: stats.hero_stat3_label,
+        hero_stat4_value: stats.hero_stat4_value,
+        hero_stat4_label: stats.hero_stat4_label,
       })
       .eq("id", stats.id);
     setSavingStats(false);
@@ -619,6 +635,76 @@ function AdminPage() {
                       <input
                         value={stats.success_label}
                         onChange={(e) => setStats({ ...stats, success_label: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                  </div>
+                  <div className="pt-2">
+                    <p className="text-sm font-medium">Home page highlight card</p>
+                    <p className="text-xs text-muted-foreground">The four numbers shown near the top of the home page.</p>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 1 value</label>
+                      <input
+                        value={stats.hero_stat1_value}
+                        onChange={(e) => setStats({ ...stats, hero_stat1_value: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 1 label</label>
+                      <input
+                        value={stats.hero_stat1_label}
+                        onChange={(e) => setStats({ ...stats, hero_stat1_label: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 2 value</label>
+                      <input
+                        value={stats.hero_stat2_value}
+                        onChange={(e) => setStats({ ...stats, hero_stat2_value: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 2 label</label>
+                      <input
+                        value={stats.hero_stat2_label}
+                        onChange={(e) => setStats({ ...stats, hero_stat2_label: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 3 value</label>
+                      <input
+                        value={stats.hero_stat3_value}
+                        onChange={(e) => setStats({ ...stats, hero_stat3_value: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 3 label</label>
+                      <input
+                        value={stats.hero_stat3_label}
+                        onChange={(e) => setStats({ ...stats, hero_stat3_label: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 4 value</label>
+                      <input
+                        value={stats.hero_stat4_value}
+                        onChange={(e) => setStats({ ...stats, hero_stat4_value: e.target.value })}
+                        className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs text-muted-foreground">Stat 4 label</label>
+                      <input
+                        value={stats.hero_stat4_label}
+                        onChange={(e) => setStats({ ...stats, hero_stat4_label: e.target.value })}
                         className="w-full rounded-lg border border-border bg-background/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>

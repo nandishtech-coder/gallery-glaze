@@ -138,6 +138,14 @@ export type Database = {
         Row: {
           created_at: string
           heading: string
+          hero_stat1_label: string
+          hero_stat1_value: string
+          hero_stat2_label: string
+          hero_stat2_value: string
+          hero_stat3_label: string
+          hero_stat3_value: string
+          hero_stat4_label: string
+          hero_stat4_value: string
           id: string
           projects_count: string
           projects_label: string
@@ -149,6 +157,14 @@ export type Database = {
         Insert: {
           created_at?: string
           heading?: string
+          hero_stat1_label?: string
+          hero_stat1_value?: string
+          hero_stat2_label?: string
+          hero_stat2_value?: string
+          hero_stat3_label?: string
+          hero_stat3_value?: string
+          hero_stat4_label?: string
+          hero_stat4_value?: string
           id?: string
           projects_count?: string
           projects_label?: string
@@ -160,6 +176,14 @@ export type Database = {
         Update: {
           created_at?: string
           heading?: string
+          hero_stat1_label?: string
+          hero_stat1_value?: string
+          hero_stat2_label?: string
+          hero_stat2_value?: string
+          hero_stat3_label?: string
+          hero_stat3_value?: string
+          hero_stat4_label?: string
+          hero_stat4_value?: string
           id?: string
           projects_count?: string
           projects_label?: string

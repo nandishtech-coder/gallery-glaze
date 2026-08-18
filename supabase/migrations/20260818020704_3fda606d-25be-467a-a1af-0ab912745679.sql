@@ -1,0 +1,9 @@
+ALTER TABLE public.site_stats
+  ADD COLUMN IF NOT EXISTS hero_stat1_value TEXT NOT NULL DEFAULT '50+',
+  ADD COLUMN IF NOT EXISTS hero_stat1_label TEXT NOT NULL DEFAULT 'Projects delivered',
+  ADD COLUMN IF NOT EXISTS hero_stat2_value TEXT NOT NULL DEFAULT '30+',
+  ADD COLUMN IF NOT EXISTS hero_stat2_label TEXT NOT NULL DEFAULT 'Happy clients',
+  ADD COLUMN IF NOT EXISTS hero_stat3_value TEXT NOT NULL DEFAULT '3+',
+  ADD COLUMN IF NOT EXISTS hero_stat3_label TEXT NOT NULL DEFAULT 'Years experience',
+  ADD COLUMN IF NOT EXISTS hero_stat4_value TEXT NOT NULL DEFAULT '24/7',
+  ADD COLUMN IF NOT EXISTS hero_stat4_label TEXT NOT NULL DEFAULT 'Support on WhatsApp';
