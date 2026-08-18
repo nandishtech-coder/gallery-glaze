@@ -21,6 +21,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { BetterBusiness } from "@/components/better-business";
 import techBg from "@/assets/tech-bg.jpg";
+import heroBg from "@/assets/hero-bg.jpg";
 
 
 export const Route = createFileRoute("/")({
