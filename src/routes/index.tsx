@@ -21,6 +21,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { BetterBusiness } from "@/components/better-business";
 import techBg from "@/assets/tech-bg.jpg";
+import heroBg from "@/assets/hero-bg.jpg";
 
 
 export const Route = createFileRoute("/")({
@@ -151,9 +152,21 @@ function Home() {
 
       <main>
         {/* Hero */}
-        <section className="mx-auto max-w-6xl px-4 pb-16 pt-16 text-center sm:pt-24">
+        <div className="relative">
+          {/* Extra decorative background for the first section */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+            <img
+              src={heroBg}
+              alt=""
+              width={1920}
+              height={1080}
+              className="h-full w-full object-cover opacity-25"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/70 to-background" />
+          </div>
 
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
+          <section className="relative mx-auto max-w-6xl px-4 pb-16 pt-16 text-center sm:pt-24">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Solutions for all your needs
           </div>
           <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
@@ -181,6 +194,7 @@ function Home() {
             </Link>
           </div>
         </section>
+      </div>
 
         {/* Stats */}
         <section className="mx-auto max-w-6xl px-4">
