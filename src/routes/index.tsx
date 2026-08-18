@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowRight,
   Code2,
@@ -77,7 +79,7 @@ const solutions = [
   },
 ];
 
-const stats = [
+const fallbackStats = [
   { value: "50+", label: "Projects delivered" },
   { value: "30+", label: "Happy clients" },
   { value: "3+", label: "Years experience" },
@@ -110,6 +112,27 @@ const industries = [
 ];
 
 function Home() {
+  const [stats, setStats] = useState(fallbackStats);
+
+  useEffect(() => {
+    supabase
+      .from("site_stats")
+      .select(
+        "hero_stat1_value, hero_stat1_label, hero_stat2_value, hero_stat2_label, hero_stat3_value, hero_stat3_label, hero_stat4_value, hero_stat4_label",
+      )
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return;
+        setStats([
+          { value: data.hero_stat1_value, label: data.hero_stat1_label },
+          { value: data.hero_stat2_value, label: data.hero_stat2_label },
+          { value: data.hero_stat3_value, label: data.hero_stat3_label },
+          { value: data.hero_stat4_value, label: data.hero_stat4_label },
+        ]);
+      });
+  }, []);
+
   return (
     <div className="relative min-h-screen">
       {/* Realistic modern-tech backdrop */}
