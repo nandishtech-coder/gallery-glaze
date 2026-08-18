@@ -118,12 +118,14 @@ import { FloatingContact } from "@/components/floating-contact";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdminArea = pathname.startsWith("/admin") || pathname.startsWith("/login");
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Outlet />
-        <FloatingContact />
+        {!isAdminArea && <FloatingContact />}
         <Toaster theme="dark" />
       </AuthProvider>
     </QueryClientProvider>
