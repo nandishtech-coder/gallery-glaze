@@ -20,6 +20,7 @@ import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { BetterBusiness } from "@/components/better-business";
+import { LiveOffers } from "@/components/live-offers";
 import techBg from "@/assets/tech-bg.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
 import heroBg2 from "@/assets/hero-bg-2.jpg";
@@ -150,6 +151,7 @@ function Home() {
       </div>
 
       <NavBar />
+      <LiveOffers />
 
       <main>
         {/* Hero */}
@@ -183,7 +185,7 @@ function Home() {
             <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
           </div>
 
-          <section className="relative mx-auto max-w-6xl px-4 pb-16 pt-16 text-center sm:pt-24">
+          <section className="relative mx-auto max-w-6xl px-4 pb-16 pt-32 text-center sm:pt-28">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <Sparkles className="h-3.5 w-3.5 text-primary" /> Solutions for all your needs
           </div>
