@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
@@ -45,6 +46,7 @@ export function NavBar() {
         )}
 
         <div className="flex shrink-0 items-center gap-1 text-sm">
+          <ThemeToggle />
           {user && isAdmin && !isAdminPage && (
             <Link
               to="/admin"
