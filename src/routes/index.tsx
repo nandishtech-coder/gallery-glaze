@@ -153,16 +153,33 @@ function Home() {
       <main>
         {/* Hero */}
         <div className="relative">
-          {/* Extra decorative background for the first section */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+          {/* Layered, animated decorative background for the first section */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             <img
               src={heroBg}
               alt=""
               width={1920}
               height={1080}
-              className="h-full w-full object-cover opacity-25"
+              className="hero-layer absolute inset-0 h-full w-full object-cover opacity-30"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/70 to-background" />
+            <img
+              src={heroBg2}
+              alt=""
+              width={1920}
+              height={1088}
+              className="hero-layer hero-layer-2 absolute inset-0 h-full w-full object-cover opacity-30"
+            />
+            <img
+              src={techBg}
+              alt=""
+              width={1920}
+              height={1088}
+              className="hero-layer hero-layer-3 absolute inset-0 h-full w-full object-cover opacity-30"
+            />
+            <div className="aurora left-[-10%] top-[-20%] h-72 w-72 bg-primary/30 sm:h-96 sm:w-96" />
+            <div className="aurora aurora-2 right-[-10%] top-[10%] h-72 w-72 bg-accent/25 sm:h-96 sm:w-96" />
+            <div className="hero-grid absolute inset-0" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
           </div>
 
           <section className="relative mx-auto max-w-6xl px-4 pb-16 pt-16 text-center sm:pt-24">
