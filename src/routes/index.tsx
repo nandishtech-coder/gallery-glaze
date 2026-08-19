@@ -20,6 +20,7 @@ import { NavBar } from "@/components/nav-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { BetterBusiness } from "@/components/better-business";
+import { LiveOffers } from "@/components/live-offers";
 import techBg from "@/assets/tech-bg.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
 import heroBg2 from "@/assets/hero-bg-2.jpg";
