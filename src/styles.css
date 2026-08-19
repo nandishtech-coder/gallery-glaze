@@ -62,6 +62,69 @@
 
 .dark { color-scheme: dark; }
 
+/* Light theme (toggled from the navbar) */
+:root.light {
+  --background: oklch(0.98 0.008 280);
+  --foreground: oklch(0.22 0.03 280);
+  --card: oklch(1 0 0 / 75%);
+  --card-foreground: oklch(0.22 0.03 280);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.03 280);
+  --primary: oklch(0.52 0.2 295);
+  --primary-foreground: oklch(0.99 0.005 280);
+  --secondary: oklch(0.92 0.02 285 / 80%);
+  --secondary-foreground: oklch(0.24 0.03 280);
+  --muted: oklch(0.94 0.015 285 / 70%);
+  --muted-foreground: oklch(0.45 0.03 280);
+  --accent: oklch(0.6 0.14 200);
+  --accent-foreground: oklch(0.99 0.005 280);
+  --border: oklch(0.2 0.03 280 / 12%);
+  --input: oklch(0.2 0.03 280 / 16%);
+  --ring: oklch(0.52 0.2 295);
+
+  --gradient-hero: radial-gradient(ellipse at top, oklch(0.62 0.18 295 / 0.16), transparent 60%),
+                   radial-gradient(ellipse at bottom right, oklch(0.65 0.14 200 / 0.14), transparent 55%);
+  --gradient-primary: linear-gradient(135deg, oklch(0.52 0.2 295), oklch(0.55 0.15 200));
+  --shadow-glow: 0 0 40px -10px oklch(0.52 0.2 295 / 0.35);
+  --shadow-card: 0 10px 30px -14px oklch(0.3 0.05 280 / 0.35);
+}
+:root.light, :root.light body { color-scheme: light; }
+
+/* Hero backdrop: slow cross-fading layers + drifting aurora blobs */
+@keyframes hero-fade {
+  0%, 28%   { opacity: 0; }
+  36%, 61%  { opacity: 1; }
+  69%, 100% { opacity: 0; }
+}
+.hero-layer {
+  animation: hero-fade 24s ease-in-out infinite;
+  will-change: opacity;
+}
+.hero-layer-2 { animation-delay: 8s; }
+.hero-layer-3 { animation-delay: 16s; }
+
+@keyframes aurora-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(6%, -4%, 0) scale(1.15); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  animation: aurora-drift 18s ease-in-out infinite;
+  will-change: transform;
+}
+.aurora-2 { animation-duration: 24s; animation-delay: -6s; }
+
+.hero-grid {
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 72%);
+}
+
 @layer base {
   * { border-color: var(--color-border); }
   html, body { color-scheme: dark; }
