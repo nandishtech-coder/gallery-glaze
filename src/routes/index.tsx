@@ -151,6 +151,7 @@ function Home() {
       </div>
 
       <NavBar />
+      <LiveOffers />
 
       <main>
         {/* Hero */}
