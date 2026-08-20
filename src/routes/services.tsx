@@ -31,7 +31,7 @@ interface Service {
   discount_percent: number;
 }
 
-const ADMIN_WHATSAPP = "917899560461";
+const ADMIN_WHATSAPP = "917406386316";
 
 function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);

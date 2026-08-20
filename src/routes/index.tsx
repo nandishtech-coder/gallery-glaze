@@ -46,7 +46,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const ADMIN_PHONE = "917899560461";
+const ADMIN_PHONE = "917406386316";
 const waLink = (msg: string) => `https://wa.me/${ADMIN_PHONE}?text=${encodeURIComponent(msg)}`;
 
 const solutions = [

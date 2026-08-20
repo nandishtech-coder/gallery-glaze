@@ -34,7 +34,7 @@ interface Service {
   discount_percent: number;
 }
 
-const ADMIN_WHATSAPP = "917899560461";
+const ADMIN_WHATSAPP = "917406386316";
 
 interface PublicProject {
   id: string;
@@ -501,7 +501,7 @@ function Index() {
                           </a>
                         )}
                         <a
-                          href={`https://wa.me/917899560461?text=${encodeURIComponent(`Hello Nandish-Tech 👋,\n\nI came across your portfolio and I'm interested in the "${p.name}" demo project.\n\nCould you please share more details regarding:\n• Features & customization options\n• Pricing & delivery timeline\n• Next steps to get started\n\nLooking forward to your response.\n\nThank you!`)}`}
+                          href={`https://wa.me/917406386316?text=${encodeURIComponent(`Hello Nandish-Tech 👋,\n\nI came across your portfolio and I'm interested in the "${p.name}" demo project.\n\nCould you please share more details regarding:\n• Features & customization options\n• Pricing & delivery timeline\n• Next steps to get started\n\nLooking forward to your response.\n\nThank you!`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Enquire about ${p.name} on WhatsApp`}
