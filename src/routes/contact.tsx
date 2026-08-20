@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { NavBar } from "@/components/nav-bar";
+import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { Mail, MapPin, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -38,7 +39,8 @@ function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+      <PageBackground variant="hero2" />
       <NavBar />
       <main className="mx-auto max-w-5xl px-4 pt-16 pb-20">
         <header className="text-center">

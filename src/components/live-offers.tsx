@@ -30,7 +30,7 @@ interface LiveOfferItem {
   href?: string;
 }
 
-const ADMIN_WHATSAPP = "917899560461";
+const ADMIN_WHATSAPP = "917406386316";
 
 function useNow(intervalMs = 1000) {
   const [now, setNow] = useState(() => Date.now());

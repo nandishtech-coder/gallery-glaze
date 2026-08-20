@@ -1,6 +1,6 @@
 import { Phone } from "lucide-react";
 
-const ADMIN_PHONE = "917899560461";
+const ADMIN_PHONE = "917406386316";
 
 export function FloatingContact() {
   return (
