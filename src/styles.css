@@ -117,6 +117,22 @@
 }
 .aurora-2 { animation-duration: 24s; animation-delay: -6s; }
 
+/* Slow automatic scrolling/panning of background imagery */
+@keyframes bg-pan {
+  0%   { transform: scale(1.18) translate3d(-3%, -2%, 0); }
+  50%  { transform: scale(1.18) translate3d(3%, 2%, 0); }
+  100% { transform: scale(1.18) translate3d(-3%, -2%, 0); }
+}
+.bg-pan {
+  animation: bg-pan 40s ease-in-out infinite;
+  will-change: transform;
+}
+.bg-pan-slow { animation-duration: 60s; }
+@media (prefers-reduced-motion: reduce) {
+  .bg-pan { animation: none; }
+}
+
+
 .hero-grid {
   background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
                     linear-gradient(to bottom, var(--border) 1px, transparent 1px);

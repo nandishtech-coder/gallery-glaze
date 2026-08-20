@@ -163,21 +163,21 @@ function Home() {
               alt=""
               width={1920}
               height={1080}
-              className="hero-layer absolute inset-0 h-full w-full object-cover opacity-30"
+              className="hero-layer bg-pan absolute inset-0 h-full w-full object-cover opacity-30"
             />
             <img
               src={heroBg2}
               alt=""
               width={1920}
               height={1088}
-              className="hero-layer hero-layer-2 absolute inset-0 h-full w-full object-cover opacity-30"
+              className="hero-layer hero-layer-2 bg-pan bg-pan-slow absolute inset-0 h-full w-full object-cover opacity-30"
             />
             <img
               src={techBg}
               alt=""
               width={1920}
               height={1088}
-              className="hero-layer hero-layer-3 absolute inset-0 h-full w-full object-cover opacity-30"
+              className="hero-layer hero-layer-3 bg-pan absolute inset-0 h-full w-full object-cover opacity-30"
             />
             <div className="aurora left-[-10%] top-[-20%] h-72 w-72 bg-primary/30 sm:h-96 sm:w-96" />
             <div className="aurora aurora-2 right-[-10%] top-[10%] h-72 w-72 bg-accent/25 sm:h-96 sm:w-96" />
