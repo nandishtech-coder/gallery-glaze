@@ -277,7 +277,8 @@ function Index() {
 
 
       {totalOffers > 0 && (
-        <div className="fixed left-1/2 top-[6.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] -translate-x-1/2 sm:left-auto sm:right-4 sm:top-[7.5rem] sm:translate-x-0">
+        <div className="fixed left-1/2 top-[8.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] -translate-x-1/2 sm:left-auto sm:right-4 sm:top-[8rem] sm:translate-x-0">
+
 
 
           {offersOpen ? (
