@@ -22,9 +22,9 @@ export function NavBar() {
       <div className="mx-auto mt-4 flex max-w-6xl flex-col items-center gap-2 rounded-2xl glass px-3 py-2 sm:flex-row sm:justify-between sm:gap-3 sm:px-5 sm:py-3">
         <Link
           to={isAdminPage ? "/admin" : "/"}
-          className="flex shrink-0 items-center gap-2 text-lg font-bold tracking-tight sm:text-xl"
+          className="flex shrink-0 items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl"
         >
-          <Sparkles className="h-5 w-5 shrink-0 text-primary sm:h-6 sm:w-6" />
+          <Sparkles className="h-6 w-6 shrink-0 text-primary sm:h-7 sm:w-7" />
           <span className="text-gradient whitespace-nowrap">
             {isAdminPage ? "Admin Dashboard" : "NANDISH-TECH"}
           </span>
