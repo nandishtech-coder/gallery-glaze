@@ -10,7 +10,7 @@ export function PageBackground({ variant = "tech" }: { variant?: keyof typeof im
       <img
         src={images[variant]}
         alt=""
-        className="h-full w-full object-cover opacity-30"
+        className="bg-pan h-full w-full object-cover opacity-30"
       />
       <div className="aurora left-[-20%] top-[-15%] h-64 w-64 bg-primary/25 sm:h-96 sm:w-96" />
       <div className="aurora aurora-2 right-[-15%] top-[20%] h-64 w-64 bg-accent/20 sm:h-96 sm:w-96" />
