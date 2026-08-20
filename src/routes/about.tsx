@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { NavBar } from "@/components/nav-bar";
+import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { Code2, Sparkles, Rocket, Layers } from "lucide-react";
 
@@ -24,7 +25,8 @@ const values = [
 
 function AboutPage() {
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+      <PageBackground variant="hero" />
       <NavBar />
       <main className="mx-auto max-w-5xl px-4 pt-16 pb-20">
         <header className="text-center">

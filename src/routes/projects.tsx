@@ -4,6 +4,7 @@ import { ExternalLink, Sparkles, Search, MessageCircle, Check, ArrowRight, Clock
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
+import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection } from "@/components/testimonials-section";
 import { Button } from "@/components/ui/button";
@@ -268,7 +269,8 @@ function Index() {
     current && current.kind === "project" ? formatRemaining(new Date(current.endsAt).getTime() - now) : null;
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+      <PageBackground variant="hero" />
       <NavBar />
 
 

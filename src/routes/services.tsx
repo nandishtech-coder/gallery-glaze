@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Check, Sparkles, MessageCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
+import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { computeDiscounted } from "@/lib/price";
 
@@ -62,7 +63,8 @@ function ServicesPage() {
   )}`;
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
+      <PageBackground variant="tech" />
       <NavBar />
       <main className="mx-auto max-w-6xl px-4 pt-16 pb-24">
         <section className="mb-12 text-center">
