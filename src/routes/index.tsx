@@ -5,7 +5,7 @@ import {
   ArrowRight,
   Code2,
   Palette,
-  Megaphone,
+  
   ShoppingCart,
   Smartphone,
   Search,
