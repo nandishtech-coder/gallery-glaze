@@ -115,7 +115,7 @@ const industries = [
 ];
 
 function Home() {
-  const [stats, setStats] = useState(fallbackStats);
+  const [stats, setStats] = useState<typeof fallbackStats | null>(null);
 
   useEffect(() => {
     supabase
