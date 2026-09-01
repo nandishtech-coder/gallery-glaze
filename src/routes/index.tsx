@@ -219,10 +219,19 @@ function Home() {
         {/* Stats */}
         <section className="mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-2 gap-4 rounded-2xl glass p-6 sm:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-2xl font-semibold text-gradient sm:text-3xl">{s.value}</div>
-                <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</div>
+            {(stats ?? [null, null, null, null]).map((s, i) => (
+              <div key={s?.label ?? i} className="text-center">
+                {s ? (
+                  <>
+                    <div className="text-2xl font-semibold text-gradient sm:text-3xl">{s.value}</div>
+                    <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="mx-auto h-8 w-16 animate-pulse rounded-md bg-muted/60" />
+                    <div className="mx-auto mt-2 h-3 w-24 animate-pulse rounded bg-muted/40" />
+                  </>
+                )}
               </div>
             ))}
           </div>
