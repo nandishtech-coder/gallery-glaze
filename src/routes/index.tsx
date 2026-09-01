@@ -5,7 +5,7 @@ import {
   ArrowRight,
   Code2,
   Palette,
-  Megaphone,
+  
   ShoppingCart,
   Smartphone,
   Search,
@@ -69,16 +69,6 @@ const solutions = [
     icon: Smartphone,
     title: "Custom Web Applications",
     text: "Dashboards, portals and internal tools tailored to your workflow.",
-  },
-  {
-    icon: Sparkles,
-    title: "Graphics & Branding",
-    text: "Logos, brochures, banners and visiting cards with a consistent identity.",
-  },
-  {
-    icon: Megaphone,
-    title: "Digital & Social Marketing",
-    text: "SEO, social media and campaigns that put your brand in front of buyers.",
   },
 ];
 
