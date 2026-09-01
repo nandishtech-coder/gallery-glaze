@@ -126,7 +126,7 @@ function Home() {
       .limit(1)
       .maybeSingle()
       .then(({ data }) => {
-        if (!data) return;
+        if (!data) return setStats(fallbackStats);
         setStats([
           { value: data.hero_stat1_value, label: data.hero_stat1_label },
           { value: data.hero_stat2_value, label: data.hero_stat2_label },
