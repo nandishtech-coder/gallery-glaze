@@ -23,6 +23,8 @@ interface Project {
   offer_label: string;
   offer_discount_percent: number;
   offer_ends_at: string | null;
+  project_type: string;
+  live_enabled: boolean;
 }
 
 interface Profile {
@@ -81,7 +83,7 @@ type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 type TestimonialDraft = Omit<Testimonial, "id" | "created_at"> & { id?: string };
 
-const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null };
+const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null, project_type: "Web Application", live_enabled: true };
 const emptyService: ServiceDraft = {
   title: "", description: "", price: "", price_suffix: "onwards",
   features: [], popular: true, cta_label: "Get Started", sort_order: 0, discount_percent: 0, featuresText: "",
@@ -110,7 +112,7 @@ function AdminPage() {
   const load = async () => {
     setFetching(true);
     const [proj, prof, svc, tst, st] = await Promise.all([
-      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at").order("created_at", { ascending: false }),
+      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
@@ -262,6 +264,8 @@ function AdminPage() {
       offer_label: editing.offer_label || "Offer ends soon",
       offer_discount_percent: Math.max(0, Math.min(100, Number(editing.offer_discount_percent) || 0)),
       offer_ends_at: editing.offer_ends_at ? new Date(editing.offer_ends_at).toISOString() : null,
+      project_type: editing.project_type || "Web Application",
+      live_enabled: editing.live_enabled ?? true,
     };
     const res = editing.id
       ? await supabase.from("projects").update(payload).eq("id", editing.id)
@@ -400,6 +404,10 @@ function AdminPage() {
                       <tr key={p.id} className="border-b border-border/30 last:border-0 hover:bg-secondary/30">
                         <td className="px-5 py-4">
                           <div className="font-medium">{p.name}</div>
+                          <div className="mt-1 flex flex-wrap gap-1 text-[10px]">
+                            <span className="rounded bg-primary/15 px-1.5 py-0.5 text-primary">{p.project_type}</span>
+                            {!p.live_enabled && <span className="rounded bg-secondary px-1.5 py-0.5">Private</span>}
+                          </div>
                           <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.description}</div>
                         </td>
                         <td className="px-5 py-4">
@@ -882,6 +890,27 @@ function AdminPage() {
                   )}
                 </div>
               ))}
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Project type</label>
+                <select
+                  value={editing.project_type ?? "Web Application"}
+                  onChange={(e) => setEditing({ ...editing, project_type: e.target.value })}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary"
+                >
+                  <option>Web Application</option>
+                  <option>Mobile App</option>
+                  <option>Mobile + Web Application</option>
+                </select>
+              </div>
+              <label className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-secondary/20 p-3">
+                <span className="text-sm font-medium">Show live URL (off = Private Project)</span>
+                <input
+                  type="checkbox"
+                  className="h-5 w-9 cursor-pointer appearance-none rounded-full bg-secondary outline-none transition checked:bg-primary relative after:absolute after:top-0.5 after:left-0.5 after:h-4 after:w-4 after:rounded-full after:bg-background after:transition checked:after:translate-x-4"
+                  checked={editing.live_enabled ?? true}
+                  onChange={(e) => setEditing({ ...editing, live_enabled: e.target.checked })}
+                />
+              </label>
             </div>
 
             <div className="mt-6 rounded-xl border border-border/60 bg-secondary/20 p-4">

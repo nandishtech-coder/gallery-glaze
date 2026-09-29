@@ -47,6 +47,8 @@ interface PublicProject {
   offer_label: string | null;
   offer_discount_percent: number | null;
   offer_ends_at: string | null;
+  project_type: string | null;
+  live_enabled: boolean | null;
 }
 
 function useNow(intervalMs = 1000) {
@@ -88,7 +90,7 @@ function Index() {
   useEffect(() => {
     supabase
       .from("public_projects")
-      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at")
+      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         setProjects((data ?? []) as PublicProject[]);
@@ -401,9 +403,24 @@ function Index() {
 
 
         <section>
+          {!loading && (
+            <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                { label: "Total Projects", count: projects.length },
+                { label: "Web Applications", count: projects.filter((p) => (p.project_type ?? "Web Application") === "Web Application").length },
+                { label: "Mobile Apps", count: projects.filter((p) => p.project_type === "Mobile App").length },
+                { label: "Mobile + Web", count: projects.filter((p) => p.project_type === "Mobile + Web Application").length },
+              ].map((c) => (
+                <div key={c.label} className="rounded-2xl glass p-4 text-center">
+                  <div className="text-2xl font-semibold text-gradient sm:text-3xl">{c.count}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{c.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-              Selected Work
+              Selected Work ({filtered.length})
             </h2>
             <div className="relative w-full sm:max-w-xs">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -485,6 +502,9 @@ function Index() {
                     )}
                   </div>
                   <div className="flex flex-1 flex-col p-5">
+                    <span className="mb-2 inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                      {p.project_type ?? "Web Application"}
+                    </span>
                     <h3 className="text-lg font-semibold transition-transform duration-300 hover:scale-105 hover:text-primary inline-block origin-left cursor-default">
                       {p.name}
                     </h3>
@@ -493,7 +513,11 @@ function Index() {
                     </p>
                     {(p.live_url || p.name) && (
                       <div className="mt-4 flex flex-wrap gap-2">
-                        {p.live_url && (
+                        {p.live_enabled === false ? (
+                          <span className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-medium text-muted-foreground">
+                            🔒 Private Project
+                          </span>
+                        ) : p.live_url && (
                           <a
                             href={p.live_url}
                             target="_blank"
