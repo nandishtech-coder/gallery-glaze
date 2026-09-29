@@ -50,12 +50,14 @@ export type Database = {
           description: string
           github_url: string | null
           id: string
+          live_enabled: boolean
           live_url: string | null
           name: string
           offer_discount_percent: number
           offer_enabled: boolean
           offer_ends_at: string | null
           offer_label: string
+          project_type: string
           thumbnail_url: string | null
           updated_at: string
         }
@@ -64,12 +66,14 @@ export type Database = {
           description?: string
           github_url?: string | null
           id?: string
+          live_enabled?: boolean
           live_url?: string | null
           name: string
           offer_discount_percent?: number
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
@@ -78,12 +82,14 @@ export type Database = {
           description?: string
           github_url?: string | null
           id?: string
+          live_enabled?: boolean
           live_url?: string | null
           name?: string
           offer_discount_percent?: number
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
@@ -258,36 +264,42 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string | null
+          live_enabled: boolean | null
           live_url: string | null
           name: string | null
           offer_discount_percent: number | null
           offer_enabled: boolean | null
           offer_ends_at: string | null
           offer_label: string | null
+          project_type: string | null
           thumbnail_url: string | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
           id?: string | null
-          live_url?: string | null
+          live_enabled?: boolean | null
+          live_url?: never
           name?: string | null
           offer_discount_percent?: number | null
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_type?: string | null
           thumbnail_url?: string | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
           id?: string | null
-          live_url?: string | null
+          live_enabled?: boolean | null
+          live_url?: never
           name?: string | null
           offer_discount_percent?: number | null
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_type?: string | null
           thumbnail_url?: string | null
         }
         Relationships: []
@@ -319,12 +331,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -348,11 +360,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -373,11 +385,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -398,11 +410,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -415,11 +427,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
