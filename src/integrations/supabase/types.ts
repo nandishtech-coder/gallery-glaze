@@ -50,12 +50,14 @@ export type Database = {
           description: string
           github_url: string | null
           id: string
+          live_enabled: boolean
           live_url: string | null
           name: string
           offer_discount_percent: number
           offer_enabled: boolean
           offer_ends_at: string | null
           offer_label: string
+          project_type: string
           thumbnail_url: string | null
           updated_at: string
         }
@@ -64,12 +66,14 @@ export type Database = {
           description?: string
           github_url?: string | null
           id?: string
+          live_enabled?: boolean
           live_url?: string | null
           name: string
           offer_discount_percent?: number
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
@@ -78,12 +82,14 @@ export type Database = {
           description?: string
           github_url?: string | null
           id?: string
+          live_enabled?: boolean
           live_url?: string | null
           name?: string
           offer_discount_percent?: number
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
@@ -258,36 +264,42 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string | null
+          live_enabled: boolean | null
           live_url: string | null
           name: string | null
           offer_discount_percent: number | null
           offer_enabled: boolean | null
           offer_ends_at: string | null
           offer_label: string | null
+          project_type: string | null
           thumbnail_url: string | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
           id?: string | null
-          live_url?: string | null
+          live_enabled?: boolean | null
+          live_url?: never
           name?: string | null
           offer_discount_percent?: number | null
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_type?: string | null
           thumbnail_url?: string | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
           id?: string | null
-          live_url?: string | null
+          live_enabled?: boolean | null
+          live_url?: never
           name?: string | null
           offer_discount_percent?: number | null
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_type?: string | null
           thumbnail_url?: string | null
         }
         Relationships: []
