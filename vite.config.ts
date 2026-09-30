@@ -1,6 +1,11 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// On Vercel, build with Nitro's Vercel preset so the output lands in
+// `.vercel/output` (Build Output API) which Vercel picks up automatically.
+const isVercel = !!process.env.VERCEL;
+
 export default defineConfig({
+  ...(isVercel ? { nitro: { preset: "vercel" } } : {}),
   tanstackStart: {
     spa: {
       enabled: true,
