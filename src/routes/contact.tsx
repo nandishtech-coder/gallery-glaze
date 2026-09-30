@@ -5,6 +5,7 @@ import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { Mail, MapPin, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -22,20 +23,28 @@ function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sending, setSending] = useState(false);
 
-  const to = "contactnandishtech@gmail.com";
-  const subject = encodeURIComponent(`New inquiry from ${form.name || "website visitor"}`);
-  const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`);
-  const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}`;
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const name = form.name.trim().slice(0, 100);
+    const email = form.email.trim().slice(0, 255);
+    const message = form.message.trim().slice(0, 2000);
+    if (!name || !email || !message) return;
     setSending(true);
-    // Universal: opens the OS default mail client (Gmail app on mobile, default mail app on desktop)
-    window.location.href = mailtoUrl;
-    setTimeout(() => {
-      toast.success("Opening your email…");
-      setSending(false);
-    }, 400);
+    // Open WhatsApp window synchronously so popup blockers allow it
+    const text =
+      `Hello Nandish-Tech,\n\nNew enquiry from the website:\n\n` +
+      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+    const waUrl = `https://wa.me/917406386316?text=${encodeURIComponent(text)}`;
+    const win = window.open(waUrl, "_blank", "noopener,noreferrer");
+    const { error } = await supabase.from("contact_messages").insert({ name, email, message });
+    setSending(false);
+    if (error) {
+      toast.error("Could not save your message. Please try again.");
+      return;
+    }
+    if (!win) window.location.href = waUrl;
+    toast.success("Message saved! Opening WhatsApp…");
+    setForm({ name: "", email: "", message: "" });
   };
 
   return (
