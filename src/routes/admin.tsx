@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star, BarChart3 } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star, BarChart3, Inbox, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { computeDiscounted } from "@/lib/price";
 
@@ -60,6 +60,14 @@ interface Testimonial {
   created_at: string;
 }
 
+interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+}
+
 interface SiteStats {
   id: string;
   heading: string;
@@ -95,6 +103,7 @@ function AdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [services, setServices] = useState<Service[]>([]);
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [fetching, setFetching] = useState(true);
   const [editing, setEditing] = useState<Draft | null>(null);
@@ -102,7 +111,7 @@ function AdminPage() {
   const [editingTestimonial, setEditingTestimonial] = useState<TestimonialDraft | null>(null);
   const [stats, setStats] = useState<SiteStats | null>(null);
   const [savingStats, setSavingStats] = useState(false);
-  const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials" | "stats">("projects");
+  const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials" | "enquiries" | "stats">("projects");
 
 
   useEffect(() => {
@@ -111,21 +120,24 @@ function AdminPage() {
 
   const load = async () => {
     setFetching(true);
-    const [proj, prof, svc, tst, st] = await Promise.all([
+    const [proj, prof, svc, tst, st, msg] = await Promise.all([
       supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
       supabase.from("site_stats").select("*").limit(1).maybeSingle(),
+      supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
     ]);
     if (proj.error) toast.error(proj.error.message);
     if (prof.error) toast.error(prof.error.message);
     if (svc.error) toast.error(svc.error.message);
     if (tst.error) toast.error(tst.error.message);
+    if (msg.error) toast.error(msg.error.message);
     setProjects((proj.data ?? []) as Project[]);
     setProfiles((prof.data ?? []) as Profile[]);
     setServices((svc.data ?? []) as Service[]);
     setTestimonials((tst.data ?? []) as Testimonial[]);
+    setMessages((msg.data ?? []) as ContactMessage[]);
     setStats((st.data as SiteStats) ?? null);
     setFetching(false);
 
