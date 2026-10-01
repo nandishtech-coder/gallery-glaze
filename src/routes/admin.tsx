@@ -64,6 +64,7 @@ interface ContactMessage {
   id: string;
   name: string;
   email: string;
+  phone: string | null;
   message: string;
   created_at: string;
 }
@@ -635,6 +636,16 @@ function AdminPage() {
                             >
                               <Mail className="h-3 w-3" /> {m.email}
                             </a>
+                            {m.phone && (
+                              <a
+                                href={`https://wa.me/${m.phone.replace(/\D/g, "")}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-xs text-emerald-500 hover:underline"
+                              >
+                                <Phone className="h-3 w-3" /> {m.phone}
+                              </a>
+                            )}
                           </div>
                           <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/85">{m.message}</p>
                           <p className="mt-2 text-xs text-muted-foreground">
