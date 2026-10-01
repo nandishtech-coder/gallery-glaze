@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star, BarChart3, Inbox, Mail } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star, BarChart3, Inbox, Mail, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { computeDiscounted } from "@/lib/price";
 
