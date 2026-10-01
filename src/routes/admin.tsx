@@ -607,6 +607,68 @@ function AdminPage() {
           </>
         )}
 
+        {tab === "enquiries" && (
+          <>
+            <div className="mb-4">
+              <p className="text-sm text-muted-foreground">
+                Messages sent from the Contact page form. Newest first.
+              </p>
+            </div>
+            <div className="overflow-hidden rounded-2xl glass">
+              {fetching ? (
+                <div className="p-12 text-center text-muted-foreground">
+                  <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No enquiries yet.</div>
+              ) : (
+                <ul className="divide-y divide-border/60">
+                  {messages.map((m) => (
+                    <li key={m.id} className="p-5">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-medium">{m.name}</span>
+                            <a
+                              href={`mailto:${m.email}`}
+                              className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                            >
+                              <Mail className="h-3 w-3" /> {m.email}
+                            </a>
+                          </div>
+                          <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/85">{m.message}</p>
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            {new Date(m.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <a
+                            href={`mailto:${m.email}?subject=Re: Your enquiry to Nandish-Tech`}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium transition hover:bg-secondary"
+                          >
+                            <Mail className="h-3.5 w-3.5" /> Reply
+                          </a>
+                          <button
+                            onClick={async () => {
+                              const { error } = await supabase.from("contact_messages").delete().eq("id", m.id);
+                              if (error) return toast.error(error.message);
+                              setMessages((prev) => prev.filter((x) => x.id !== m.id));
+                              toast.success("Enquiry deleted");
+                            }}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-destructive/40 px-3 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        )}
+
         {tab === "stats" && (
           <>
             <div className="mb-4">
