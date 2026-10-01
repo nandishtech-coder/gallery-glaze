@@ -372,6 +372,19 @@ function AdminPage() {
             )}
           </button>
           <button
+            onClick={() => setTab("enquiries")}
+            className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              tab === "enquiries" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Inbox className="h-4 w-4" /> Customer Enquiries
+            {messages.length > 0 && (
+              <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
+                {messages.length}
+              </span>
+            )}
+          </button>
+          <button
             onClick={() => setTab("stats")}
             className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
               tab === "stats" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
