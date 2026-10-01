@@ -20,23 +20,24 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [sending, setSending] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const name = form.name.trim().slice(0, 100);
     const email = form.email.trim().slice(0, 255);
+    const phone = form.phone.trim().slice(0, 20);
     const message = form.message.trim().slice(0, 2000);
-    if (!name || !email || !message) return;
+    if (!name || !email || !phone || !message) return;
     setSending(true);
     // Open WhatsApp window synchronously so popup blockers allow it
     const text =
       `Hello Nandish-Tech,\n\nNew enquiry from the website:\n\n` +
-      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+      `Name: ${name}\nEmail: ${email}\nWhatsApp: ${phone}\n\nMessage:\n${message}`;
     const waUrl = `https://wa.me/917406386316?text=${encodeURIComponent(text)}`;
     const win = window.open(waUrl, "_blank", "noopener,noreferrer");
-    const { error } = await supabase.from("contact_messages").insert({ name, email, message });
+    const { error } = await supabase.from("contact_messages").insert({ name, email, phone, message });
     setSending(false);
     if (error) {
       toast.error("Could not save your message. Please try again.");
@@ -44,7 +45,7 @@ function ContactPage() {
     }
     if (!win) window.location.href = waUrl;
     toast.success("Message saved! Opening WhatsApp…");
-    setForm({ name: "", email: "", message: "" });
+    setForm({ name: "", email: "", phone: "", message: "" });
   };
 
   return (
@@ -96,9 +97,20 @@ function ContactPage() {
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                   className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
                 />
               </div>
+            </div>
+            <div className="mt-4">
+              <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Mobile / WhatsApp number</label>
+              <input
+                required
+                type="tel"
+                placeholder="+91 98765 43210"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+              />
             </div>
             <div className="mt-4">
               <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Message</label>

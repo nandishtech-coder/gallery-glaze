@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
 import { GithubIcon } from "@/components/icons/github";
-import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star, BarChart3, Inbox, Mail } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, Loader2, X, Check, UserX, FolderKanban, Users as UsersIcon, Briefcase, MessageSquare, Star, BarChart3, Inbox, Mail, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { computeDiscounted } from "@/lib/price";
 
@@ -64,6 +64,7 @@ interface ContactMessage {
   id: string;
   name: string;
   email: string;
+  phone: string | null;
   message: string;
   created_at: string;
 }
@@ -635,6 +636,16 @@ function AdminPage() {
                             >
                               <Mail className="h-3 w-3" /> {m.email}
                             </a>
+                            {m.phone && (
+                              <a
+                                href={`https://wa.me/${m.phone.replace(/\D/g, "")}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-xs text-emerald-500 hover:underline"
+                              >
+                                <Phone className="h-3 w-3" /> {m.phone}
+                              </a>
+                            )}
                           </div>
                           <p className="mt-2 whitespace-pre-wrap text-sm text-foreground/85">{m.message}</p>
                           <p className="mt-2 text-xs text-muted-foreground">
