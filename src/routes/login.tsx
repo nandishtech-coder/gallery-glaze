@@ -36,7 +36,7 @@ function LoginPage() {
     if (loading || !user || mode === "otp") return;
     checkOtp().then((r) => {
       if (r.verified) navigate({ to: "/admin" });
-      else setMode("otp");
+      else { setMode("otp"); send().catch((e) => toast.error(e instanceof Error ? e.message : "Could not send code")); }
     }).catch(() => {});
   }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
