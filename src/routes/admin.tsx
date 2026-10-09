@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { checkAdminOtp } from "@/lib/admin-otp.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { NavBar } from "@/components/nav-bar";
@@ -115,9 +117,17 @@ function AdminPage() {
   const [tab, setTab] = useState<"projects" | "services" | "clients" | "testimonials" | "enquiries" | "stats">("projects");
 
 
+  const [otpOk, setOtpOk] = useState(false);
+  const checkOtp = useServerFn(checkAdminOtp);
+
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/login" });
-  }, [user, loading, navigate]);
+    if (loading) return;
+    if (!user) { navigate({ to: "/login" }); return; }
+    checkOtp().then((r) => {
+      if (r.verified) setOtpOk(true);
+      else navigate({ to: "/login" });
+    }).catch(() => navigate({ to: "/login" }));
+  }, [user, loading, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const load = async () => {
     setFetching(true);
