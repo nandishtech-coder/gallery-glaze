@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_login_otps: {
+        Row: {
+          attempts: number
+          code_hash: string
+          created_at: string
+          expires_at: string
+          id: string
+          session_id: string
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          session_id: string
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_id?: string
+          user_id?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
