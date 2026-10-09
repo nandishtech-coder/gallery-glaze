@@ -10,8 +10,9 @@ async function sha256(text: string) {
 
 function sessionIdOf(claims: Record<string, unknown>) {
   const sid = claims["session_id"];
-  if (typeof sid !== "string" || !sid) throw new Error("Invalid session");
-  return sid;
+  if (typeof sid === "string" && sid) return sid;
+  if (claims["sub"] && claims["iat"]) return `${claims["sub"]}:${claims["iat"]}`;
+  throw new Error("Invalid session");
 }
 
 async function assertAdmin(supabase: any, userId: string) {
