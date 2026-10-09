@@ -13,7 +13,7 @@ function sessionIdOf(claims: Record<string, unknown>) {
   console.log("OTP claims keys", Object.keys(claims));
   if (typeof sid === "string" && sid) return sid;
   if (claims["sub"] && claims["iat"]) return `${claims["sub"]}:${claims["iat"]}`;
-  throw new Error("Invalid session");
+  throw new Error("Invalid session " + Object.keys(claims).join(","));
 }
 
 async function assertAdmin(supabase: any, userId: string) {
