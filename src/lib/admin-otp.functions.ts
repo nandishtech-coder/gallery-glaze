@@ -10,10 +10,9 @@ async function sha256(text: string) {
 
 function sessionIdOf(claims: Record<string, unknown>) {
   const sid = claims["session_id"];
-  console.log("OTP claims keys", Object.keys(claims));
   if (typeof sid === "string" && sid) return sid;
   if (claims["sub"] && claims["iat"]) return `${claims["sub"]}:${claims["iat"]}`;
-  throw new Error("Invalid session " + Object.keys(claims).join(","));
+  throw new Error("Invalid session");
 }
 
 async function assertAdmin(supabase: any, userId: string) {
