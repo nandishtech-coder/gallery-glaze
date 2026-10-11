@@ -14,9 +14,9 @@ export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
       { title: "Projects & Services — Nandish-Tech" },
-      { name: "description", content: "Browse shipped websites, live project demos, limited-time offers, and the freelance services I offer." },
+      { name: "description", content: "Browse shipped websites, live project demos, limited-time offers, and the technology services I offer." },
       { property: "og:title", content: "Projects & Services — Nandish-Tech" },
-      { property: "og:description", content: "Browse shipped websites, live project demos, limited-time offers, and the freelance services I offer." },
+      { property: "og:description", content: "Browse shipped websites, live project demos, limited-time offers, and the technology services I offer." },
     ],
   }),
   component: Index,
