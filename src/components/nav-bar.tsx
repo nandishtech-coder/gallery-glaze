@@ -1,6 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { checkAdminOtp } from "@/lib/admin-otp.functions";
 import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
 
 const navLinks = [
@@ -16,6 +18,18 @@ export function NavBar() {
   const { user, isAdmin, signOut } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdminPage = pathname === "/admin" || pathname.startsWith("/admin/");
+  const [otpVerified, setOtpVerified] = useState(false);
+
+  useEffect(() => {
+    if (!user || !isAdmin) { setOtpVerified(false); return; }
+    let cancelled = false;
+    checkAdminOtp()
+      .then((r) => { if (!cancelled) setOtpVerified(!!r.verified); })
+      .catch(() => { if (!cancelled) setOtpVerified(false); });
+    return () => { cancelled = true; };
+  }, [user, isAdmin, pathname]);
+
+  const showAdminControls = !!user && isAdmin && otpVerified;
 
   return (
     <header className="sticky top-0 z-40 w-full px-2 sm:px-4 rise-in">
@@ -47,7 +61,7 @@ export function NavBar() {
 
         <div className="flex shrink-0 items-center gap-1 text-sm">
           <ThemeToggle />
-          {user && isAdmin && !isAdminPage && (
+          {showAdminControls && !isAdminPage && (
             <Link
               to="/admin"
               aria-label="Admin"
@@ -57,7 +71,7 @@ export function NavBar() {
               <span className="hidden sm:inline">Admin</span>
             </Link>
           )}
-          {user && (
+          {showAdminControls && (
             <button
               onClick={() => signOut()}
               aria-label="Sign out"
@@ -72,4 +86,3 @@ export function NavBar() {
     </header>
   );
 }
-
