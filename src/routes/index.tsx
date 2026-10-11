@@ -262,7 +262,7 @@ function Home() {
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-primary">Why choose us</p>
               <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-                A freelance partner that actually ships
+                A dedicated technology partner that actually ships
               </h2>
               <p className="mt-4 text-muted-foreground">
                 Every project is handled personally — from the first message to launch day and beyond. You get
