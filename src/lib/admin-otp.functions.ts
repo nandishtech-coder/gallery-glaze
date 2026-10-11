@@ -33,9 +33,8 @@ export const requestAdminOtp = createServerFn({ method: "POST" })
     if (!pass) throw new Error("Email sending is not configured");
 
     const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.from("admin_login_otps").delete().eq("session_id", sid);
-    const { error } = await supabaseAdmin.from("admin_login_otps").insert({
+    await supabase.from("admin_login_otps").delete().eq("session_id", sid);
+    const { error } = await supabase.from("admin_login_otps").insert({
       user_id: userId,
       session_id: sid,
       code_hash: await sha256(code + sid),
@@ -72,22 +71,22 @@ export const verifyAdminOtp = createServerFn({ method: "POST" })
     return d;
   })
   .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
     const sid = sessionIdOf(context.claims as any);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row } = await supabaseAdmin
+    const { data: row } = await supabase
       .from("admin_login_otps")
       .select("*")
       .eq("session_id", sid)
-      .eq("user_id", context.userId)
+      .eq("user_id", userId)
       .maybeSingle();
     if (!row) throw new Error("No code requested. Please resend.");
     if (new Date(row.expires_at).getTime() < Date.now()) throw new Error("Code expired. Please resend.");
     if (row.attempts >= 5) throw new Error("Too many attempts. Please resend a new code.");
     if ((await sha256(data.code + sid)) !== row.code_hash) {
-      await supabaseAdmin.from("admin_login_otps").update({ attempts: row.attempts + 1 }).eq("id", row.id);
+      await supabase.from("admin_login_otps").update({ attempts: row.attempts + 1 }).eq("id", row.id);
       throw new Error("Incorrect code");
     }
-    await supabaseAdmin
+    await supabase
       .from("admin_login_otps")
       .update({ verified: true, expires_at: new Date(Date.now() + 12 * 3600 * 1000).toISOString() })
       .eq("id", row.id);
@@ -97,13 +96,13 @@ export const verifyAdminOtp = createServerFn({ method: "POST" })
 export const checkAdminOtp = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const { supabase, userId } = context;
     const sid = sessionIdOf(context.claims as any);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row } = await supabaseAdmin
+    const { data: row } = await supabase
       .from("admin_login_otps")
       .select("verified, expires_at")
       .eq("session_id", sid)
-      .eq("user_id", context.userId)
+      .eq("user_id", userId)
       .maybeSingle();
     return { verified: !!row?.verified && new Date(row.expires_at).getTime() > Date.now() };
   });
