@@ -183,19 +183,6 @@ function Home() {
             We focus on growing <br className="hidden sm:block" />
             your <span className="text-gradient">brand online</span>.
           </h1>
-          <div className="mx-auto mt-6 flex flex-col items-center justify-center gap-2 rise-in rise-delay-3 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-3">
-            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-foreground sm:text-base">
-              Your Vision
-            </span>
-            <span aria-hidden className="hidden h-4 w-px bg-border sm:block sm:h-5" />
-            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-primary sm:text-base">
-              Our Technology
-            </span>
-            <span aria-hidden className="hidden h-4 w-px bg-border sm:block sm:h-5" />
-            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-gradient sm:text-base">
-              Better Together
-            </span>
-          </div>
           <p className="mx-auto mt-5 max-w-2xl text-balance text-muted-foreground rise-in rise-delay-3">
             Design, development and marketing under one roof — websites, web apps, eCommerce stores and
             brand identity that help startups and businesses look credible and sell more.
@@ -274,8 +261,16 @@ function Home() {
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-primary">Why choose us</p>
-              <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-                A dedicated technology partner that actually ships
+              <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                <span className="inline-block whitespace-nowrap">
+                  <span className="text-foreground">Your Vision</span>
+                  <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
+                </span>
+                <span className="inline-block whitespace-nowrap">
+                  <span className="text-primary">Our Technology</span>
+                  <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
+                </span>
+                <span className="inline-block whitespace-nowrap text-gradient">Better Together</span>
               </h2>
               <p className="mt-4 text-muted-foreground">
                 Every project is handled personally — from the first message to launch day and beyond. You get
