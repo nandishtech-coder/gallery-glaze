@@ -177,6 +177,18 @@
   color: transparent;
 }
 
+/* Same coloured fill for titles sitting on dark brand panels */
+@utility text-gradient-light {
+  background: linear-gradient(
+    135deg,
+    oklch(0.99 0.005 280) 0%,
+    color-mix(in oklab, var(--accent) 55%, white) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* Extruded, bevelled word colours — lit from above, depth falling down */
 @utility text-3d-primary {
   background: linear-gradient(

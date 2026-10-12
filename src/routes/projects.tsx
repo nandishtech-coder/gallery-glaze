@@ -540,7 +540,7 @@ function Index() {
 
         <section className="mt-24 flex justify-center">
           <div className="w-full max-w-2xl overflow-hidden rounded-3xl bg-gradient-to-br from-violet-700 via-purple-700 to-fuchsia-800 p-8 text-center shadow-2xl shadow-violet-900/30 sm:p-12 card-hover">
-            <h2 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-gradient-light sm:text-4xl">
               Let&apos;s build your digital product
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-violet-100">

@@ -231,7 +231,7 @@ function Home() {
         <section className="mx-auto max-w-6xl px-4 py-20">
           <div className="mb-10 text-center">
             <p className="text-xs font-medium uppercase tracking-widest text-primary">What we do</p>
-            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
               All the digital services that are convenient for you
             </h2>
           </div>
@@ -306,7 +306,7 @@ function Home() {
         <section className="mx-auto max-w-6xl px-4 pb-20">
           <div className="mb-10 text-center">
             <p className="text-xs font-medium uppercase tracking-widest text-primary">How it works</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">A simple 4-step process</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">A simple 4-step process</h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {process.map((p) => (
@@ -322,7 +322,7 @@ function Home() {
         {/* Industries */}
         <section className="mx-auto max-w-6xl px-4 pb-20 text-center">
           <p className="text-xs font-medium uppercase tracking-widest text-primary">Industries</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
             Multi-industry design & marketing
           </h2>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
@@ -343,7 +343,7 @@ function Home() {
         {/* CTA */}
         <section className="mx-auto mt-20 max-w-6xl px-4">
           <div className="rounded-3xl glass p-8 text-center sm:p-12">
-            <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="text-balance text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
               Ready to take your brand online?
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
