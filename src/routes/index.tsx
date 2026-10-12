@@ -183,6 +183,19 @@ function Home() {
             We focus on growing <br className="hidden sm:block" />
             your <span className="text-gradient">brand online</span>.
           </h1>
+          <div className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 rise-in rise-delay-3">
+            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-foreground sm:text-base">
+              Your Vision
+            </span>
+            <span aria-hidden className="h-4 w-px bg-border sm:h-5" />
+            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-primary sm:text-base">
+              Our Technology
+            </span>
+            <span aria-hidden className="h-4 w-px bg-border sm:h-5" />
+            <span className="text-sm font-semibold uppercase tracking-[0.18em] text-gradient sm:text-base">
+              Better Together
+            </span>
+          </div>
           <p className="mx-auto mt-5 max-w-2xl text-balance text-muted-foreground rise-in rise-delay-3">
             Design, development and marketing under one roof — websites, web apps, eCommerce stores and
             brand identity that help startups and businesses look credible and sell more.
