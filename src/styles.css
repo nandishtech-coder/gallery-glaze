@@ -189,9 +189,9 @@
   background-clip: text;
   color: transparent;
   filter:
-    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 62%, black))
-    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 50%, black))
-    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 40%, black));
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 82%, black))
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 68%, black))
+    drop-shadow(0 3px 8px color-mix(in oklab, var(--primary) 22%, transparent));
 }
 
 @utility text-3d-accent {
@@ -205,9 +205,9 @@
   background-clip: text;
   color: transparent;
   filter:
-    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 62%, black))
-    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 50%, black))
-    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 40%, black));
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 82%, black))
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 68%, black))
+    drop-shadow(0 3px 8px color-mix(in oklab, var(--accent) 22%, transparent));
 }
 
 @utility btn-glow {
