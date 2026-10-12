@@ -143,7 +143,7 @@ function ServicesPage() {
         )}
 
         <section className="mt-16 rounded-2xl glass-strong p-8 text-center sm:p-12">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Custom Solutions Available</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-gradient sm:text-3xl">Custom Solutions Available</h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
             Have a unique project requirement? Let's discuss your specific needs and create a custom solution tailored to you.
           </p>

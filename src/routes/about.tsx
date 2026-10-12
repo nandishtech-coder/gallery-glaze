@@ -55,7 +55,7 @@ function AboutPage() {
         </section>
 
         <section className="mt-14 rounded-2xl glass p-8 card-hover">
-          <h2 className="text-xl font-semibold">What I do</h2>
+          <h2 className="text-xl font-semibold text-gradient">What I do</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
             I work end-to-end on web products — design systems, frontend architecture, and the backend
             services that power them. Recent work spans healthcare platforms, internal tools, and SaaS

@@ -70,7 +70,7 @@ export function TestimonialsSection() {
           <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
             Testimonials
           </h2>
-          <p className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          <p className="mt-2 text-2xl font-semibold tracking-tight text-gradient sm:text-3xl">
             Loved by <span className="text-gradient">happy clients</span>
           </p>
         </div>

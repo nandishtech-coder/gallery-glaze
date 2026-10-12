@@ -177,6 +177,51 @@
   color: transparent;
 }
 
+/* Same coloured fill for titles sitting on dark brand panels */
+@utility text-gradient-light {
+  background: linear-gradient(
+    135deg,
+    oklch(0.99 0.005 280) 0%,
+    color-mix(in oklab, var(--accent) 55%, white) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Extruded, bevelled word colours — lit from above, depth falling down */
+@utility text-3d-primary {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 68%, white) 0%,
+    var(--primary) 48%,
+    color-mix(in oklab, var(--primary) 82%, black) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 82%, black))
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--primary) 68%, black))
+    drop-shadow(0 3px 8px color-mix(in oklab, var(--primary) 22%, transparent));
+}
+
+@utility text-3d-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--accent) 68%, white) 0%,
+    var(--accent) 48%,
+    color-mix(in oklab, var(--accent) 82%, black) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 82%, black))
+    drop-shadow(0 1px 0 color-mix(in oklab, var(--accent) 68%, black))
+    drop-shadow(0 3px 8px color-mix(in oklab, var(--accent) 22%, transparent));
+}
+
 @utility btn-glow {
   box-shadow: var(--shadow-glow);
 }

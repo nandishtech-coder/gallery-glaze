@@ -29,7 +29,7 @@ export function BetterBusiness() {
       <div className="grid gap-10 rounded-3xl glass p-8 sm:p-12 lg:grid-cols-2 lg:items-center">
         <div>
           <p className="text-xs font-medium uppercase tracking-widest text-primary">Better business</p>
-          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
             {stats.heading}
           </h2>
           <p className="mt-4 text-muted-foreground">{stats.subheading}</p>
