@@ -263,7 +263,7 @@ function Home() {
               <p className="text-xs font-medium uppercase tracking-widest text-primary">Why choose us</p>
               <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
                 <span className="inline-block whitespace-nowrap">
-                  <span className="text-foreground">Your Vision</span>
+                  <span className="text-accent">Your Vision</span>
                   <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
                 </span>
                 <span className="inline-block whitespace-nowrap">
