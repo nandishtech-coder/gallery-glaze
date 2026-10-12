@@ -263,18 +263,18 @@ function Home() {
               <p className="text-xs font-medium uppercase tracking-widest text-primary">Why choose us</p>
               <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
                 <span className="inline-block whitespace-nowrap">
-                  <span className="text-primary">Your</span>{" "}
-                  <span className="text-accent">Vision</span>
+                  <span className="inline-block text-3d-primary">Your</span>{" "}
+                  <span className="inline-block text-3d-accent">Vision</span>
                   <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
                 </span>
                 <span className="inline-block whitespace-nowrap">
-                  <span className="text-primary">Our</span>{" "}
-                  <span className="text-accent">Technology</span>
+                  <span className="inline-block text-3d-primary">Our</span>{" "}
+                  <span className="inline-block text-3d-accent">Technology</span>
                   <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
                 </span>
                 <span className="inline-block whitespace-nowrap">
-                  <span className="text-primary">Better</span>{" "}
-                  <span className="text-accent">Together</span>
+                  <span className="inline-block text-3d-primary">Better</span>{" "}
+                  <span className="inline-block text-3d-accent">Together</span>
                 </span>
               </h2>
               <p className="mt-4 text-muted-foreground">
