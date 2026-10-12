@@ -262,10 +262,14 @@ function Home() {
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-primary">Why choose us</p>
               <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-                <span className="inline-block whitespace-nowrap text-foreground">Your Vision</span>
-                <span aria-hidden className="mx-2 inline-block text-muted-foreground/40">|</span>
-                <span className="inline-block whitespace-nowrap text-primary">Our Technology</span>
-                <span aria-hidden className="mx-2 inline-block text-muted-foreground/40">|</span>
+                <span className="inline-block whitespace-nowrap">
+                  <span className="text-foreground">Your Vision</span>
+                  <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
+                </span>
+                <span className="inline-block whitespace-nowrap">
+                  <span className="text-primary">Our Technology</span>
+                  <span aria-hidden className="mx-2 text-muted-foreground/40">|</span>
+                </span>
                 <span className="inline-block whitespace-nowrap text-gradient">Better Together</span>
               </h2>
               <p className="mt-4 text-muted-foreground">
