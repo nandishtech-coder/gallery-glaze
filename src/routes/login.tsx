@@ -10,6 +10,8 @@ import { requestAdminOtp, verifyAdminOtp, checkAdminOtp } from "@/lib/admin-otp.
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Admin Sign In — NANDISH-TECH" },
       { name: "description", content: "Secure admin sign in with email code verification." },
       { property: "og:title", content: "Admin Sign In — NANDISH-TECH" },

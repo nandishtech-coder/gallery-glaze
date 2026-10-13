@@ -10,6 +10,8 @@ import { computeDiscounted } from "@/lib/price";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Services I Offer — Nandish-Tech" },
       { name: "description", content: "Professional web development and digital solutions tailored to your business needs." },
       { property: "og:title", content: "Services I Offer — Nandish-Tech" },

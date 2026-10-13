@@ -62,6 +62,11 @@
 
 .dark { color-scheme: dark; }
 
+.navbar-logo {
+  filter: drop-shadow(0 0 5px color-mix(in oklab, var(--accent) 40%, transparent))
+          drop-shadow(0 0 10px color-mix(in oklab, var(--primary) 35%, transparent));
+}
+
 /* Light theme (toggled from the navbar) */
 :root.light {
   --background: oklch(0.98 0.008 280);
