@@ -61,12 +61,29 @@ function waForService(s: Service) {
   return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
 }
 
+/* The floating card overlays page content — keep it clear of the footer brand row */
+function useFooterVisible() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
+  return visible;
+}
+
 export function LiveOffers() {
   const [projects, setProjects] = useState<PublicProject[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [offersOpen, setOffersOpen] = useState(true);
   const [offerIndex, setOfferIndex] = useState(0);
   const [offerProgress, setOfferProgress] = useState(0);
+  const footerVisible = useFooterVisible();
   const missedShownRef = useRef<Set<string>>(new Set());
   const now = useNow(1000);
 
@@ -161,7 +178,7 @@ export function LiveOffers() {
     // to avoid duplicating toasts when LiveOffers is used on multiple routes.
   }, [projects]);
 
-  if (totalOffers === 0) return null;
+  if (totalOffers === 0 || footerVisible) return null;
 
   const current = liveOffers[offerIndex % totalOffers];
   const currentRemaining =
