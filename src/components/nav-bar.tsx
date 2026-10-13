@@ -40,7 +40,7 @@ export function NavBar() {
           className="flex shrink-0 items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl"
         >
           <img src={nandishLogo} alt="" width={48} height={48} className="navbar-logo h-11 w-11 shrink-0 object-contain sm:h-12 sm:w-12" />
-          <span className="text-gradient whitespace-nowrap">
+          <span className="text-gradient text-glow whitespace-nowrap">
             {isAdminPage ? "Admin Dashboard" : "NANDISH-TECH"}
           </span>
         </Link>
