@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, Briefcase } from "lucide-react";
 import { GithubIcon } from "@/components/icons/github";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 export function SiteFooter() {
   return (
