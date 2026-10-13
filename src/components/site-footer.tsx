@@ -1,13 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, Briefcase } from "lucide-react";
 import { GithubIcon } from "@/components/icons/github";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-border/50 bg-background/40">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <h3 className="text-lg font-semibold text-gradient">Nandish-Tech</h3>
+          <div className="flex items-center gap-2.5">
+            <img src={nandishLogo} alt="" width={40} height={40} className="navbar-logo h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10" />
+            <h3 className="text-lg font-semibold text-gradient text-glow">Nandish-Tech</h3>
+          </div>
           <p className="mt-2 max-w-xs text-sm text-muted-foreground">
             Crafting digital products with care, precision, and a focus on meaningful user experience.
           </p>
