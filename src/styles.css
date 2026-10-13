@@ -200,6 +200,12 @@
           drop-shadow(0 0 14px color-mix(in oklab, var(--primary) 40%, transparent));
 }
 
+/* On light surfaces a wide bloom reads as smudge — keep it a tight coloured rim */
+:root.light .text-glow {
+  filter: drop-shadow(0 0 1px color-mix(in oklab, var(--primary) 60%, transparent))
+          drop-shadow(0 0 4px color-mix(in oklab, var(--accent) 22%, transparent));
+}
+
 
 /* Extruded, bevelled word colours — lit from above, depth falling down */
 @utility text-3d-primary {
