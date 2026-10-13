@@ -194,6 +194,13 @@
   color: transparent;
 }
 
+/* Halo for the brand wordmark — same coloured bloom the navbar logo carries */
+@utility text-glow {
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--accent) 45%, transparent))
+          drop-shadow(0 0 14px color-mix(in oklab, var(--primary) 40%, transparent));
+}
+
+
 /* Extruded, bevelled word colours — lit from above, depth falling down */
 @utility text-3d-primary {
   background: linear-gradient(
