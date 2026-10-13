@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { checkAdminOtp } from "@/lib/admin-otp.functions";
-import { LogOut, Sparkles, LayoutDashboard } from "lucide-react";
+import { LogOut, LayoutDashboard } from "lucide-react";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -38,7 +39,7 @@ export function NavBar() {
           to={isAdminPage ? "/admin" : "/"}
           className="flex shrink-0 items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl"
         >
-          <Sparkles className="h-6 w-6 shrink-0 text-primary sm:h-7 sm:w-7" />
+          <img src={nandishLogo} alt="" width={48} height={48} className="navbar-logo h-11 w-11 shrink-0 object-contain sm:h-12 sm:w-12" />
           <span className="text-gradient whitespace-nowrap">
             {isAdminPage ? "Admin Dashboard" : "NANDISH-TECH"}
           </span>

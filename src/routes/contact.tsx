@@ -10,6 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Contact — Nandish-Tech" },
       { name: "description", content: "Get in touch with Nandish-Tech for project inquiries and collaborations." },
       { property: "og:title", content: "Contact — Nandish-Tech" },

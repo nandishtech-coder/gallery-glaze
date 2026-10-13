@@ -11,6 +11,16 @@ import { toast } from "sonner";
 import { computeDiscounted } from "@/lib/price";
 
 export const Route = createFileRoute("/admin")({
+  head: () => ({
+    meta: [
+      { title: "Admin Dashboard — Nandish-Tech" },
+      { name: "description", content: "Manage Nandish-Tech projects, services and customer enquiries." },
+      { property: "og:title", content: "Admin Dashboard — Nandish-Tech" },
+      { property: "og:description", content: "Manage Nandish-Tech projects, services and customer enquiries." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: AdminPage,
 });
 

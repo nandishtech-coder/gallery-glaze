@@ -7,6 +7,8 @@ import { Code2, Sparkles, Rocket, Layers } from "lucide-react";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "About — Nandish-Tech" },
       { name: "description", content: "About Nandish-Tech: building thoughtful, modern digital products." },
       { property: "og:title", content: "About — Nandish-Tech" },

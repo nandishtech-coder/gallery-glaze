@@ -29,6 +29,8 @@ import heroBg2 from "@/assets/hero-bg-2.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Nandish-Tech — Web Design, Development & Digital Marketing" },
       {
         name: "description",
