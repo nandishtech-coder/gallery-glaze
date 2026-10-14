@@ -397,4 +397,22 @@ html.no-anim *::after {
   }
 }
 
+/* Email tile — the site's own gradient, so it reads as a real app icon and
+   follows both themes exactly like the brand tiles beside it */
+.social-mail {
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.65rem;
+  background: var(--gradient-primary);
+  color: #fff;
+}
+.social-mail:hover,
+.social-mail:focus-visible,
+.social-mail:active {
+  filter: drop-shadow(0 4px 10px color-mix(in oklab, var(--primary) 60%, transparent))
+          drop-shadow(0 0 8px color-mix(in oklab, var(--accent) 40%, transparent));
+}
+
 

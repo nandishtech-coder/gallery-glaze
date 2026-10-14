@@ -49,7 +49,7 @@ export function SiteFooter() {
             Connect
           </h4>
           <div className="flex items-center gap-3">
-            <a href="mailto:contactnandishtech@gmail.com" aria-label="Email" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
+            <a href="mailto:contactnandishtech@gmail.com" aria-label="Email" className="social-brand social-mail">
               <Mail className="h-4 w-4" />
             </a>
             <a href="https://www.instagram.com/nandish.tech?stkn=czJ5bmR5MTA1cG0x" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-brand social-ig">
