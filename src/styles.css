@@ -370,4 +370,31 @@ html.no-anim *::after {
   }
 }
 
+/* Social tiles — brand artwork lifts and blooms its own colour on hover/tap */
+.social-brand {
+  display: inline-flex;
+  line-height: 0;
+  transition: transform .25s ease, filter .25s ease;
+}
+.social-brand:hover,
+.social-brand:focus-visible,
+.social-brand:active {
+  transform: translateY(-3px) scale(1.08);
+}
+.social-ig:hover,
+.social-ig:focus-visible,
+.social-ig:active {
+  filter: drop-shadow(0 4px 10px #E1306C99) drop-shadow(0 0 8px #FF543E80);
+}
+.social-fb:hover,
+.social-fb:focus-visible,
+.social-fb:active {
+  filter: drop-shadow(0 4px 10px #1877F299);
+}
+@media (hover: none) {
+  .social-brand:active {
+    transform: translateY(-3px) scale(1.08);
+  }
+}
+
 

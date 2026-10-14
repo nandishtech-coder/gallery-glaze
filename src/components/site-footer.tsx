@@ -52,11 +52,11 @@ export function SiteFooter() {
             <a href="mailto:contactnandishtech@gmail.com" aria-label="Email" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
               <Mail className="h-4 w-4" />
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
-              <GithubIcon className="h-4 w-4" />
+            <a href="https://www.instagram.com/nandish.tech?stkn=czJ5bmR5MTA1cG0x" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-brand social-ig">
+              <InstagramIcon className="h-8 w-8" />
             </a>
-            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="rounded-lg border border-border bg-secondary/40 p-2 text-foreground/80 transition hover:bg-secondary hover:text-foreground">
-              <Briefcase className="h-4 w-4" />
+            <a href="https://www.facebook.com/share/1F5douFjuA/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-brand social-fb">
+              <FacebookIcon className="h-8 w-8" />
             </a>
           </div>
         </div>
