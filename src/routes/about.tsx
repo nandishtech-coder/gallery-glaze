@@ -3,6 +3,7 @@ import { NavBar } from "@/components/nav-bar";
 import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { Code2, Sparkles, Rocket, Layers } from "lucide-react";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -30,15 +31,16 @@ function AboutPage() {
     <div className="relative min-h-screen">
       <PageBackground variant="hero" />
       <NavBar />
-      <main className="mx-auto max-w-5xl px-4 pt-16 pb-20">
-        <header className="text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" /> About
+      <main className="page-shell px-4 pt-16 pb-20 sm:pt-20">
+        <header className="pb-6 pt-10 text-center sm:pt-12">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
+            <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
           </div>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            Hi, I'm <span className="text-gradient">Nandish</span> — I build the web.
+          <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
+            Building <span className="text-gradient">digital experiences</span><br />
+            with care and precision.
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-balance text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-2xl text-balance text-muted-foreground rise-in rise-delay-3">
             Nandish-Tech is an independent studio focused on designing and engineering modern digital
             products — from polished marketing sites to full-stack applications and dashboards.
           </p>

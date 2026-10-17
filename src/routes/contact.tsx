@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Mail, MapPin, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -54,15 +55,16 @@ function ContactPage() {
     <div className="relative min-h-screen">
       <PageBackground variant="hero2" />
       <NavBar />
-      <main className="mx-auto max-w-5xl px-4 pt-16 pb-20">
-        <header className="text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground">
-            <Mail className="h-3.5 w-3.5 text-primary" /> Get in touch
+      <main className="page-shell px-4 pt-16 pb-20 sm:pt-20">
+        <header className="pb-6 pt-10 text-center sm:pt-12">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
+            <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
           </div>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            Let's <span className="text-gradient">build something</span> together.
+          <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
+            Let&apos;s <span className="text-gradient">build something</span><br />
+            remarkable together.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
             Have a project in mind, a question, or just want to say hi? Drop a message — I usually reply within 24 hours.
           </p>
         </header>

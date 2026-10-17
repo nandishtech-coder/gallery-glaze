@@ -6,64 +6,113 @@ import nandishLogo from "@/assets/nandish-logo.png";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-border/50 bg-background/40">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <img src={nandishLogo} alt="" width={40} height={40} className="navbar-logo h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10" />
-            <h3 className="text-lg font-semibold text-gradient text-glow">Nandish-Tech</h3>
+    <footer className="mt-24 border-t" style={{ borderColor: "rgba(99,102,241,0.12)", background: "rgba(10,14,26,0.6)" }}>
+      <div className="page-shell px-4 py-14 sm:px-8">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-4">
+
+          {/* Brand */}
+          <div className="md:col-span-1">
+            <div className="flex items-center gap-2.5 mb-3">
+              <img src={nandishLogo} alt="" width={36} height={36} className="navbar-logo h-8 w-8 shrink-0 object-contain" />
+              <span className="text-base font-bold text-gradient text-glow">Nandish-Tech</span>
+            </div>
+            <p className="text-sm leading-relaxed" style={{ color: "#8892b4" }}>
+              Crafting digital products with care, precision, and a focus on meaningful user experience.
+            </p>
           </div>
-          <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-            Crafting digital products with care, precision, and a focus on meaningful user experience.
-          </p>
-        </div>
 
-        <div>
-          <h4 className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            Navigate
-          </h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/" className="text-foreground/80 hover:text-foreground">Home</Link></li>
-            <li><Link to="/projects" className="text-foreground/80 hover:text-foreground">Projects</Link></li>
-            <li><Link to="/about" className="text-foreground/80 hover:text-foreground">About</Link></li>
+          {/* Navigate */}
+          <div>
+            <h4 className="mb-4 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "#6366f1" }}>
+              Navigate
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              {[
+                { to: "/", label: "Home" },
+                { to: "/projects", label: "Projects" },
+                { to: "/about", label: "About" },
+                { to: "/services", label: "Services" },
+                { to: "/contact", label: "Contact" },
+              ].map((l) => (
+                <li key={l.to}>
+                  <Link
+                    to={l.to}
+                    className="transition-colors duration-150"
+                    style={{ color: "#8892b4" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#f0f4ff")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#8892b4")}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Services</Link></li>
-            <li><Link to="/contact" className="text-foreground/80 hover:text-foreground">Contact</Link></li>
-          </ul>
-        </div>
+          {/* Services */}
+          <div>
+            <h4 className="mb-4 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "#6366f1" }}>
+              Services
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              {[
+                "Website Setup / Deployment",
+                "Bug Fixing / Small Tasks",
+                "Custom Web Development",
+              ].map((s) => (
+                <li key={s}>
+                  <Link
+                    to="/services"
+                    className="transition-colors duration-150"
+                    style={{ color: "#8892b4" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#f0f4ff")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#8892b4")}
+                  >
+                    {s}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  to="/services"
+                  className="transition-colors duration-150 font-medium"
+                  style={{ color: "#a5b4fc" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#6366f1")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#a5b4fc")}
+                >
+                  View all services →
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-        <div>
-          <h4 className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            Services I Offer
-          </h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Website Setup / Deployment</Link></li>
-            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Bug Fixing / Small Tasks</Link></li>
-            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">Custom Web Development</Link></li>
-            <li><Link to="/services" className="text-foreground/80 hover:text-foreground">View all services →</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            Connect
-          </h4>
-          <div className="flex items-center gap-3">
-            <a href="mailto:contactnandishtech@gmail.com" aria-label="Email" className="social-brand social-mail">
-              <Mail className="h-4 w-4" />
-            </a>
-            <a href="https://www.instagram.com/nandish.tech?stkn=czJ5bmR5MTA1cG0x" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-brand social-ig">
-              <InstagramIcon className="h-8 w-8" />
-            </a>
-            <a href="https://www.facebook.com/share/1F5douFjuA/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-brand social-fb">
-              <FacebookIcon className="h-8 w-8" />
-            </a>
+          {/* Connect */}
+          <div>
+            <h4 className="mb-4 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "#6366f1" }}>
+              Connect
+            </h4>
+            <div className="flex items-center gap-3">
+              <a href="mailto:contactnandishtech@gmail.com" aria-label="Email" className="social-brand social-mail">
+                <Mail className="h-4 w-4" />
+              </a>
+              <a href="https://www.instagram.com/nandish.tech?stkn=czJ5bmR5MTA1cG0x" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-brand social-ig">
+                <InstagramIcon className="h-8 w-8" />
+              </a>
+              <a href="https://www.facebook.com/share/1F5douFjuA/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-brand social-fb">
+                <FacebookIcon className="h-8 w-8" />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-border/50 py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Nandish-Tech · All rights reserved.
+        {/* Bottom bar */}
+        <div
+          className="mt-10 flex flex-col items-center justify-between gap-3 border-t pt-6 text-center text-xs sm:flex-row sm:text-left"
+          style={{ borderColor: "rgba(99,102,241,0.10)", color: "#64748b" }}
+        >
+          <span>© {new Date().getFullYear()} Nandish-Tech · All rights reserved.</span>
+          <span className="opacity-60">Built with ♥ in India</span>
+        </div>
       </div>
     </footer>
   );

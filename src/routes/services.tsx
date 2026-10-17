@@ -6,6 +6,7 @@ import { NavBar } from "@/components/nav-bar";
 import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
 import { computeDiscounted } from "@/lib/price";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -68,13 +69,14 @@ function ServicesPage() {
     <div className="relative min-h-screen">
       <PageBackground variant="tech" />
       <NavBar />
-      <main className="mx-auto max-w-6xl px-4 pt-16 pb-24">
-        <section className="mb-12 text-center">
+      <main className="page-shell px-4 pt-16 pb-24 sm:pt-20">
+        <section className="mb-12 pb-6 pt-10 text-center sm:pt-12">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
-            <Sparkles className="h-3.5 w-3.5 text-primary" /> What I can build for you
+            <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
           </div>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl rise-in rise-delay-2">
-            Services <span className="text-gradient">I Offer</span>
+          <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
+            Tailored <span className="text-gradient">digital solutions</span><br />
+            for growing businesses.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
             Professional web development and digital solutions tailored to your business needs.

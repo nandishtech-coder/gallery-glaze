@@ -4,7 +4,7 @@ const ADMIN_PHONE = "917406386316";
 
 export function FloatingContact() {
   return (
-    <div className="fixed bottom-5 left-4 z-50 flex flex-col gap-3">
+    <div className="fixed bottom-5 right-4 z-50 flex flex-col gap-3">
       <a
         href={`tel:+${ADMIN_PHONE}`}
         aria-label="Call us"

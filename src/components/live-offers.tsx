@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import { Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { computeDiscounted } from "@/lib/price";
 
@@ -61,7 +60,6 @@ function waForService(s: Service) {
   return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
 }
 
-/* The floating card overlays page content — keep it clear of the footer brand row */
 function useFooterVisible() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -90,21 +88,15 @@ export function LiveOffers() {
   useEffect(() => {
     supabase
       .from("public_projects")
-      .select(
-        "id, name, live_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at",
-      )
+      .select("id, name, live_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at")
       .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        setProjects((data ?? []) as PublicProject[]);
-      });
+      .then(({ data }) => { setProjects((data ?? []) as PublicProject[]); });
 
     supabase
       .from("services")
       .select("id, title, price, price_suffix, discount_percent")
       .order("sort_order", { ascending: true })
-      .then(({ data }) => {
-        setServices((data ?? []) as Service[]);
-      });
+      .then(({ data }) => { setServices((data ?? []) as Service[]); });
   }, []);
 
   const activeProjectOffers = projects
@@ -145,10 +137,7 @@ export function LiveOffers() {
       if (totalOffers > 1) setOfferIndex((i) => (i + 1) % totalOffers);
       else setOfferProgress(0);
     }, 5000);
-    return () => {
-      clearInterval(tickId);
-      clearTimeout(advId);
-    };
+    return () => { clearInterval(tickId); clearTimeout(advId); };
   }, [totalOffers, offerIndex]);
 
   useEffect(() => {
@@ -174,8 +163,6 @@ export function LiveOffers() {
     if (newlyMissed.length && typeof window !== "undefined") {
       sessionStorage.setItem("missedOffersShown", JSON.stringify(Array.from(seen)));
     }
-    // Missed-project notifications are intentionally shown on the projects page only
-    // to avoid duplicating toasts when LiveOffers is used on multiple routes.
   }, [projects]);
 
   if (totalOffers === 0 || footerVisible) return null;
@@ -187,14 +174,16 @@ export function LiveOffers() {
       : null;
 
   return (
-    <div className="fixed left-1/2 top-[8.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] -translate-x-1/2 sm:left-auto sm:right-4 sm:top-[8rem] sm:translate-x-0">
-      {offersOpen ? (
-        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-3 shadow-lg shadow-emerald-500/10 backdrop-blur">
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-500">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+    <div className="relative z-20 mt-0 w-full px-4 sm:px-8">
+      <div className="ml-auto w-[min(20rem,calc(100vw-1.5rem))]">
+        {offersOpen ? (
+          <div className="live-offer-card rounded-xl p-3.5">
+          {/* Header */}
+          <div className="mb-2.5 flex items-center justify-between gap-3">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest live-offer-timer">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: "#818cf8" }} />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "#6366f1" }} />
               </span>
               Live offer {totalOffers > 1 ? `${(offerIndex % totalOffers) + 1}/${totalOffers}` : ""}
             </span>
@@ -202,50 +191,61 @@ export function LiveOffers() {
               type="button"
               onClick={() => setOffersOpen(false)}
               aria-label="Hide offers"
-              className="text-sm leading-none text-emerald-500/70 hover:text-emerald-400"
+              className="live-offer-close flex h-5 w-5 items-center justify-center rounded-full text-[11px] leading-none transition-all hover:scale-110"
+              style={{ background: "rgba(99,102,241,0.1)" }}
             >
               ✕
             </button>
           </div>
+
+          {/* Offer item */}
           <a
             key={current.id}
             href={current.href || "#"}
             target={current.href ? "_blank" : undefined}
             rel={current.href ? "noopener noreferrer" : undefined}
-            className="offer-rise flex items-center justify-between gap-2 rounded-lg bg-background/40 px-3 py-2 text-xs transition hover:bg-background/60"
+            className="offer-rise live-offer-inner flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-xs transition-all duration-200"
           >
             <span className="min-w-0 flex-1">
-              <span className="block text-[10px] uppercase tracking-wider text-emerald-500/70">
+              <span className="live-offer-kind mb-0.5 block text-[9px] font-semibold uppercase tracking-widest">
                 {current.kind === "project" ? "Project" : "Service"}
               </span>
-              <span className="block truncate font-medium text-foreground">{current.title}</span>
+              <span className="live-offer-title block truncate text-sm font-semibold leading-tight">{current.title}</span>
             </span>
-            <span className="flex shrink-0 items-center gap-1.5">
+            <span className="flex shrink-0 flex-col items-end gap-1">
               {current.discount && current.discount > 0 && (
-                <span className="rounded-full bg-emerald-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                <span
+                  className="rounded-md px-1.5 py-0.5 text-[10px] font-bold text-white"
+                  style={{ background: "linear-gradient(135deg, #6366f1 0%, #22d3ee 100%)" }}
+                >
                   {current.discount}% OFF
                 </span>
               )}
               {current.kind === "project" && currentRemaining && (
-                <span className="font-mono tabular-nums text-emerald-400">{currentRemaining}</span>
+                <span className="live-offer-timer font-mono text-[10px] tabular-nums">{currentRemaining}</span>
               )}
             </span>
           </a>
-          <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-emerald-500/15">
+
+          {/* Progress bar */}
+          <div className="live-offer-progress-bg mt-2.5 h-0.5 w-full overflow-hidden rounded-full">
             <div
-              className="h-full bg-emerald-400 transition-[width] duration-100 ease-linear"
-              style={{ width: `${offerProgress}%` }}
+              className="h-full transition-[width] duration-100 ease-linear"
+              style={{ width: `${offerProgress}%`, background: "linear-gradient(90deg, #6366f1, #22d3ee)" }}
             />
           </div>
+
+          {/* Dots */}
           {totalOffers > 1 && (
             <div className="mt-2 flex justify-center gap-1">
               {liveOffers.map((_, i) => (
                 <span
                   key={i}
-                  className={
-                    "h-1 rounded-full transition-all " +
-                    (i === offerIndex % totalOffers ? "w-4 bg-emerald-400" : "w-1 bg-emerald-500/30")
-                  }
+                  className="h-1 rounded-full transition-all duration-300"
+                  style={{
+                    width: i === offerIndex % totalOffers ? "1rem" : "0.25rem",
+                    background: i === offerIndex % totalOffers ? "#6366f1" : "rgba(99,102,241,0.25)",
+                  }}
                 />
               ))}
             </div>
@@ -255,15 +255,16 @@ export function LiveOffers() {
         <button
           type="button"
           onClick={() => setOffersOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-500 shadow-lg backdrop-blur hover:bg-emerald-500/20"
+          className="live-offer-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-all duration-200"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: "#818cf8" }} />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "#6366f1" }} />
           </span>
           {totalOffers} live offer{totalOffers > 1 ? "s" : ""}
         </button>
       )}
+      </div>
     </div>
   );
 }
