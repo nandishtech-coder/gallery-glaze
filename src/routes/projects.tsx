@@ -6,7 +6,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { NavBar } from "@/components/nav-bar";
 import { PageBackground } from "@/components/page-background";
 import { SiteFooter } from "@/components/site-footer";
-import { TestimonialsSection } from "@/components/testimonials-section";
 import { Button } from "@/components/ui/button";
 import { computeDiscounted } from "@/lib/price";
 import nandishLogo from "@/assets/nandish-logo.png";
@@ -52,7 +51,10 @@ interface PublicProject {
   offer_ends_at: string | null;
   project_type: string | null;
   live_enabled: boolean | null;
+  is_completed: boolean | null;
 }
+
+type ProjectTab = "completed" | "ongoing";
 
 function useNow(intervalMs = 1000) {
   const [now, setNow] = useState(() => Date.now());
@@ -80,10 +82,19 @@ function Index() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string>("All");
+  const [activeTab, setActiveTab] = useState<ProjectTab>("completed");
 
-  const tags = ["All", ...Array.from(new Set(projects.map((p) => p.name).filter(Boolean)))];
+  const completedProjects = projects.filter((p) => !!p.is_completed);
+  const ongoingProjects = projects.filter((p) => !p.is_completed);
+  const currentProjectSet = activeTab === "completed" ? completedProjects : ongoingProjects;
+  const tabs: Array<{ key: ProjectTab; label: string; count: number }> = [
+    { key: "completed", label: "Demo Projects", count: completedProjects.length },
+    { key: "ongoing", label: "Ongoing Projects", count: ongoingProjects.length },
+  ];
 
-  const filtered = projects.filter((p) => {
+  const tags = ["All", ...Array.from(new Set(currentProjectSet.map((p) => p.name).filter(Boolean)))];
+
+  const filtered = currentProjectSet.filter((p) => {
     const q = query.trim().toLowerCase();
     const matchesQuery = !q || p.name.toLowerCase().includes(q) || (p.description ?? "").toLowerCase().includes(q);
     const matchesTag = activeTag === "All" || p.name === activeTag;
@@ -91,9 +102,13 @@ function Index() {
   });
 
   useEffect(() => {
+    setActiveTag("All");
+  }, [activeTab]);
+
+  useEffect(() => {
     supabase
       .from("public_projects")
-      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled")
+      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled, is_completed")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         setProjects((data ?? []) as PublicProject[]);
@@ -281,114 +296,92 @@ function Index() {
 
 
 
-      {totalOffers > 0 && (
-        <div className="fixed left-1/2 top-[8.5rem] z-40 w-[min(19rem,calc(100vw-1.5rem))] -translate-x-1/2 sm:left-auto sm:right-4 sm:top-[8rem] sm:translate-x-0">
+      <main className="page-shell px-4 pb-24 pt-32 sm:pt-28">
+        <section className="mb-16 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-2xl text-left">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
+              <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
+            </div>
+            <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
+              Crafting <span className="text-gradient">digital products</span><br />
+              with care and precision.
+            </h1>
+            <p className="mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
+              I help startups and businesses bring their products to life with precision and modern tech.
+            </p>
+            {sortedOffers.length === 1 && soonest && soonestRemaining && (
+              <div className="mt-6 flex justify-start">{renderOfferPill(soonest, soonest.id)}</div>
+            )}
+          </div>
 
-
-
-          {offersOpen ? (
-            <div className="live-offer-card rounded-xl p-3.5">
-              <div className="mb-2.5 flex items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest live-offer-timer">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: "#818cf8" }} />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "#6366f1" }} />
-                  </span>
-                  Live offer {totalOffers > 1 ? `${(offerIndex % totalOffers) + 1}/${totalOffers}` : ""}
+          <div className="w-full max-w-md lg:flex lg:justify-end">
+            <div className="w-full rounded-3xl border border-white/10 bg-slate-950/30 p-4 shadow-2xl backdrop-blur-md">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <img
+                    src={nandishLogo}
+                    alt="Nandish-Tech"
+                    className="h-6 w-6 shrink-0 rounded-full object-contain"
+                  />
+                  <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
+                  {totalOffers > 0 ? "Live offers" : "Available now"}
+                </div>
+                <span className="rounded-full border border-border bg-white/5 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {totalOffers > 0 ? `${totalOffers} ${totalOffers === 1 ? "offer" : "offers"}` : "New work"}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => setOffersOpen(false)}
-                  aria-label="Hide offers"
-                  className="live-offer-close flex h-5 w-5 items-center justify-center rounded-full text-[11px] leading-none transition-all hover:scale-110"
-                  style={{ background: "rgba(99,102,241,0.1)" }}
-                >
-                  ✕
-                </button>
               </div>
-              {current && (
+
+              {current ? (
                 <a
-                  key={current.id}
                   href={current.href || "#"}
                   target={current.href ? "_blank" : undefined}
                   rel={current.href ? "noopener noreferrer" : undefined}
-                  className="offer-rise live-offer-inner flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-xs transition-all duration-200"
+                  className="block rounded-2xl border border-primary/20 bg-primary/5 p-3 transition hover:border-primary/40 hover:bg-primary/10"
                 >
-                  <span className="min-w-0 flex-1">
-                    <span className="live-offer-kind mb-0.5 block text-[9px] font-semibold uppercase tracking-widest">
-                      {current.kind === "project" ? "Project" : "Service"}
-                    </span>
-                    <span className="live-offer-title block truncate text-sm font-semibold leading-tight">{current.title}</span>
-                  </span>
-                  <span className="flex shrink-0 flex-col items-end gap-1">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
+                    {current.kind === "project" ? "Project" : "Service"} offer
+                  </div>
+                  <div className="mt-2 flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="text-base font-semibold text-foreground">{current.title}</div>
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        {current.kind === "project"
+                          ? (currentRemaining ? `Ends in ${currentRemaining}` : "Limited-time availability")
+                          : "Special launch pricing"}
+                      </div>
+                    </div>
                     {current.discount && current.discount > 0 && (
-                      <span
-                        className="rounded-md px-1.5 py-0.5 text-[10px] font-bold text-white"
-                        style={{ background: "linear-gradient(135deg, #6366f1 0%, #22d3ee 100%)" }}
-                      >
+                      <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-[10px] font-bold text-emerald-400">
                         {current.discount}% OFF
                       </span>
                     )}
-                    {current.kind === "project" && currentRemaining && (
-                      <span className="live-offer-timer font-mono text-[10px] tabular-nums">{currentRemaining}</span>
-                    )}
-                  </span>
+                  </div>
                 </a>
+              ) : (
+                <div className="rounded-2xl border border-border bg-white/5 p-3 text-sm text-muted-foreground">
+                  No active offers right now — new projects are still available.
+                </div>
               )}
-              <div className="live-offer-progress-bg mt-2.5 h-0.5 w-full overflow-hidden rounded-full">
-                <div
-                  className="h-full transition-[width] duration-100 ease-linear"
-                  style={{ width: `${offerProgress}%`, background: "linear-gradient(90deg, #6366f1, #22d3ee)" }}
-                />
-              </div>
+
               {totalOffers > 1 && (
-                <div className="mt-2 flex justify-center gap-1">
-                  {liveOffers.map((_, i) => (
-                    <span
-                      key={i}
-                      className="h-1 rounded-full transition-all duration-300"
-                      style={{
-                        width: i === offerIndex % totalOffers ? "1rem" : "0.25rem",
-                        background: i === offerIndex % totalOffers ? "#6366f1" : "rgba(99,102,241,0.25)",
-                      }}
-                    />
-                  ))}
+                <div className="mt-3 flex items-center justify-between rounded-xl border border-border bg-white/5 px-3 py-2 text-xs text-muted-foreground">
+                  <span>Next offer</span>
+                  <div className="flex items-center gap-1">
+                    {liveOffers.map((_, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-block h-1.5 rounded-full transition-all"
+                        style={{
+                          width: idx === offerIndex % totalOffers ? "1.2rem" : "0.4rem",
+                          background: idx === offerIndex % totalOffers ? "#22d3ee" : "rgba(148,163,184,0.35)",
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setOffersOpen(true)}
-              className="live-offer-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-all duration-200"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: "#818cf8" }} />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "#6366f1" }} />
-              </span>
-              {totalOffers} live offer{totalOffers > 1 ? "s" : ""}
-            </button>
-          )}
-        </div>
-      )}
-
-
-
-      <main className="page-shell px-4 pt-32 pb-24 sm:pt-28">
-        <section className="mb-16 text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
-            <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
           </div>
-          <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl rise-in rise-delay-2">
-            Crafting <span className="text-gradient">digital products</span><br />
-            with care and precision.
-          </h1>
-          <p className="mx-auto mt-5 max-w-xl text-balance text-muted-foreground rise-in rise-delay-3">
-           I help startups and businesses bring their products to life with precision and modern tech.
-          </p>
-          {sortedOffers.length === 1 && soonest && soonestRemaining && (
-            <div className="mt-6 flex justify-center">{renderOfferPill(soonest, soonest.id)}</div>
-          )}
         </section>
 
         {sortedOffers.length > 1 && (
@@ -411,18 +404,30 @@ function Index() {
 
 
         <section>
-          {!loading && (
-            <div className="mb-8 flex justify-center">
-              <div className="rounded-2xl glass px-10 py-5 text-center">
-                <div className="text-3xl font-semibold text-gradient sm:text-4xl">{projects.length}</div>
-                <div className="mt-1 text-sm text-muted-foreground">Total Projects</div>
-              </div>
-            </div>
-          )}
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-              Selected Work ({filtered.length})
-            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              {tabs.map((tab) => {
+                const isActive = activeTab === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => setActiveTab(tab.key)}
+                    className={
+                      "inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] transition " +
+                      (isActive
+                        ? "border-primary/40 bg-primary/10 text-primary"
+                        : "border-border bg-transparent text-muted-foreground hover:text-foreground")
+                    }
+                  >
+                    <span>{tab.label}</span>
+                    <span className="inline-flex min-w-6 items-center justify-center rounded-full border border-current/30 bg-background/60 px-1.5 py-0.5 text-[10px]">
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
             <div className="relative w-full sm:max-w-xs">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
@@ -564,7 +569,6 @@ function Index() {
           </div>
         </section>
 
-        <TestimonialsSection />
       </main>
 
       <SiteFooter />

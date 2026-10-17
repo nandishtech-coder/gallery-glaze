@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { computeDiscounted } from "@/lib/price";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 interface Service {
   id: string;
@@ -75,10 +76,14 @@ function useFooterVisible() {
   return visible;
 }
 
-export function LiveOffers() {
+interface LiveOffersProps {
+  isOpen: boolean;
+  onToggle: (open: boolean) => void;
+}
+
+export function LiveOffers({ isOpen, onToggle }: LiveOffersProps) {
   const [projects, setProjects] = useState<PublicProject[]>([]);
   const [services, setServices] = useState<Service[]>([]);
-  const [offersOpen, setOffersOpen] = useState(true);
   const [offerIndex, setOfferIndex] = useState(0);
   const [offerProgress, setOfferProgress] = useState(0);
   const footerVisible = useFooterVisible();
@@ -176,11 +181,16 @@ export function LiveOffers() {
   return (
     <div className="relative z-20 mt-0 w-full px-4 sm:px-8">
       <div className="ml-auto w-[min(20rem,calc(100vw-1.5rem))]">
-        {offersOpen ? (
+        {isOpen ? (
           <div className="live-offer-card rounded-xl p-3.5">
           {/* Header */}
           <div className="mb-2.5 flex items-center justify-between gap-3">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest live-offer-timer">
+              <img
+                src={nandishLogo}
+                alt="Nandish-Tech"
+                className="h-4 w-4 shrink-0 rounded-full object-contain"
+              />
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: "#818cf8" }} />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "#6366f1" }} />
@@ -189,7 +199,7 @@ export function LiveOffers() {
             </span>
             <button
               type="button"
-              onClick={() => setOffersOpen(false)}
+              onClick={() => onToggle(false)}
               aria-label="Hide offers"
               className="live-offer-close flex h-5 w-5 items-center justify-center rounded-full text-[11px] leading-none transition-all hover:scale-110"
               style={{ background: "rgba(99,102,241,0.1)" }}
@@ -251,19 +261,7 @@ export function LiveOffers() {
             </div>
           )}
         </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setOffersOpen(true)}
-          className="live-offer-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-semibold transition-all duration-200"
-        >
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60" style={{ background: "#818cf8" }} />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "#6366f1" }} />
-          </span>
-          {totalOffers} live offer{totalOffers > 1 ? "s" : ""}
-        </button>
-      )}
+      ) : null}
       </div>
     </div>
   );

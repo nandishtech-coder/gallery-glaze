@@ -110,6 +110,7 @@ export type Database = {
           description: string
           github_url: string | null
           id: string
+          is_completed: boolean
           live_enabled: boolean
           live_url: string | null
           name: string
@@ -117,6 +118,7 @@ export type Database = {
           offer_enabled: boolean
           offer_ends_at: string | null
           offer_label: string
+          project_status: string
           project_type: string
           thumbnail_url: string | null
           updated_at: string
@@ -126,6 +128,7 @@ export type Database = {
           description?: string
           github_url?: string | null
           id?: string
+          is_completed?: boolean
           live_enabled?: boolean
           live_url?: string | null
           name: string
@@ -133,6 +136,7 @@ export type Database = {
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_status?: string
           project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
@@ -142,6 +146,7 @@ export type Database = {
           description?: string
           github_url?: string | null
           id?: string
+          is_completed?: boolean
           live_enabled?: boolean
           live_url?: string | null
           name?: string
@@ -149,6 +154,7 @@ export type Database = {
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_status?: string
           project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
@@ -324,6 +330,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string | null
+          is_completed: boolean | null
           live_enabled: boolean | null
           live_url: string | null
           name: string | null
@@ -338,6 +345,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string | null
+          is_completed?: boolean | null
           live_enabled?: boolean | null
           live_url?: never
           name?: string | null
@@ -352,6 +360,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string | null
+          is_completed?: boolean | null
           live_enabled?: boolean | null
           live_url?: never
           name?: string | null

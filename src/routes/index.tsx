@@ -125,12 +125,17 @@ function Home() {
       });
   }, []);
 
+  const [liveOffersOpen, setLiveOffersOpen] = useState(false);
+
   return (
     <div className="relative min-h-screen">
       <PageBackground variant="hero" />
 
-      <NavBar />
-      <LiveOffers />
+      <NavBar
+        liveOffersOpen={liveOffersOpen}
+        onToggleLiveOffers={() => setLiveOffersOpen((current) => !current)}
+      />
+      <LiveOffers isOpen={liveOffersOpen} onToggle={setLiveOffersOpen} />
 
       <main>
         <div className="relative">
@@ -167,8 +172,8 @@ function Home() {
                 </div>
               </div>
               {/* Right: Brand Trust Panel */}
-              <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-center">
-                <div className="relative flex flex-col items-center gap-5 rise-in rise-delay-3">
+              <div className="mt-10 flex w-full flex-1 items-center justify-center lg:mt-0">
+                <div className="relative flex w-full max-w-xl flex-col items-center gap-5 rise-in rise-delay-3">
                   {/* Ambient glows */}
                   <div className="aurora pointer-events-none absolute -top-16 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
                   <div className="aurora aurora-2 pointer-events-none absolute top-10 right-0 h-48 w-48 rounded-full bg-accent/20 blur-2xl" />

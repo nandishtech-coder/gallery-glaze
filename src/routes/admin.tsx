@@ -37,6 +37,8 @@ interface Project {
   offer_ends_at: string | null;
   project_type: string;
   live_enabled: boolean;
+  is_completed: boolean;
+  project_status: string;
 }
 
 interface Profile {
@@ -104,7 +106,7 @@ type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 type TestimonialDraft = Omit<Testimonial, "id" | "created_at"> & { id?: string };
 
-const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null, project_type: "Web Application", live_enabled: true };
+const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null, project_type: "Web Application", live_enabled: true, is_completed: false, project_status: "ongoing" };
 const emptyService: ServiceDraft = {
   title: "", description: "", price: "", price_suffix: "onwards",
   features: [], popular: true, cta_label: "Get Started", sort_order: 0, discount_percent: 0, featuresText: "",
@@ -142,7 +144,7 @@ function AdminPage() {
   const load = async () => {
     setFetching(true);
     const [proj, prof, svc, tst, st, msg] = await Promise.all([
-      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled").order("created_at", { ascending: false }),
+      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled, is_completed, project_status").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
@@ -299,6 +301,8 @@ function AdminPage() {
       offer_ends_at: editing.offer_ends_at ? new Date(editing.offer_ends_at).toISOString() : null,
       project_type: editing.project_type || "Web Application",
       live_enabled: editing.live_enabled ?? true,
+      is_completed: !!editing.is_completed,
+      project_status: editing.project_status || (editing.is_completed ? "completed" : "ongoing"),
     };
     const res = editing.id
       ? await supabase.from("projects").update(payload).eq("id", editing.id)
@@ -452,6 +456,7 @@ function AdminPage() {
                           <div className="font-medium">{p.name}</div>
                           <div className="mt-1 flex flex-wrap gap-1 text-[10px]">
                             <span className="rounded bg-primary/15 px-1.5 py-0.5 text-primary">{p.project_type}</span>
+                            <span className="rounded bg-secondary px-1.5 py-0.5 capitalize">{p.project_status ?? (p.is_completed ? "completed" : "ongoing")}</span>
                             {!p.live_enabled && <span className="rounded bg-secondary px-1.5 py-0.5">Private</span>}
                           </div>
                           <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{p.description}</div>
@@ -1018,6 +1023,26 @@ function AdminPage() {
                   <option>Web Application</option>
                   <option>Mobile App</option>
                   <option>Mobile + Web Application</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Project status</label>
+                <select
+                  value={editing.project_status ?? "ongoing"}
+                  onChange={(e) => {
+                    const nextStatus = e.target.value;
+                    setEditing({
+                      ...editing,
+                      project_status: nextStatus,
+                      is_completed: nextStatus === "completed" || nextStatus === "demo",
+                    });
+                  }}
+                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary"
+                >
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                  <option value="demo">Demo</option>
+                  <option value="upcoming">Upcoming</option>
                 </select>
               </div>
               <label className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-secondary/20 p-3">
