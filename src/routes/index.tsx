@@ -78,6 +78,8 @@ const fallbackStats = [
   { value: "24/7", label: "Support on WhatsApp" },
 ];
 
+const heroText = "We focus on growing your brand online for you.";
+
 const whyUs = [
   { icon: Rocket, title: "Quick turnaround", text: "Most small websites go live within days, not months." },
   { icon: ShieldCheck, title: "Transparent pricing", text: "Fixed, clearly listed pricing with no hidden charges." },
@@ -105,6 +107,12 @@ const industries = [
 
 function Home() {
   const [stats, setStats] = useState<typeof fallbackStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIsLoading(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     supabase
@@ -137,20 +145,58 @@ function Home() {
       />
       <LiveOffers isOpen={liveOffersOpen} onToggle={setLiveOffersOpen} />
 
-      <main>
+      {isLoading ? (
+        <div className="relative z-10 flex min-h-[calc(100vh-76px)] items-start justify-center px-4 pt-16 sm:pt-28">
+          <div className="glass relative w-full max-w-[360px] overflow-hidden rounded-[2rem] border border-primary/20 px-6 py-8 text-center shadow-[0_20px_60px_rgba(20,27,55,0.55)]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_45%),radial-gradient(circle_at_bottom,rgba(34,211,238,0.12),transparent_35%)]" />
+            <div className="relative flex flex-col items-center">
+              <div className="relative mb-5 flex h-28 w-28 items-center justify-center">
+                <div className="absolute inset-0 rounded-full border border-primary/30 border-t-transparent border-l-transparent animate-spin [animation-duration:7s]" />
+                <div className="absolute inset-3 rounded-full border border-cyan-400/40 border-r-transparent border-b-transparent animate-spin [animation-duration:5s] [animation-direction:reverse]" />
+                <div className="absolute inset-0 animate-[spin_9s_linear_infinite]">
+                  <span className="absolute left-1/2 top-0 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-cyan-400 shadow-[0_0_15px_rgba(99,102,241,0.8)]" />
+                  <span className="absolute right-0 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-cyan-400 to-primary shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                  <span className="absolute bottom-0 left-1/2 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-cyan-400 shadow-[0_0_15px_rgba(99,102,241,0.8)]" />
+                  <span className="absolute left-0 top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-cyan-400 to-primary shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                </div>
+
+                <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full border border-primary/30 bg-primary/10 shadow-[0_0_30px_rgba(99,102,241,0.35)]">
+                  <img src={nandishLogo} alt="Nandish-Tech" className="h-10 w-10 object-contain" />
+                </div>
+              </div>
+
+              <div className="mb-4 flex items-center justify-center gap-2">
+                {[0, 1, 2].map((bar) => (
+                  <span
+                    key={bar}
+                    className="h-2.5 w-2.5 rounded-full bg-gradient-to-b from-primary to-cyan-400 animate-pulse"
+                    style={{ animationDelay: `${bar * 180}ms`, animationDuration: "1.2s" }}
+                  />
+                ))}
+              </div>
+
+              <p className="text-lg font-semibold tracking-[0.18em] text-foreground/90 uppercase">Loading</p>
+              <p className="mt-2 text-sm text-muted-foreground">Preparing your digital experience</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <main>
         <div className="relative">
-          <section className="relative w-full px-6 pb-16 pt-12 sm:px-12 sm:pt-12">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16">
+          <section className="relative w-full px-4 pb-10 pt-8 sm:px-12 sm:pt-12">
+            <div className="mx-auto flex max-w-7xl flex-col gap-8 xl:flex-row xl:items-center xl:gap-16">
               {/* Left: Text content */}
-              <div className="flex-1">
+              <div className="min-w-0 flex-1">
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
                   <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Solutions for all your needs
                 </div>
-                <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-7xl rise-in rise-delay-2">
-                  We focus on growing <br />
-                  your <span className="text-gradient">brand online</span>.
+                <h1 className="max-w-[900px] text-[clamp(3.2rem,6vw,7rem)] font-semibold leading-[0.9] tracking-[-0.06em] rise-in rise-delay-2">
+                  <span className="block text-white" style={{ wordBreak: "keep-all" }}>
+                    <span className="text-white">We focus on growing your </span>
+                    <span className="text-gradient">brand online for you.</span>
+                  </span>
                 </h1>
-                <p className="mt-6 max-w-xl text-balance text-lg text-muted-foreground rise-in rise-delay-3">
+                <p className="mt-5 max-w-xl text-balance text-base text-muted-foreground sm:text-lg rise-in rise-delay-3">
                   We build websites, web apps, eCommerce stores and brand identities — crafted to make
                   your business look professional, trustworthy, and stand out online.
                 </p>
@@ -171,113 +217,33 @@ function Home() {
                   </Link>
                 </div>
               </div>
-              {/* Right: Brand Trust Panel */}
-              <div className="mt-10 flex w-full flex-1 items-center justify-center lg:mt-0">
-                <div className="relative flex w-full max-w-xl flex-col items-center gap-5 rise-in rise-delay-3">
-                  {/* Ambient glows */}
-                  <div className="aurora pointer-events-none absolute -top-16 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl" />
-                  <div className="aurora aurora-2 pointer-events-none absolute top-10 right-0 h-48 w-48 rounded-full bg-accent/20 blur-2xl" />
 
-                  {/* Main brand card */}
-                  <div className="relative z-10 w-full rounded-3xl glass border border-white/10 p-8 shadow-2xl backdrop-blur-xl">
-                    {/* Logo + brand name */}
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="relative">
-                        <div className="absolute inset-0 rounded-full bg-primary/30 blur-md" />
-                        <img src={nandishLogo} alt="Nandish-Tech" className="relative h-20 w-20 object-contain drop-shadow-lg" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold tracking-tight text-foreground">Nandish-Tech</p>
-                        <p className="text-sm text-primary font-medium">Web Design &amp; Development</p>
-                      </div>
-                      {/* Verified badge */}
-                      <div className="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-primary/20 border border-primary/40">
-                        <svg className="h-5 w-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
-
-                    {/* Trust badges row */}
-                    <div className="grid grid-cols-3 gap-3 mb-4">
-                      {/* 100% Satisfaction badge */}
-                      <div className="flex flex-col items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 py-3 px-4">
-                        <svg className="h-7 w-7 text-emerald-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
-                        </svg>
-                        <span className="text-xs text-emerald-400 font-bold leading-tight text-center">100%<br />Satisfaction</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-1.5 rounded-xl bg-primary/10 border border-primary/30 py-3 px-4">
-                        <svg className="h-7 w-7 text-primary" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.745 3.745 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                        </svg>
-                        <span className="text-xs text-primary font-bold leading-tight text-center">MSME<br />Verified</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-1.5 rounded-xl py-3 px-4" style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.18)" }}>
-                        <svg className="h-7 w-7 text-accent" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                        </svg>
-                        <span className="text-xs text-muted-foreground font-medium">Fast Delivery</span>
-                      </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="mb-3 h-px w-full" style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.2), transparent)" }} />
-
-                    {/* Happy clients row */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-base font-semibold text-foreground">Happy Clients</p>
-                        <p className="text-sm text-muted-foreground mt-0.5">Trusted by businesses across India</p>
-                      </div>
-                      <div className="flex items-center">
-                        {/* Stacked avatar bubbles */}
-                        {["N", "R", "S", "A", "M"].map((letter, i) => (
-                          <div
-                            key={i}
-                            className="relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-background text-xs font-bold text-white"
-                            style={{
-                              marginLeft: i === 0 ? 0 : -10,
-                              zIndex: 5 - i,
-                              background: `hsl(${(i * 60 + 200) % 360}, 70%, 45%)`
-                            }}
-                          >
-                            {letter}
-                          </div>
-                        ))}
-                        <div className="relative ml-[-10px] flex h-10 w-10 items-center justify-center rounded-full border-2 border-background bg-primary text-[10px] font-bold text-primary-foreground" style={{ zIndex: 0 }}>
-                          30+
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
             </div>
           </section>
         </div>
 
         {/* Stats */}
         <section className="w-full px-6 sm:px-12">
-          <div className="grid grid-cols-2 gap-4 rounded-2xl glass p-6 sm:grid-cols-4">
-            {(stats ?? [null, null, null, null]).map((s, i) => (
-              <div key={s?.label ?? i} className="text-center">
-                {s ? (
-                  <>
-                    <div className="text-2xl font-semibold text-gradient sm:text-3xl">{s.value}</div>
-                    <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</div>
-                  </>
-                ) : (
-                  <>
-                    <div className="mx-auto h-8 w-16 animate-pulse rounded-md bg-muted/60" />
-                    <div className="mx-auto mt-2 h-3 w-24 animate-pulse rounded bg-muted/40" />
-                  </>
-                )}
-              </div>
-            ))}
+          <div className="rounded-2xl glass p-6">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {(stats ?? [null, null, null, null]).map((s, i) => (
+                <div key={s?.label ?? i} className="text-center">
+                  {s ? (
+                    <>
+                      <div className="text-2xl font-semibold text-gradient sm:text-3xl">{s.value}</div>
+                      <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mx-auto h-8 w-16 animate-pulse rounded-md bg-muted/60" />
+                      <div className="mx-auto mt-2 h-3 w-24 animate-pulse rounded bg-muted/40" />
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
+
         </section>
 
         {/* Solutions */}
@@ -420,7 +386,8 @@ function Home() {
             </div>
           </div>
         </section>
-      </main>
+        </main>
+      )}
 
       <SiteFooter />
     </div>

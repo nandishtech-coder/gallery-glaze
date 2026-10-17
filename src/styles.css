@@ -412,6 +412,50 @@
 }
 :root.light .hero-grid { opacity: 0.28; }
 
+@media (max-width: 767px) {
+  .glow-orb {
+    opacity: 1;
+    filter: blur(76px);
+  }
+
+  .glow-orb-violet {
+    left: -18%;
+    top: -8%;
+    width: 22rem;
+    height: 22rem;
+  }
+
+  .glow-orb-cyan {
+    right: -16%;
+    top: 12%;
+    width: 18rem;
+    height: 18rem;
+  }
+
+  .glow-orb-blue {
+    left: 18%;
+    bottom: -12%;
+    width: 15rem;
+    height: 15rem;
+  }
+
+  .glow-sheen {
+    opacity: 1;
+  }
+
+  .hero-grid {
+    opacity: 0.7;
+    background-size: 42px 42px;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .bg-pan {
+    transform: scale(1.18);
+    filter: saturate(1.25) brightness(0.9) contrast(1.08);
+  }
+}
+
 /* ═══════════════════════════════════════════
    ENTRANCE ANIMATIONS
    ═══════════════════════════════════════════ */

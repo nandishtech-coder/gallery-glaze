@@ -69,8 +69,8 @@ function ServicesPage() {
     <div className="relative min-h-screen">
       <PageBackground variant="tech" />
       <NavBar />
-      <main className="page-shell px-4 pt-16 pb-24 sm:pt-20">
-        <section className="mb-12 pb-6 pt-10 text-center sm:pt-12">
+      <main className="page-shell px-4 pb-24 pt-0 sm:pt-0">
+        <section className="mb-12 pb-6 pt-6 text-center sm:pt-8">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
           </div>

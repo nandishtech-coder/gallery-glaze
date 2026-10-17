@@ -55,8 +55,8 @@ function ContactPage() {
     <div className="relative min-h-screen">
       <PageBackground variant="hero2" />
       <NavBar />
-      <main className="page-shell px-4 pt-16 pb-20 sm:pt-20">
-        <header className="pb-6 pt-10 text-center sm:pt-12">
+      <main className="page-shell px-4 pb-20 pt-0 sm:pt-0">
+        <header className="pb-6 pt-6 text-center sm:pt-8">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
             <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Available for new work
           </div>
@@ -110,7 +110,6 @@ function ContactPage() {
               <input
                 required
                 type="tel"
-                placeholder="+91 98765 43210"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"

@@ -55,7 +55,7 @@ interface PublicProject {
   project_status: string | null;
 }
 
-type ProjectTab = "completed" | "ongoing";
+type ProjectTab = "demo" | "ongoing" | "completed";
 
 function useNow(intervalMs = 1000) {
   const [now, setNow] = useState(() => Date.now());
@@ -83,15 +83,18 @@ function Index() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string>("All");
-  const [activeTab, setActiveTab] = useState<ProjectTab>("completed");
+  const [activeTab, setActiveTab] = useState<ProjectTab>("demo");
 
   const getProjectStatus = (p: PublicProject) => (p.project_status ?? (p.is_completed ? "completed" : "ongoing")).toLowerCase();
-  const completedProjects = projects.filter((p) => ["completed", "demo"].includes(getProjectStatus(p)));
+  const demoProjects = projects.filter((p) => getProjectStatus(p) === "demo");
   const ongoingProjects = projects.filter((p) => ["ongoing", "upcoming"].includes(getProjectStatus(p)));
-  const currentProjectSet = activeTab === "completed" ? completedProjects : ongoingProjects;
+  const completedProjects = projects.filter((p) => getProjectStatus(p) === "completed");
+  const currentProjectSet =
+    activeTab === "demo" ? demoProjects : activeTab === "ongoing" ? ongoingProjects : completedProjects;
   const tabs: Array<{ key: ProjectTab; label: string; count: number }> = [
-    { key: "completed", label: "Demo Projects", count: completedProjects.length },
+    { key: "demo", label: "Demo Projects", count: demoProjects.length },
     { key: "ongoing", label: "Ongoing Projects", count: ongoingProjects.length },
+    { key: "completed", label: "Completed Projects", count: completedProjects.length },
   ];
 
   const tags = ["All", ...Array.from(new Set(currentProjectSet.map((p) => p.name).filter(Boolean)))];
@@ -298,7 +301,7 @@ function Index() {
 
 
 
-      <main className="page-shell px-4 pb-24 pt-32 sm:pt-28">
+      <main className="page-shell px-4 pb-24 pt-8 sm:pt-10">
         <section className="mb-16 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl text-left">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
@@ -473,7 +476,7 @@ function Index() {
             </div>
           ) : filtered.length === 0 ? (
             <div className="rounded-2xl glass p-12 text-center text-muted-foreground">
-              {query ? `No projects match “${query}”.` : "No projects yet. Sign in to add your first."}
+              {query ? `No projects match “${query}”.` : "Project gallery will be updated shortly."}
             </div>
           ) : (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -554,17 +557,17 @@ function Index() {
         </section>
 
         <section className="mt-24 flex justify-center">
-          <div className="w-full max-w-2xl overflow-hidden rounded-3xl bg-gradient-to-br from-violet-700 via-purple-700 to-fuchsia-800 p-8 text-center shadow-2xl shadow-violet-900/30 sm:p-12 card-hover">
-            <h2 className="text-balance text-3xl font-bold tracking-tight text-gradient-light sm:text-4xl">
+          <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-primary/20 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.20),transparent_30%),linear-gradient(135deg,rgba(15,23,42,0.92),rgba(30,41,59,0.96),rgba(76,29,149,0.82))] p-8 text-center shadow-[0_24px_60px_rgba(15,23,42,0.5)] sm:p-12 card-hover">
+            <h2 className="text-balance text-3xl font-bold tracking-tight text-white sm:text-4xl">
               Let&apos;s build your digital product
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-balance text-violet-100">
-              Have a business idea, an existing process that needs automation, or a product idea that needs to be
+            <p className="mx-auto mt-4 max-w-xl text-balance text-slate-200">
+              Have a business idea, an existing process that needs application, or an idea that needs to be
               transformed digitally? Let&apos;s turn your idea into a working digital solution.
             </p>
             <Link
               to="/contact"
-              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-amber-400 px-8 py-3.5 text-base font-bold text-amber-950 shadow-lg shadow-amber-500/30 transition-transform duration-300 hover:scale-105 hover:bg-amber-300"
+              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(135deg,#facc15,#fbbf24)] px-8 py-3.5 text-base font-bold text-slate-900 shadow-lg shadow-amber-500/30 transition-transform duration-300 hover:scale-105 hover:bg-yellow-300"
             >
               Start Your Project <ArrowRight className="h-5 w-5" />
             </Link>
