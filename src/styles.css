@@ -176,6 +176,11 @@
   * { border-color: var(--color-border); box-sizing: border-box; }
   html, body { color-scheme: dark; }
   html.light, html.light body { color-scheme: light; }
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   body {
     background-color: var(--background);
     background-image: var(--gradient-hero);

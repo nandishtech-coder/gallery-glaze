@@ -338,6 +338,7 @@ export type Database = {
           offer_enabled: boolean | null
           offer_ends_at: string | null
           offer_label: string | null
+          project_status: string | null
           project_type: string | null
           thumbnail_url: string | null
         }
@@ -353,6 +354,7 @@ export type Database = {
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_status?: string | null
           project_type?: string | null
           thumbnail_url?: string | null
         }
@@ -368,6 +370,7 @@ export type Database = {
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_status?: string | null
           project_type?: string | null
           thumbnail_url?: string | null
         }

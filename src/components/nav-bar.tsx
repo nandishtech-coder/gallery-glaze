@@ -49,6 +49,24 @@ export function NavBar({
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      return;
+    }
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, [mobileMenuOpen]);
+
   const showAdminControls = !!user && isAdmin && otpVerified;
 
   return (
@@ -232,12 +250,12 @@ export function NavBar({
       {!isAdminPage && (
         <>
           <div
-            className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
             onClick={() => setMobileMenuOpen(false)}
           />
 
           <aside
-            className={`fixed right-0 top-0 z-50 flex h-full w-[82vw] max-w-xs flex-col border-l border-white/10 bg-slate-950/95 p-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 lg:hidden ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+            className={`fixed inset-y-0 right-0 z-50 flex h-screen w-screen max-w-full flex-col border-l border-white/10 bg-slate-950/95 p-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 will-change-transform lg:hidden ${mobileMenuOpen ? "translate-x-0" : "translate-x-[110%]"}`}
             aria-label="Mobile navigation"
           >
             <div className="mb-6 flex items-center justify-between">

@@ -52,6 +52,7 @@ interface PublicProject {
   project_type: string | null;
   live_enabled: boolean | null;
   is_completed: boolean | null;
+  project_status: string | null;
 }
 
 type ProjectTab = "completed" | "ongoing";
@@ -84,8 +85,9 @@ function Index() {
   const [activeTag, setActiveTag] = useState<string>("All");
   const [activeTab, setActiveTab] = useState<ProjectTab>("completed");
 
-  const completedProjects = projects.filter((p) => !!p.is_completed);
-  const ongoingProjects = projects.filter((p) => !p.is_completed);
+  const getProjectStatus = (p: PublicProject) => (p.project_status ?? (p.is_completed ? "completed" : "ongoing")).toLowerCase();
+  const completedProjects = projects.filter((p) => ["completed", "demo"].includes(getProjectStatus(p)));
+  const ongoingProjects = projects.filter((p) => ["ongoing", "upcoming"].includes(getProjectStatus(p)));
   const currentProjectSet = activeTab === "completed" ? completedProjects : ongoingProjects;
   const tabs: Array<{ key: ProjectTab; label: string; count: number }> = [
     { key: "completed", label: "Demo Projects", count: completedProjects.length },
@@ -108,7 +110,7 @@ function Index() {
   useEffect(() => {
     supabase
       .from("public_projects")
-      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled, is_completed")
+      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled, is_completed, project_status")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         setProjects((data ?? []) as PublicProject[]);
