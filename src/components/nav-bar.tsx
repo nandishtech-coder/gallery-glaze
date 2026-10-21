@@ -70,20 +70,43 @@ export function NavBar({
   const showAdminControls = !!user && isAdmin && otpVerified;
 
   return (
-    <header className={`sticky top-0 z-40 w-full rise-in nav-bar ${scrolled ? "nav-bar--scrolled" : ""}`}>
+    <header className={`z-50 w-full rise-in nav-bar ${scrolled ? "nav-bar--scrolled" : ""}`}>
       <style>{`
+        body {
+          padding-top: 78px;
+        }
+
+        @media (max-width: 640px) {
+          body {
+            padding-top: 72px;
+          }
+        }
+
         /* ── Gradient accent line ── */
         .nav-bar::before {
           content: "";
           position: absolute;
           top: 0; left: 0; right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, transparent 0%, #6366f1 30%, #22d3ee 70%, transparent 100%);
-          opacity: 0.6;
+          height: 2px;
+          background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.9) 18%, rgba(34,211,238,0.95) 42%, rgba(168,85,247,0.9) 58%, rgba(59,130,246,0.9) 80%, transparent 100%);
+          background-size: 220% 100%;
+          background-position: 0% 50%;
+          opacity: 0.95;
+          animation: nav-accent-shift 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes nav-accent-shift {
+          0% { background-position: 0% 50%; opacity: 0.7; }
+          50% { background-position: 100% 50%; opacity: 1; }
+          100% { background-position: 50% 50%; opacity: 0.85; }
         }
 
         /* ── Dark navbar ── */
         .nav-bar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
           background: rgba(10, 14, 26, 0.6);
           backdrop-filter: blur(24px) saturate(160%);
           -webkit-backdrop-filter: blur(24px) saturate(160%);
@@ -255,7 +278,7 @@ export function NavBar({
           />
 
           <aside
-            className={`fixed inset-y-0 right-0 z-50 flex h-screen w-screen max-w-full flex-col border-l border-white/10 bg-slate-950/95 p-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 will-change-transform lg:hidden ${mobileMenuOpen ? "translate-x-0" : "translate-x-[110%]"}`}
+            className={`fixed inset-y-0 right-0 z-50 flex h-screen w-[88vw] max-w-sm flex-col border-l border-white/10 bg-slate-950/95 p-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 will-change-transform lg:hidden ${mobileMenuOpen ? "translate-x-0" : "translate-x-[110%]"}`}
             aria-label="Mobile navigation"
           >
             <div className="mb-6 flex items-center justify-between">
