@@ -979,7 +979,7 @@ function AdminPage() {
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
-          <form onSubmit={save} className="my-8 w-full max-w-md overflow-y-auto rounded-2xl glass-strong p-5 max-h-[80vh]">
+          <form onSubmit={save} className="my-8 w-full max-w-xl overflow-y-auto rounded-2xl glass-strong p-5 max-h-[80vh]">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-semibold">{editing.id ? "Edit project" : "New project"}</h2>
               <button type="button" onClick={() => setEditing(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary">
