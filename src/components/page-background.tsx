@@ -1,6 +1,7 @@
 import techBg from "@/assets/tech-bg.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
 import heroBg2 from "@/assets/hero-bg-2.jpg";
+import nandishLogo from "@/assets/nandish-logo.png";
 
 const images = { tech: techBg, hero: heroBg, hero2: heroBg2 } as const;
 
@@ -22,7 +23,17 @@ export function PageBackground({ variant = "tech" }: { variant?: keyof typeof im
           <div className="glow-orb glow-orb-cyan absolute right-[-8%] top-[10%] h-72 w-72 sm:h-[22rem] sm:w-[22rem]" />
           <div className="glow-orb glow-orb-blue absolute bottom-[-14%] left-[28%] h-64 w-64 sm:h-80 sm:w-80" />
           <div className="glow-sheen absolute inset-x-[10%] top-0 h-[28rem]" />
-          <div className="glow-ring absolute left-1/2 top-[18%] h-72 w-72 -translate-x-1/2 rounded-full border border-white/10" />
+          <div className="glow-ring absolute left-1/2 top-[18%] h-72 w-72 -translate-x-1/2 rounded-full border border-white/10">
+            <div className="flex h-full w-full items-center justify-center rounded-full border border-white/10 bg-slate-950/30 shadow-[0_0_60px_rgba(79,70,229,0.18)] backdrop-blur-[2px]">
+              <div className="flex h-[68%] w-[68%] items-center justify-center rounded-full border border-white/15 bg-white/5 shadow-[0_0_30px_rgba(34,211,238,0.18)]">
+                <img
+                  src={nandishLogo}
+                  alt="Nandish-Tech"
+                  className="h-[58%] w-[58%] rounded-full object-contain drop-shadow-[0_0_18px_rgba(148,163,184,0.5)]"
+                />
+              </div>
+            </div>
+          </div>
 
           <div className="hero-grid absolute inset-0" />
         </div>

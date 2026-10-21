@@ -106,6 +106,7 @@ export type Database = {
       }
       projects: {
         Row: {
+          background_url: string | null
           created_at: string
           description: string
           github_url: string | null
@@ -118,12 +119,14 @@ export type Database = {
           offer_enabled: boolean
           offer_ends_at: string | null
           offer_label: string
+          project_logo_url: string | null
           project_status: string
           project_type: string
           thumbnail_url: string | null
           updated_at: string
         }
         Insert: {
+          background_url?: string | null
           created_at?: string
           description?: string
           github_url?: string | null
@@ -136,12 +139,14 @@ export type Database = {
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_logo_url?: string | null
           project_status?: string
           project_type?: string
           thumbnail_url?: string | null
           updated_at?: string
         }
         Update: {
+          background_url?: string | null
           created_at?: string
           description?: string
           github_url?: string | null
@@ -154,6 +159,7 @@ export type Database = {
           offer_enabled?: boolean
           offer_ends_at?: string | null
           offer_label?: string
+          project_logo_url?: string | null
           project_status?: string
           project_type?: string
           thumbnail_url?: string | null
@@ -327,6 +333,7 @@ export type Database = {
     Views: {
       public_projects: {
         Row: {
+          background_url: string | null
           created_at: string | null
           description: string | null
           id: string | null
@@ -338,11 +345,12 @@ export type Database = {
           offer_enabled: boolean | null
           offer_ends_at: string | null
           offer_label: string | null
+          project_logo_url: string | null
           project_status: string | null
           project_type: string | null
-          thumbnail_url: string | null
         }
         Insert: {
+          background_url?: string | null
           created_at?: string | null
           description?: string | null
           id?: string | null
@@ -354,11 +362,12 @@ export type Database = {
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_logo_url?: string | null
           project_status?: string | null
           project_type?: string | null
-          thumbnail_url?: string | null
         }
         Update: {
+          background_url?: string | null
           created_at?: string | null
           description?: string | null
           id?: string | null
@@ -370,9 +379,9 @@ export type Database = {
           offer_enabled?: boolean | null
           offer_ends_at?: string | null
           offer_label?: string | null
+          project_logo_url?: string | null
           project_status?: string | null
           project_type?: string | null
-          thumbnail_url?: string | null
         }
         Relationships: []
       }

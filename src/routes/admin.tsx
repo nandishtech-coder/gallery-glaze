@@ -31,6 +31,8 @@ interface Project {
   live_url: string | null;
   github_url: string | null;
   thumbnail_url: string | null;
+  background_url: string | null;
+  project_logo_url: string | null;
   offer_enabled: boolean;
   offer_label: string;
   offer_discount_percent: number;
@@ -106,7 +108,7 @@ type Draft = Omit<Project, "id"> & { id?: string };
 type ServiceDraft = Omit<Service, "id"> & { id?: string; featuresText?: string };
 type TestimonialDraft = Omit<Testimonial, "id" | "created_at"> & { id?: string };
 
-const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null, project_type: "Web Application", live_enabled: true, is_completed: false, project_status: "ongoing" };
+const empty: Draft = { name: "", description: "", live_url: "", github_url: "", thumbnail_url: "", background_url: "", project_logo_url: "", offer_enabled: false, offer_label: "Offer ends soon", offer_discount_percent: 0, offer_ends_at: null, project_type: "Web Application", live_enabled: true, is_completed: false, project_status: "ongoing" };
 const emptyService: ServiceDraft = {
   title: "", description: "", price: "", price_suffix: "onwards",
   features: [], popular: true, cta_label: "Get Started", sort_order: 0, discount_percent: 0, featuresText: "",
@@ -144,7 +146,7 @@ function AdminPage() {
   const load = async () => {
     setFetching(true);
     const [proj, prof, svc, tst, st, msg] = await Promise.all([
-      supabase.from("projects").select("id, name, description, live_url, github_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled, is_completed, project_status").order("created_at", { ascending: false }),
+      supabase.from("projects").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("id, user_id, email, approved, created_at").order("created_at", { ascending: false }),
       supabase.from("services").select("*").order("sort_order", { ascending: true }),
       supabase.from("testimonials").select("*").order("created_at", { ascending: false }),
@@ -295,6 +297,8 @@ function AdminPage() {
       live_url: editing.live_url || null,
       github_url: editing.github_url || null,
       thumbnail_url: editing.thumbnail_url || null,
+      background_url: editing.background_url || null,
+      project_logo_url: editing.project_logo_url || null,
       offer_enabled: !!editing.offer_enabled,
       offer_label: editing.offer_label || "Offer ends soon",
       offer_discount_percent: Math.max(0, Math.min(100, Number(editing.offer_discount_percent) || 0)),
@@ -989,10 +993,11 @@ function AdminPage() {
             <div className="space-y-4">
               {[
                 { k: "name", label: "Name", required: true },
-                { k: "description", label: "Description", textarea: true },
+                { k: "description", label: "Description", textarea: true, required: true },
                 { k: "live_url", label: "Live URL" },
                 { k: "github_url", label: "GitHub URL" },
-                { k: "thumbnail_url", label: "Project logo URL (optional)", placeholder: "https://example.com/logo.png" },
+                { k: "background_url", label: "Background URL", placeholder: "https://example.com/project-image.jpg", required: true },
+                { k: "project_logo_url", label: "Project Logo URL", placeholder: "https://example.com/logo.png", required: true },
               ].map((f) => (
                 <div key={f.k}>
                   <label className="mb-1.5 block text-xs font-medium text-muted-foreground">{f.label}</label>

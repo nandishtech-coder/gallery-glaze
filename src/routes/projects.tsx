@@ -45,6 +45,8 @@ interface PublicProject {
   description: string;
   live_url: string | null;
   thumbnail_url: string | null;
+  background_url: string | null;
+  project_logo_url: string | null;
   offer_enabled: boolean | null;
   offer_label: string | null;
   offer_discount_percent: number | null;
@@ -113,7 +115,7 @@ function Index() {
   useEffect(() => {
     supabase
       .from("public_projects")
-      .select("id, name, description, live_url, thumbnail_url, offer_enabled, offer_label, offer_discount_percent, offer_ends_at, project_type, live_enabled, is_completed, project_status")
+      .select("*")
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         setProjects((data ?? []) as PublicProject[]);
@@ -469,7 +471,7 @@ function Index() {
           )}
 
           {loading ? (
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-6 grid-cols-1">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="h-80 rounded-2xl glass animate-pulse" />
               ))}
@@ -479,79 +481,95 @@ function Index() {
               {query ? `No projects match “${query}”.` : "Project gallery will be updated shortly."}
             </div>
           ) : (
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
-              {filtered.map((p) => (
-                <article
-                  key={p.id}
-                  className="group flex flex-col overflow-hidden rounded-2xl glass card-hover"
-                >
-                  <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
-                    {p.thumbnail_url ? (
-                      <img
-                        src={p.thumbnail_url}
-                        alt={`${p.name} project logo`}
-                        loading="lazy"
-                        className="h-full w-full bg-white/5 object-contain p-4 transition duration-500 group-hover:scale-[1.03]"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-muted-foreground bg-gradient-to-br from-primary/10 via-secondary to-transparent">
-                        <Sparkles className="h-8 w-8 opacity-40" />
-                      </div>
-                    )}
-                    {p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now && (
-                      <div className="absolute left-3 top-3 flex flex-col items-start gap-1">
-                        {(p.offer_discount_percent ?? 0) > 0 && (
-                          <span className="rounded-full bg-emerald-500 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-lg">
-                            {p.offer_discount_percent}% OFF
-                          </span>
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {filtered.map((p) => {
+                const cardBackground = p.background_url || p.thumbnail_url || "";
+                const projectLogo = p.project_logo_url || p.thumbnail_url || "";
+                const isPrivate = p.live_enabled === false;
+
+                return (
+                  <article
+                    key={p.id}
+                    className="group flex h-full w-full flex-col overflow-hidden rounded-[24px] border border-[#3d4b72] bg-[#101a2e]/90 p-3 shadow-[0_12px_32px_rgba(10,13,20,0.45)] transition duration-300 hover:-translate-y-1 hover:border-[#6276be]"
+                  >
+                    <div className="grid h-full gap-4 grid-cols-1">
+                      <div className="relative h-full min-h-[160px] overflow-hidden rounded-[18px] border border-white/10 bg-[#1a243d] md:min-h-[200px]">
+                        {projectLogo && !["demo"].includes(getProjectStatus(p)) ? (
+                          <div className="absolute left-3 top-3 z-20 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-950/75 shadow-lg backdrop-blur-sm">
+                            <img
+                              src={projectLogo}
+                              alt={`${p.name} logo`}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                        ) : null}
+                        {cardBackground ? (
+                          <img
+                            src={cardBackground}
+                            alt={`${p.name} project preview`}
+                            loading="lazy"
+                            className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                          />
+                        ) : (
+                          <div className="h-full w-full bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.35),transparent_30%),linear-gradient(135deg,#1f2937,#101828,#312e81)]" />
                         )}
-                        <span className="inline-flex items-center gap-1 rounded-full bg-background/80 px-2.5 py-1 text-[10px] font-medium text-foreground backdrop-blur">
-                          <Clock className="h-3 w-3 text-emerald-500" />
-                          <span className="font-mono tabular-nums">{formatRemaining(new Date(p.offer_ends_at).getTime() - now)}</span>
-                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent" />
+
+                        {p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now && (
+                          <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full border border-emerald-500/40 bg-slate-950/60 px-2.5 py-1.5 text-[10px] font-medium text-emerald-300 backdrop-blur-sm">
+                            <Clock className="h-3 w-3" />
+                            <span>{formatRemaining(new Date(p.offer_ends_at).getTime() - now)}</span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <span className="mb-2 inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                      {p.project_type ?? "Web Application"}
-                    </span>
-                    <h3 className="text-lg font-semibold transition-transform duration-300 hover:scale-105 hover:text-primary inline-block origin-left cursor-default">
-                      {p.name}
-                    </h3>
-                    <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground transition-transform duration-300 hover:scale-[1.02] hover:text-foreground origin-left cursor-default">
-                      {p.description}
-                    </p>
-                    {(p.live_url || p.name) && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {p.live_enabled === false ? (
-                          <span className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-medium text-muted-foreground">
-                            🔒 Private Project
+
+                      <div className="flex min-h-full flex-col justify-between">
+                        <div>
+                          <span className="mb-3 inline-flex rounded-full border border-[#5d6ea7] bg-[#1c2941] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#e2e8ff]">
+                            {p.project_type ?? "Web Application"}
                           </span>
-                        ) : p.live_url && (
+
+                          <h3 className="mb-3 min-h-[2.5rem] text-xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-[1.55rem]">
+                            {p.name}
+                          </h3>
+
+                          <p className="max-w-xl overflow-hidden text-sm leading-6 text-slate-200/85 sm:text-[0.92rem]" style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                            {p.description}
+                          </p>
+                        </div>
+
+                        <div className="mt-4 flex flex-wrap gap-2.5">
+                          {isPrivate ? (
+                            <span className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-slate-100">
+                              <span className="text-sm">🔒</span>
+                              Private Project
+                            </span>
+                          ) : p.live_url ? (
+                            <a
+                              href={p.live_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#5a6ef5] px-3.5 py-2.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(90,110,245,0.28)] transition-transform duration-300 hover:scale-[1.02]"
+                            >
+                              View Live <ExternalLink className="h-3.5 w-3.5" />
+                            </a>
+                          ) : null}
+
                           <a
-                            href={p.live_url}
+                            href={`https://wa.me/917406386316?text=${encodeURIComponent(`Hello Nandish-Tech 👋,\n\nI came across your portfolio and I'm interested in the "${p.name}" demo project.\n\nCould you please share more details regarding:\n• Features & customization options\n• Pricing & delivery timeline\n• Next steps to get started\n\nLooking forward to your response.\n\nThank you!`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-transform duration-300 hover:scale-105 hover:opacity-90"
+                            aria-label={`Enquire about ${p.name} on WhatsApp`}
+                            className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#6f7bb2] bg-transparent px-3.5 py-2.5 text-xs font-semibold text-white transition-transform duration-300 hover:scale-[1.02] hover:border-[#8ea0ff]"
                           >
-                            View Live <ExternalLink className="h-3.5 w-3.5" />
+                            WhatsApp <MessageCircle className="h-3.5 w-3.5" />
                           </a>
-                        )}
-                        <a
-                          href={`https://wa.me/917406386316?text=${encodeURIComponent(`Hello Nandish-Tech 👋,\n\nI came across your portfolio and I'm interested in the "${p.name}" demo project.\n\nCould you please share more details regarding:\n• Features & customization options\n• Pricing & delivery timeline\n• Next steps to get started\n\nLooking forward to your response.\n\nThank you!`)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`Enquire about ${p.name} on WhatsApp`}
-                          className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-border glass px-3 py-2 text-sm font-medium transition-transform duration-300 hover:scale-105 hover:text-primary"
-                        >
-                          WhatsApp <MessageCircle className="h-3.5 w-3.5" />
-                        </a>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                </article>
-              ))}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           )}
         </section>
