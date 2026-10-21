@@ -979,7 +979,7 @@ function AdminPage() {
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
-          <form onSubmit={save} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+          <form onSubmit={save} className="my-8 w-full max-w-md overflow-y-auto rounded-2xl glass-strong p-5 max-h-[80vh]">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-semibold">{editing.id ? "Edit project" : "New project"}</h2>
               <button type="button" onClick={() => setEditing(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary">
@@ -1018,7 +1018,7 @@ function AdminPage() {
                 <select
                   value={editing.project_type ?? "Web Application"}
                   onChange={(e) => setEditing({ ...editing, project_type: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary"
+                  className="admin-select w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary"
                 >
                   <option>Web Application</option>
                   <option>Mobile App</option>
@@ -1037,7 +1037,7 @@ function AdminPage() {
                       is_completed: nextStatus === "completed" || nextStatus === "demo",
                     });
                   }}
-                  className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary"
+                  className="admin-select w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary"
                 >
                   <option value="ongoing">Ongoing</option>
                   <option value="completed">Completed</option>

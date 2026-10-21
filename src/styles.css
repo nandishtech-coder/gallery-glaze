@@ -192,6 +192,36 @@
     letter-spacing: -0.011em;
     text-rendering: optimizeLegibility;
   }
+
+  select {
+    color-scheme: dark;
+    background-color: var(--input);
+    color: var(--foreground);
+  }
+
+  select option {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+  }
+
+  :root.light select {
+    color-scheme: light;
+  }
+}
+
+.admin-select {
+  color-scheme: dark;
+  background-color: var(--input);
+  color: var(--foreground);
+}
+
+.admin-select option {
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+}
+
+:root.light .admin-select {
+  color-scheme: light;
 }
 
 /* ═══════════════════════════════════════════
