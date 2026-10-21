@@ -1113,7 +1113,7 @@ function AdminPage() {
 
       {editingService && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm overflow-y-auto">
-          <form onSubmit={saveService} className="w-full max-w-lg rounded-2xl glass-strong p-6 my-8">
+          <form onSubmit={saveService} className="my-8 w-full max-w-xl overflow-y-auto rounded-2xl glass-strong p-5 max-h-[80vh]">
             <div className="mb-5 flex items-center justify-between">
               <h2 className="text-lg font-semibold">{editingService.id ? "Edit service" : "New service"}</h2>
               <button type="button" onClick={() => setEditingService(null)} className="rounded-md p-1 text-muted-foreground hover:bg-secondary">
