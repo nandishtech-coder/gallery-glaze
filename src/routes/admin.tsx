@@ -992,7 +992,7 @@ function AdminPage() {
                 { k: "description", label: "Description", textarea: true },
                 { k: "live_url", label: "Live URL" },
                 { k: "github_url", label: "GitHub URL" },
-                { k: "thumbnail_url", label: "Thumbnail URL" },
+                { k: "thumbnail_url", label: "Project logo URL (optional)", placeholder: "https://example.com/logo.png" },
               ].map((f) => (
                 <div key={f.k}>
                   <label className="mb-1.5 block text-xs font-medium text-muted-foreground">{f.label}</label>
@@ -1005,7 +1005,9 @@ function AdminPage() {
                     />
                   ) : (
                     <input
-                      type="text" required={f.required}
+                      type="text"
+                      required={f.required}
+                      placeholder={f.placeholder}
                       value={(editing as any)[f.k] ?? ""}
                       onChange={(e) => setEditing({ ...editing, [f.k]: e.target.value } as Draft)}
                       className="w-full rounded-lg border border-border bg-input/50 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"

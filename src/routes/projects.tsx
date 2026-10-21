@@ -489,12 +489,12 @@ function Index() {
                     {p.thumbnail_url ? (
                       <img
                         src={p.thumbnail_url}
-                        alt={p.name}
+                        alt={`${p.name} project logo`}
                         loading="lazy"
-                        className="h-full w-full object-contain object-center transition duration-500 group-hover:scale-[1.03]"
+                        className="h-full w-full bg-white/5 object-contain p-4 transition duration-500 group-hover:scale-[1.03]"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                      <div className="flex h-full w-full items-center justify-center text-muted-foreground bg-gradient-to-br from-primary/10 via-secondary to-transparent">
                         <Sparkles className="h-8 w-8 opacity-40" />
                       </div>
                     )}
