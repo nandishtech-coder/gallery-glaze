@@ -495,7 +495,7 @@ function Index() {
                     <div className="grid h-full gap-4 grid-cols-1">
                       <div className="relative h-full min-h-[160px] overflow-hidden rounded-[18px] border border-white/10 bg-[#1a243d] md:min-h-[200px]">
                         {projectLogo && !["demo"].includes(getProjectStatus(p)) ? (
-                          <div className="absolute left-3 top-3 z-20 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-slate-950/75 shadow-lg backdrop-blur-sm">
+                          <div className="absolute left-3 top-3 z-20 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border-2 border-white/80 bg-white/95 shadow-[0_8px_20px_rgba(15,23,42,0.45)] backdrop-blur-sm">
                             <img
                               src={projectLogo}
                               alt={`${p.name} logo`}
