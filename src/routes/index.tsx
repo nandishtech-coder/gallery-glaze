@@ -21,6 +21,8 @@ import { TestimonialsSection } from "@/components/testimonials-section";
 import { BetterBusiness } from "@/components/better-business";
 import { LiveOffers } from "@/components/live-offers";
 import { PageBackground } from "@/components/page-background";
+import { TypewriterHeadline } from "@/components/typewriter-headline";
+import { Reveal } from "@/components/reveal";
 
 
 export const Route = createFileRoute("/")({
@@ -77,8 +79,6 @@ const fallbackStats = [
   { value: "3+", label: "Years experience" },
   { value: "24/7", label: "Support on WhatsApp" },
 ];
-
-const heroText = "We focus on growing your brand online for you.";
 
 const whyUs = [
   { icon: Rocket, title: "Quick turnaround", text: "Most small websites go live within days, not months." },
@@ -183,19 +183,14 @@ function Home() {
       ) : (
         <main>
         <div className="relative">
-          <section className="relative w-full px-4 pb-10 pt-8 sm:px-12 sm:pt-12">
+          <section className="relative w-full snap-section px-4 pb-10 pt-8 sm:px-12 sm:pt-12">
             <div className="mx-auto flex max-w-7xl flex-col gap-8 xl:flex-row xl:items-center xl:gap-16">
               {/* Left: Text content */}
               <div className="min-w-0 flex-1">
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs text-muted-foreground rise-in rise-delay-1">
                   <img src={nandishLogo} alt="Nandish-Tech" className="h-3.5 w-3.5 object-contain" /> Solutions for all your needs
                 </div>
-                <h1 className="max-w-[900px] text-[clamp(3.2rem,6vw,7rem)] font-semibold leading-[0.9] tracking-[-0.06em] rise-in rise-delay-2">
-                  <span className="block text-white" style={{ wordBreak: "keep-all" }}>
-                    <span className="text-white">We focus on growing your </span>
-                    <span className="text-gradient">brand online for you.</span>
-                  </span>
-                </h1>
+                <TypewriterHeadline className="max-w-[900px] text-[clamp(3.2rem,6vw,7rem)] font-bold leading-[0.9] tracking-[-0.05em] rise-in rise-delay-2" />
                 <p className="mt-5 max-w-xl text-balance text-base text-muted-foreground sm:text-lg rise-in rise-delay-3">
                   We build websites, web apps, eCommerce stores and brand identities — crafted to make
                   your business look professional, trustworthy, and stand out online.
@@ -223,7 +218,8 @@ function Home() {
         </div>
 
         {/* Stats */}
-        <section className="w-full px-6 sm:px-12">
+        <section className="w-full snap-section px-6 sm:px-12">
+          <Reveal>
           <div className="rounded-2xl glass p-6">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {(stats ?? [null, null, null, null]).map((s, i) => (
@@ -243,26 +239,29 @@ function Home() {
               ))}
             </div>
           </div>
+          </Reveal>
 
         </section>
 
         {/* Solutions */}
-        <section className="w-full px-6 py-20 sm:px-12">
-          <div className="mb-10 text-center">
+        <section className="w-full snap-section px-6 py-20 sm:px-12">
+          <Reveal className="mb-10 text-center">
             <p className="text-xs font-medium uppercase tracking-widest text-primary">What we do</p>
             <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
               All the digital services that are convenient for you
             </h2>
-          </div>
+          </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {solutions.map((s) => (
-              <article key={s.title} className="rounded-2xl glass p-6 card-hover">
-                <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            {solutions.map((s, i) => (
+              <Reveal key={s.title} delay={i * 90}>
+              <article className="rounded-2xl glass p-6 card-hover">
+                <div className="icon-chip mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <s.icon className="h-5 w-5" />
                 </div>
                 <h3 className="text-lg font-semibold">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
               </article>
+              </Reveal>
             ))}
           </div>
           <div className="mt-10 text-center">
@@ -276,8 +275,9 @@ function Home() {
         </section>
 
         {/* Why us */}
-        <section className="w-full px-6 pb-20 sm:px-12">
+        <section className="w-full snap-section px-6 pb-20 sm:px-12">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <Reveal>
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-primary">Why choose us</p>
               <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
@@ -309,46 +309,55 @@ function Home() {
                 ))}
               </ul>
             </div>
+            </Reveal>
             <div className="grid gap-4 sm:grid-cols-2">
-              {whyUs.map((w) => (
-                <div key={w.title} className="rounded-2xl glass p-5 card-hover">
+              {whyUs.map((w, i) => (
+                <Reveal key={w.title} delay={i * 90}>
+                <div className="rounded-2xl glass p-5 card-hover">
                   <w.icon className="h-5 w-5 text-primary" />
                   <h3 className="mt-3 font-semibold">{w.title}</h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">{w.text}</p>
                 </div>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
         {/* Process */}
-        <section className="w-full px-6 pb-20 sm:px-12">
-          <div className="mb-10 text-center">
+        <section className="w-full snap-section px-6 pb-20 sm:px-12">
+          <Reveal className="mb-10 text-center">
             <p className="text-xs font-medium uppercase tracking-widest text-primary">How it works</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">A simple 4-step process</h2>
-          </div>
+          </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {process.map((p) => (
-              <div key={p.step} className="rounded-2xl glass p-6 card-hover">
+            {process.map((p, i) => (
+              <Reveal key={p.step} delay={i * 90}>
+              <div className="rounded-2xl glass p-6 card-hover">
                 <div className="text-sm font-semibold text-primary">{p.step}</div>
                 <h3 className="mt-2 text-lg font-semibold">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
               </div>
+              </Reveal>
             ))}
           </div>
         </section>
 
         {/* Industries */}
-        <section className="w-full px-6 pb-20 text-center sm:px-12">
+        <section className="w-full snap-section px-6 pb-20 text-center sm:px-12">
+          <Reveal>
           <p className="text-xs font-medium uppercase tracking-widest text-primary">Industries</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
             Multi-industry design & development
           </h2>
+          </Reveal>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
-            {industries.map((i) => (
-              <span key={i} className="rounded-full glass border border-border px-4 py-1.5 text-sm text-foreground/85">
-                {i}
-              </span>
+            {industries.map((i, idx) => (
+              <Reveal key={i} delay={idx * 45}>
+                <span className="rounded-full glass border border-border px-4 py-1.5 text-sm text-foreground/85">
+                  {i}
+                </span>
+              </Reveal>
             ))}
           </div>
         </section>
@@ -360,7 +369,8 @@ function Home() {
 
 
         {/* CTA */}
-        <section className="mt-20 w-full px-6 sm:px-12">
+        <section className="mt-20 w-full snap-section px-6 sm:px-12">
+          <Reveal>
           <div className="rounded-3xl glass p-8 text-center sm:p-12">
             <h2 className="text-balance text-3xl font-semibold tracking-tight text-gradient sm:text-4xl">
               Ready to take your brand online?
@@ -385,6 +395,7 @@ function Home() {
               </Link>
             </div>
           </div>
+          </Reveal>
         </section>
         </main>
       )}

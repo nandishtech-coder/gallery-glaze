@@ -55,7 +55,7 @@ export function SiteFooter() {
                   "Website to Mobile Development",
                 ].map((service) => (
                   <li key={service}>
-                    <Link to="/services" className="transition hover:text-white">
+                    <Link to="/services" className="link-underline transition hover:text-white">
                       {service}
                     </Link>
                   </li>
@@ -73,7 +73,7 @@ export function SiteFooter() {
                   { to: "/contact", label: "Contact" },
                 ].map((l) => (
                   <li key={l.to}>
-                    <Link to={l.to} className="transition hover:text-white">
+                    <Link to={l.to} className="link-underline transition hover:text-white">
                       {l.label}
                     </Link>
                   </li>
