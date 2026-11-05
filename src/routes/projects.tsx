@@ -44,7 +44,7 @@ interface PublicProject {
   name: string;
   description: string;
   live_url: string | null;
-  thumbnail_url: string | null;
+  thumbnail_url?: string | null;
   background_url: string | null;
   project_logo_url: string | null;
   offer_enabled: boolean | null;
