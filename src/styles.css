@@ -705,8 +705,12 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   animation: none !important;
   transition: none !important;
 }
+html.no-anim {
+  scroll-behavior: auto;
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
 }
 
 @media (max-width: 768px) {
