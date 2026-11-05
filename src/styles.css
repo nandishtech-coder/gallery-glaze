@@ -405,6 +405,23 @@
 :root.light .glow-orb { opacity: 0.7; }
 :root.light .glow-sheen { opacity: 0.5; }
 
+/* Light theme: keep the photo backdrop barely visible so dark text reads cleanly */
+:root.light .bg-pan {
+  opacity: 0.08 !important;
+  filter: saturate(1.05);
+}
+:root.light .glow-ring,
+:root.light .glow-ring > div {
+  border-color: rgba(79, 70, 229, 0.12);
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.05), transparent 62%);
+  box-shadow: 0 0 40px rgba(79, 70, 229, 0.10);
+}
+:root.light .glow-ring > div > div {
+  border-color: rgba(79, 70, 229, 0.16);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 30px rgba(8, 145, 178, 0.10);
+}
+
 @keyframes bg-pan {
   0%   { transform: scale(1.15) translate3d(-2%, -1.5%, 0); }
   50%  { transform: scale(1.15) translate3d(2%, 1.5%, 0); }
@@ -499,6 +516,98 @@
 .rise-delay-1 { animation-delay: 0.10s; }
 .rise-delay-2 { animation-delay: 0.25s; }
 .rise-delay-3 { animation-delay: 0.40s; }
+
+/* ═══════════════════════════════════════════
+   TYPEWRITER HEADLINE — zero layout shift
+   The invisible ghost copy reserves the exact final
+   height so the page never moves while typing/deleting.
+   ═══════════════════════════════════════════ */
+.type-stack {
+  display: grid;
+}
+.type-cell {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+.type-ghost {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+.type-accent {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.type-cursor,
+.type-cursor-ghost {
+  display: inline-block;
+  width: 0.075em;
+  height: 0.82em;
+  margin-left: 0.06em;
+  border-radius: 999px;
+  vertical-align: baseline;
+  transform: translateY(0.08em);
+}
+.type-cursor-ghost {
+  background: transparent;
+}
+.type-cursor {
+  background: var(--gradient-primary);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--accent) 55%, transparent);
+  animation: type-blink 1.05s steps(2, start) infinite;
+}
+@keyframes type-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0.15; }
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL — sections fade/slide in once
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION SCROLLING — clear the fixed navbar
+   and glide smoothly between sections
+   ═══════════════════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+}
+.snap-section {
+  scroll-margin-top: 96px;
+}
+
+/* ═══════════════════════════════════════════
+   ICON CHIP — glowing service icon frame
+   ═══════════════════════════════════════════ */
+.icon-chip {
+  border: 1px solid color-mix(in oklab, var(--primary) 28%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 14%, transparent),
+    color-mix(in oklab, var(--accent) 10%, transparent)
+  );
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--foreground) 10%, transparent);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover .icon-chip {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 0 20px color-mix(in oklab, var(--primary) 35%, transparent),
+              inset 0 1px 0 color-mix(in oklab, var(--foreground) 10%, transparent);
+}
 
 /* ═══════════════════════════════════════════
    MARQUEE / SCROLLING
@@ -613,8 +722,12 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   animation: none !important;
   transition: none !important;
 }
+html.no-anim {
+  scroll-behavior: auto;
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
 }
 
 @media (max-width: 768px) {
