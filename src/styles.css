@@ -501,6 +501,98 @@
 .rise-delay-3 { animation-delay: 0.40s; }
 
 /* ═══════════════════════════════════════════
+   TYPEWRITER HEADLINE — zero layout shift
+   The invisible ghost copy reserves the exact final
+   height so the page never moves while typing/deleting.
+   ═══════════════════════════════════════════ */
+.type-stack {
+  display: grid;
+}
+.type-cell {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+.type-ghost {
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+.type-accent {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.type-cursor,
+.type-cursor-ghost {
+  display: inline-block;
+  width: 0.075em;
+  height: 0.82em;
+  margin-left: 0.06em;
+  border-radius: 999px;
+  vertical-align: baseline;
+  transform: translateY(0.08em);
+}
+.type-cursor-ghost {
+  background: transparent;
+}
+.type-cursor {
+  background: var(--gradient-primary);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--accent) 55%, transparent);
+  animation: type-blink 1.05s steps(2, start) infinite;
+}
+@keyframes type-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0.15; }
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL — sections fade/slide in once
+   ═══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION SCROLLING — clear the fixed navbar
+   and glide smoothly between sections
+   ═══════════════════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+}
+.snap-section {
+  scroll-margin-top: 96px;
+}
+
+/* ═══════════════════════════════════════════
+   ICON CHIP — glowing service icon frame
+   ═══════════════════════════════════════════ */
+.icon-chip {
+  border: 1px solid color-mix(in oklab, var(--primary) 28%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 14%, transparent),
+    color-mix(in oklab, var(--accent) 10%, transparent)
+  );
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--foreground) 10%, transparent);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover .icon-chip {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 0 20px color-mix(in oklab, var(--primary) 35%, transparent),
+              inset 0 1px 0 color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
+/* ═══════════════════════════════════════════
    MARQUEE / SCROLLING
    ═══════════════════════════════════════════ */
 @keyframes marquee-x {
