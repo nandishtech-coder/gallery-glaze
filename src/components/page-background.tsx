@@ -40,7 +40,7 @@ export function PageBackground({ variant = "tech" }: { variant?: keyof typeof im
       </div>
 
       <div
-        className="absolute inset-0"
+        className="page-background-overlay absolute inset-0"
         style={{ background: "linear-gradient(to bottom, rgba(10,14,26,0.48) 0%, rgba(10,14,26,0.72) 45%, rgba(10,14,26,0.96) 100%)" }}
       />
     </div>

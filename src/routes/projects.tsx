@@ -57,6 +57,8 @@ interface PublicProject {
   project_status: string | null;
 }
 
+type ActiveOfferProject = PublicProject & { offer_ends_at: string };
+
 type ProjectTab = "demo" | "ongoing" | "completed";
 
 function useNow(intervalMs = 1000) {
@@ -141,13 +143,14 @@ function Index() {
 
   const now = useNow(1000);
   const activeOffers = projects.filter(
-    (p) => p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now,
+    (p): p is ActiveOfferProject =>
+      Boolean(p.offer_enabled && p.offer_ends_at && new Date(p.offer_ends_at).getTime() > now),
   );
   const sortedOffers = activeOffers
     .slice()
-    .sort((a, b) => new Date(a.offer_ends_at!).getTime() - new Date(b.offer_ends_at!).getTime());
+    .sort((a, b) => new Date(a.offer_ends_at).getTime() - new Date(b.offer_ends_at).getTime());
   const soonest = sortedOffers[0];
-  const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at!).getTime() - now) : null;
+  const soonestRemaining = soonest ? formatRemaining(new Date(soonest.offer_ends_at).getTime() - now) : null;
 
   const missedShownRef = useRef<Set<string>>(new Set());
   useEffect(() => {
@@ -220,8 +223,8 @@ function Index() {
   }, [services]);
 
 
-  const renderOfferPill = (p: PublicProject, key: string) => {
-    const remaining = formatRemaining(new Date(p.offer_ends_at!).getTime() - now);
+  const renderOfferPill = (p: ActiveOfferProject, key: string) => {
+    const remaining = formatRemaining(new Date(p.offer_ends_at).getTime() - now);
     return (
       <span
         key={key}
@@ -254,7 +257,7 @@ function Index() {
       id: `p-${p.id}`,
       title: p.name,
       discount: p.offer_discount_percent ?? null,
-      endsAt: p.offer_ends_at!,
+      endsAt: p.offer_ends_at,
       href: p.live_url ?? undefined,
     })),
     ...serviceOffers.map((s) => ({

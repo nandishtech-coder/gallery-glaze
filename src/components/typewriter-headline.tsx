@@ -52,7 +52,13 @@ export function TypewriterHeadline({ className }: { className?: string }) {
 
   // After hydration, start from an empty headline.
   useEffect(() => {
-    if (!motion || startedRef.current) return;
+    if (!motion) {
+      startedRef.current = false;
+      setCount(FULL_TEXT.length);
+      setDeleting(false);
+      return;
+    }
+    if (startedRef.current) return;
     startedRef.current = true;
     setCount(0);
   }, [motion]);
