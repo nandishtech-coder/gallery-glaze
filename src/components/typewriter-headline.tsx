@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const SEGMENTS = [
-  { text: "We focus on ", accent: false },
   { text: "growing your brand", accent: true },
   { text: " online for you...", accent: false },
 ] as const;
 
-const FULL_TEXT = SEGMENTS.map((s) => s.text).join("");
+const PREFIX = "We focus on ";
+const ANIMATED_TEXT = SEGMENTS.map((s) => s.text).join("");
+const FULL_TEXT = PREFIX + ANIMATED_TEXT;
 const TYPE_BASE_MS = 55;
 const TYPE_JITTER_MS = 45;
 const PUNCTUATION_PAUSE_MS = 240;
@@ -46,7 +47,7 @@ function useMotionEnabled() {
  */
 export function TypewriterHeadline({ className }: { className?: string }) {
   const motion = useMotionEnabled();
-  const [count, setCount] = useState(FULL_TEXT.length);
+  const [count, setCount] = useState(ANIMATED_TEXT.length);
   const [deleting, setDeleting] = useState(false);
   const startedRef = useRef(false);
 
@@ -54,7 +55,7 @@ export function TypewriterHeadline({ className }: { className?: string }) {
   useEffect(() => {
     if (!motion) {
       startedRef.current = false;
-      setCount(FULL_TEXT.length);
+      setCount(ANIMATED_TEXT.length);
       setDeleting(false);
       return;
     }
@@ -67,8 +68,8 @@ export function TypewriterHeadline({ className }: { className?: string }) {
     if (!motion || !startedRef.current) return;
 
     if (!deleting) {
-      if (count < FULL_TEXT.length) {
-        const nextChar = FULL_TEXT[count];
+      if (count < ANIMATED_TEXT.length) {
+        const nextChar = ANIMATED_TEXT[count];
         const pause = ".,".includes(nextChar) ? PUNCTUATION_PAUSE_MS : 0;
         const t = window.setTimeout(
           () => setCount((c) => c + 1),
@@ -112,6 +113,7 @@ export function TypewriterHeadline({ className }: { className?: string }) {
           <span className="type-cursor-ghost" />
         </span>
         <span className="type-cell">
+          {PREFIX}
           {typed}
           {motion && <span className="type-cursor" />}
         </span>
