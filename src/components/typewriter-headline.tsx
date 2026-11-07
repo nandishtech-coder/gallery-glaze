@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 const SEGMENTS = [
   { text: "We focus on ", accent: false },
   { text: "growing your brand", accent: true },
-  { text: " online for you.", accent: false },
+  { text: " online for you...", accent: false },
 ] as const;
 
 const FULL_TEXT = SEGMENTS.map((s) => s.text).join("");
