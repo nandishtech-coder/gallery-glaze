@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Star, Quote, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,63 @@ export function TestimonialsSection() {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstGroupRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ pointerId: number; startX: number; startScrollLeft: number } | null>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const viewport = marqueeRef.current;
+    const track = trackRef.current;
+    const firstGroup = firstGroupRef.current;
+    if (!viewport || !track || !firstGroup) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    let previousTime = 0;
+    const speed = 32;
+    const animate = (time: number) => {
+      if (previousTime && !pausedRef.current) {
+        const groupGap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+        const loopDistance = firstGroup.offsetWidth + groupGap;
+        if (loopDistance > 0) {
+          viewport.scrollLeft += ((time - previousTime) / 1000) * speed;
+          if (viewport.scrollLeft >= loopDistance) viewport.scrollLeft -= loopDistance;
+        }
+      }
+      previousTime = time;
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [items.length]);
+
+  const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: event.currentTarget.scrollLeft,
+    };
+    pausedRef.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const moveDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    event.currentTarget.scrollLeft = drag.startScrollLeft - (event.clientX - drag.startX);
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    pausedRef.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -57,12 +114,6 @@ export function TestimonialsSection() {
     setOpen(false);
   };
 
-  // Repeat items so the marquee track is always wide enough for a seamless loop
-  const marqueeItems: Testimonial[] =
-    items.length === 0
-      ? []
-      : Array.from({ length: Math.max(2, Math.ceil(6 / items.length) * 2) }).flatMap(() => items);
-
   return (
     <section className="mt-24">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -91,12 +142,30 @@ export function TestimonialsSection() {
           No testimonials yet. Be the first to share your experience!
         </div>
       ) : (
-        <div className="testimonial-marquee-wrap overflow-hidden">
-          <div
-            className="testimonial-marquee-track"
-            style={{ animationDuration: `${Math.max(30, marqueeItems.length * 7)}s` }}
-          >
-            {marqueeItems.map((t, idx) => {
+        <div
+          ref={marqueeRef}
+          className="testimonial-marquee-wrap"
+          role="region"
+          aria-label="Client testimonials"
+          tabIndex={0}
+          onPointerDown={startDrag}
+          onPointerMove={moveDrag}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onPointerEnter={() => { pausedRef.current = true; }}
+          onPointerLeave={() => { if (!dragRef.current) pausedRef.current = false; }}
+          onFocus={() => { pausedRef.current = true; }}
+          onBlur={() => { pausedRef.current = false; }}
+        >
+          <div ref={trackRef} className="testimonial-marquee-track">
+            {Array.from({ length: 4 }, (_, groupIndex) => (
+              <div
+                key={`testimonial-group-${groupIndex}`}
+                ref={groupIndex === 0 ? firstGroupRef : undefined}
+                className="testimonial-marquee-group"
+                aria-hidden={groupIndex > 0}
+              >
+                {items.map((t) => {
               const initials = t.name
                 .split(/\s+/)
                 .filter(Boolean)
@@ -116,7 +185,7 @@ export function TestimonialsSection() {
               const gradient = palettes[hash % palettes.length];
               return (
                 <article
-                  key={`${t.id}-${idx}`}
+                  key={t.id}
                   className="group relative flex w-[min(22rem,85vw)] shrink-0 flex-col overflow-hidden rounded-2xl glass p-6 card-hover"
                 >
                   <div
@@ -150,7 +219,10 @@ export function TestimonialsSection() {
                   </p>
                 </article>
               );
-            })}
+                );
+                })}
+              </div>
+            ))}
           </div>
         </div>
 
