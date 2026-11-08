@@ -659,8 +659,6 @@ html {
   scrollbar-width: none;
   touch-action: pan-y;
   overscroll-behavior-x: contain;
-  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 .testimonial-marquee-wrap::-webkit-scrollbar { display: none; }
 .testimonial-marquee-wrap:active { cursor: grabbing; }
