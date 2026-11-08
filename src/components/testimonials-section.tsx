@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Star, Quote, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,63 @@ export function TestimonialsSection() {
   const [form, setForm] = useState(emptyForm);
   const [submitting, setSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const firstGroupRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ pointerId: number; startX: number; startScrollLeft: number } | null>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const viewport = marqueeRef.current;
+    const track = trackRef.current;
+    const firstGroup = firstGroupRef.current;
+    if (!viewport || !track || !firstGroup) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    let previousTime = 0;
+    const speed = 32;
+    const animate = (time: number) => {
+      if (previousTime && !pausedRef.current) {
+        const groupGap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+        const loopDistance = firstGroup.offsetWidth + groupGap;
+        if (loopDistance > 0) {
+          viewport.scrollLeft += ((time - previousTime) / 1000) * speed;
+          if (viewport.scrollLeft >= loopDistance) viewport.scrollLeft -= loopDistance;
+        }
+      }
+      previousTime = time;
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frame);
+  }, [items.length]);
+
+  const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startScrollLeft: event.currentTarget.scrollLeft,
+    };
+    pausedRef.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const moveDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    event.currentTarget.scrollLeft = drag.startScrollLeft - (event.clientX - drag.startX);
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    pausedRef.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -57,12 +114,6 @@ export function TestimonialsSection() {
     setOpen(false);
   };
 
-  // Repeat items so the marquee track is always wide enough for a seamless loop
-  const marqueeItems: Testimonial[] =
-    items.length === 0
-      ? []
-      : Array.from({ length: Math.max(2, Math.ceil(6 / items.length) * 2) }).flatMap(() => items);
-
   return (
     <section className="mt-24">
       <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -91,66 +142,86 @@ export function TestimonialsSection() {
           No testimonials yet. Be the first to share your experience!
         </div>
       ) : (
-        <div className="testimonial-marquee-wrap overflow-hidden">
-          <div
-            className="testimonial-marquee-track"
-            style={{ animationDuration: `${Math.max(30, marqueeItems.length * 7)}s` }}
-          >
-            {marqueeItems.map((t, idx) => {
-              const initials = t.name
-                .split(/\s+/)
-                .filter(Boolean)
-                .slice(0, 2)
-                .map((s) => s[0]?.toUpperCase())
-                .join("");
-              const palettes = [
-                "from-fuchsia-500 to-pink-500",
-                "from-sky-500 to-indigo-500",
-                "from-emerald-500 to-teal-500",
-                "from-amber-500 to-orange-500",
-                "from-violet-500 to-purple-500",
-                "from-rose-500 to-red-500",
-              ];
-              let hash = 0;
-              for (let i = 0; i < t.name.length; i++) hash = (hash * 31 + t.name.charCodeAt(i)) >>> 0;
-              const gradient = palettes[hash % palettes.length];
-              return (
-                <article
-                  key={`${t.id}-${idx}`}
-                  className="group relative flex w-[min(22rem,85vw)] shrink-0 flex-col overflow-hidden rounded-2xl glass p-6 card-hover"
-                >
-                  <div
-                    className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${gradient} opacity-20 blur-2xl transition group-hover:opacity-30`}
-                  />
-                  <Quote className="absolute right-4 top-4 h-6 w-6 text-primary/40" />
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-sm font-semibold text-white shadow-lg ring-2 ring-background`}
+        <div
+          ref={marqueeRef}
+          className="testimonial-marquee-wrap"
+          role="region"
+          aria-label="Client testimonials"
+          tabIndex={0}
+          onPointerDown={startDrag}
+          onPointerMove={moveDrag}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+          onPointerEnter={() => { pausedRef.current = true; }}
+          onPointerLeave={() => { if (!dragRef.current) pausedRef.current = false; }}
+          onFocus={() => { pausedRef.current = true; }}
+          onBlur={() => { pausedRef.current = false; }}
+        >
+          <div ref={trackRef} className="testimonial-marquee-track">
+            {Array.from({ length: 4 }, (_, groupIndex) => (
+              <div
+                key={`testimonial-group-${groupIndex}`}
+                ref={groupIndex === 0 ? firstGroupRef : undefined}
+                className="testimonial-marquee-group"
+                aria-hidden={groupIndex > 0}
+              >
+                {items.map((t) => {
+                  const initials = t.name
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .map((s) => s[0]?.toUpperCase())
+                    .join("");
+                  const palettes = [
+                    "from-fuchsia-500 to-pink-500",
+                    "from-sky-500 to-indigo-500",
+                    "from-emerald-500 to-teal-500",
+                    "from-amber-500 to-orange-500",
+                    "from-violet-500 to-purple-500",
+                    "from-rose-500 to-red-500",
+                  ];
+                  let hash = 0;
+                  for (let i = 0; i < t.name.length; i++) hash = (hash * 31 + t.name.charCodeAt(i)) >>> 0;
+                  const gradient = palettes[hash % palettes.length];
+                  return (
+                    <article
+                      key={t.id}
+                      className="group relative flex w-[min(22rem,85vw)] shrink-0 flex-col overflow-hidden rounded-2xl glass p-6 card-hover"
                     >
-                      {initials || "★"}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="truncate text-sm font-semibold">{t.name}</div>
-                      {(t.role || t.company) && (
-                        <div className="truncate text-xs text-muted-foreground">
-                          {t.role ? <span>{t.role}</span> : null}
-                          {t.role && t.company ? <span className="mx-1 text-muted-foreground/50">·</span> : null}
-                          {t.company ? <span className="text-primary/80">{t.company}</span> : null}
+                      <div
+                        className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${gradient} opacity-20 blur-2xl transition group-hover:opacity-30`}
+                      />
+                      <Quote className="absolute right-4 top-4 h-6 w-6 text-primary/40" />
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-sm font-semibold text-white shadow-lg ring-2 ring-background`}
+                        >
+                          {initials || "★"}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center gap-1 text-amber-400">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
-                    ))}
-                  </div>
-                  <p className="mt-3 flex-1 whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/90">
-                    &ldquo;{t.message}&rdquo;
-                  </p>
-                </article>
-              );
-            })}
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-semibold">{t.name}</div>
+                          {(t.role || t.company) && (
+                            <div className="truncate text-xs text-muted-foreground">
+                              {t.role ? <span>{t.role}</span> : null}
+                              {t.role && t.company ? <span className="mx-1 text-muted-foreground/50">·</span> : null}
+                              {t.company ? <span className="text-primary/80">{t.company}</span> : null}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-4 flex items-center gap-1 text-amber-400">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} className={`h-4 w-4 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
+                        ))}
+                      </div>
+                      <p className="mt-3 flex-1 whitespace-pre-wrap break-words text-sm leading-relaxed text-foreground/90">
+                        &ldquo;{t.message}&rdquo;
+                      </p>
+                    </article>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
 

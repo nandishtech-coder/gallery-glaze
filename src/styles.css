@@ -653,16 +653,25 @@ html {
   to   { transform: translateX(-50%); }
 }
 .testimonial-marquee-wrap {
-  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  scrollbar-width: none;
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
 }
+.testimonial-marquee-wrap::-webkit-scrollbar { display: none; }
+.testimonial-marquee-wrap:active { cursor: grabbing; }
 .testimonial-marquee-track {
-  display: inline-flex;
+  display: flex;
+  width: max-content;
   gap: 1.25rem;
-  animation: testimonials-scroll 48s linear infinite;
-  will-change: transform;
 }
-.testimonial-marquee-wrap:hover .testimonial-marquee-track { animation-play-state: paused; }
+.testimonial-marquee-group {
+  display: flex;
+  flex: none;
+  gap: 1.25rem;
+}
 
 /* ═══════════════════════════════════════════
    LIVE OFFER CARD — Theme-aware
@@ -757,8 +766,7 @@ html.no-anim {
   .glow-sheen,
   .bg-pan,
   .hero-layer,
-  .marquee-track,
-  .testimonial-marquee-track {
+  .marquee-track {
     animation: none !important;
   }
 
