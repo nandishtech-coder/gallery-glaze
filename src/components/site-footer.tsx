@@ -17,7 +17,7 @@ export function SiteFooter() {
           </div>
 
           <div className="grid gap-8 pb-8 min-[420px]:grid-cols-2 lg:grid-cols-3 lg:gap-x-6">
-            <div className="grid gap-4 text-white min-[420px]:col-span-2 min-[420px]:grid-cols-2 lg:col-span-3 lg:grid-cols-3">
+            <div className="space-y-4 text-white min-[420px]:col-span-2 min-[420px]:grid min-[420px]:grid-cols-2 lg:col-span-3 lg:grid-cols-3">
               <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white shadow-md ring-1 ring-white/15">
                   <Phone className="h-4 w-4" />
@@ -26,7 +26,7 @@ export function SiteFooter() {
                   7406386316
                 </a>
               </div>
-              <div className="flex items-center gap-3 min-[420px]:col-span-2 lg:col-span-1">
+              <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white shadow-md ring-1 ring-white/15">
                   <Phone className="h-4 w-4" />
                 </span>
@@ -34,7 +34,7 @@ export function SiteFooter() {
                   8431304103
                 </a>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-[420px]:col-span-2 lg:col-span-1">
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white shadow-md ring-1 ring-white/15">
                   <Mail className="h-4 w-4" />
                 </span>
